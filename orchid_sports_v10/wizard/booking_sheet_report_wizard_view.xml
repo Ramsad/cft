@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="booking_sheet_report_wizard_form" model="ir.ui.view">
+            <field name="name">booking.sheet.report.wizard</field>
+            <field name="model">booking.sheet.report.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Booking Sheet Wizard">
+                 <group>
+                    <group>
+                        <field name="date_from" required="1"/>
+                        <field name="date_to" required="1"/>
+    
+                    </group>
+                    <group>
+                        <field name="coach_id" domain="[('od_coach','=',True)]" required="1"/>
+                    </group>
+                </group>
+                <footer>
+                   <button type="object" name="generate_report" string="View Report"/>
+                     <button type="object" name="get_data_for_pdf" string="Print"/>              
+                
+                </footer>
+
+                </form>
+            </field>
+        </record>
+        
+
+        <record id="menu_booking_sheet_report_wizard" model="ir.actions.act_window">
+            <field name="name">Booking Sheet Report</field>
+
+            <field name="res_model">booking.sheet.report.wizard</field>
+
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+  <menuitem id="menu_booking_sheet_report_wizardd" name="Booking Sheet Analysis" action="menu_booking_sheet_report_wizard" parent="menu_sports_reporting" sequence="6"/>
+
+
+    </data>
+    </odoo>

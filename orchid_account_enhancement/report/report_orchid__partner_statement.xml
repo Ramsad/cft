@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="report_od_partner_statement">
+  <t t-call="report.external_layout">
+    <t t-call="report.html_container">
+      <t t-foreach="docs" t-as="o">
+      <div class="page">
+
+<div class="row">
+<p>
+ <b>Document: Customer account statement</b><br/>
+ <!-- Date From: --><!-- <span t-esc="filter['date_from']"/> --><br/>
+ <span t-if="o.date_to"><b>AS ON:<span t-esc="date_to"/></b></span><br/>
+ <span t-if="o.currency_id"><b>CURRENCY:<span t-esc="o.currency_id.name"/></b></span><br/>
+</p>
+
+<div t-foreach="overdue_line" t-as="partner" t-if="partner['info']">
+
+  <t t-set="cum_bal" t-value="0"/>
+  <t t-set="inv_tot" t-value="0"/>
+  <t t-set="paid_tot" t-value="0"/>
+  <t t-if="partner_index>0">
+      <p style="page-break-before:always;"> </p>
+    </t>
+   <b> Name:<span t-esc="partner['name']"/></b>
+     <b><t t-esc="partner_index"/><br/></b>
+     <t t-if="not partner['company']">
+        Address:<span t-esc="partner['street']"/>
+        <span t-esc="partner['city']"/>
+        <span t-esc="partner['zip']"/>
+        <br/>
+        Accountant:  <span t-esc="partner['accountant_name']"/>
+         <br/>
+        Contact:  <span t-esc="partner['accountant_contact']"/>
+     </t>
+
+     <t t-if="account_type == 'receivable'">
+     <table class="table table-condensed" style="width:100%;border:1px solid #000;border-collapse: collapse;">
+                        <colgroup>
+                           <col width='8%' />
+                           <col width='8%' />
+                           <col width='12%' />
+                           <col width='20%' />
+                           <col width='12%' />
+                           <col width='12%' />
+                           <col width='12%' />
+                           <col width='12%' />
+                        </colgroup>
+                        <thead>
+                           <tr style="border:1px solid #000;border-collapse: collapse;">
+                              <th class="text-center" style="border:1px solid #000;border-collapse: collapse;">Inv Date</th>
+                              <th class="text-center" style="border:1px solid #000;border-collapse: collapse;">Doc Type</th>
+                              <th class="text-center" style="border:1px solid #000;border-collapse: collapse;">Inv No.</th>
+                              <th class="text-center" style="border:1px solid #000;border-collapse: collapse;">Lpo Number</th>
+                              <th class="text-center" style="border:1px solid #000;border-collapse: collapse;">Inv Amount
+                                 <!-- <t t-if="partner['currency']!=''">
+                                    (<t t-esc="partner['currency']"/>)
+                                 </t>
+                                 <t t-if="partner['currency']==''">(AED)</t> -->
+                              </th>
+                              <th class="text-center" style="border:1px solid #000;border-collapse: collapse;">Paid Amt
+                                 <!-- <t t-if="partner['currency']!=''">
+                                    (<t t-esc="partner['currency']"/>)
+                                 </t>
+                                 <t t-if="partner['currency']==''">(AED)</t> -->
+                              </th>
+                              <th class="text-center" style="border:1px solid #000;border-collapse: collapse;">Balance
+                                 <!-- <t t-if="partner['currency']!=''">
+                                    (<t t-esc="partner['currency']"/>)
+                                 </t>
+                                 <t t-if="partner['currency']==''">(AED)</t> -->
+                              </th>
+                              <th class="text-center" style="border:1px solid #000;border-collapse: collapse;">PDC Amt
+                                 <!-- <t t-if="partner['currency']!=''">
+                                    (<t t-esc="partner['currency']"/>)
+                                 </t>
+                                 <t t-if="partner['currency']==''">(AED)</t> -->
+                              </th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                          <tr t-foreach="partner['info']" t-as="line" style="border:1px solid #000;border-collapse: collapse;">
+                            <td style="border:1px solid #000;border-collapse: collapse;text-align:center;">
+                                  <span t-esc="line['date']"/> 
+                                </td>
+                                <td style="border:1px solid #000;border-collapse: collapse;text-align:center;">
+                                  <span t-esc="line['doc_type']"/> 
+                                </td>
+                                <td style="border:1px solid #000;border-collapse: collapse;text-align:center;">
+                                  <span t-esc="line['inv_name']"/> 
+                                </td>
+                                <td  style="border:1px solid #000;border-collapse: collapse;text-align:center;">
+                                  <span t-esc="line['lpo_no']"/> 
+                                </td>
+                                <td style="border:1px solid #000;border-collapse: collapse;text-align: right;">
+                                  <span t-esc="'{0:,.2f}'.format(float(line['inv_amount']))"/>
+                                  <t t-set="inv_tot" t-value="inv_tot+(line['inv_amount'])"/>
+                                </td>
+                                <td  style="border:1px solid #000;border-collapse: collapse;text-align: right;">
+                                  <span t-esc="'{0:,.2f}'.format(float(line['paid_amount']))"/>
+                                  <t t-set="paid_tot" t-value="paid_tot+(line['paid_amount'])"/> 
+                                </td>
+                                <td  style="border:1px solid #000;border-collapse: collapse;text-align: right;">
+                                  <t t-set="cum_bal" t-value="cum_bal+(line['inv_amount']-line['paid_amount'])"/>
+                                  <span t-esc="'{0:,.2f}'.format(float(cum_bal))"/> 
+                                </td>
+                                <td style="border:1px solid #000;border-collapse: collapse;text-align: right;">
+                                  
+                                </td>                             
+                          </tr>
+                          <tr style="border:1px solid #000;border-collapse: collapse;">
+                              <td  colspan="4" style="border:1px solid #000;border-collapse: collapse;text-align: center;">
+                                <span><b>TOTAL</b></span>
+                              </td>
+                              <td  colspan="1" style="border:1px solid #000;border-collapse: collapse;text-align: right;"> 
+                                 <b> <span t-esc="'{0:,.2f}'.format(float(inv_tot))"/></b>
+                              </td>
+                              <td  colspan="1" style="border:1px solid #000;border-collapse: collapse;text-align: right;"> 
+                                 <b> <span t-esc="'{0:,.2f}'.format(float(paid_tot))"/></b>
+                              </td>
+                              <td  colspan="1" style="border:1px solid #000;border-collapse: collapse;text-align: right;"> 
+                                 <b> <span t-esc="'{0:,.2f}'.format(float(cum_bal))"/></b>
+                              </td>
+                              <td  colspan="1" style="border:1px solid #000;border-collapse: collapse;"> 
+                              </td>
+                          </tr>     
+                        </tbody>
+                    </table>
+                  </t>
+                   <t t-if="account_type == 'payable'">
+                    <table class="table table-condensed" style="width:100%;border:1px solid #000;border-collapse: collapse;">
+                        <colgroup>
+                           <col width='10%' />
+                           <col width='10%' />
+                           <col width='15%' />
+                           <col width='15%' />
+                           <col width='15%' />
+                           <col width='15%' />
+                           <col width='10%' />
+                           <col width='10%' />
+                        </colgroup>
+                        <thead>
+                           <tr style="border:1px solid #000;border-collapse: collapse;">
+                              <th class="text-center" style="border:1px solid #000;border-collapse: collapse;">Inv Date</th>
+                              <th class="text-center" style="border:1px solid #000;border-collapse: collapse;">Doc Type</th>
+                              <th class="text-center" style="border:1px solid #000;border-collapse: collapse;">Inv No.</th>
+                              <th class="text-center" style="border:1px solid #000;border-collapse: collapse;">Lpo Number</th>
+                              <th class="text-center" style="border:1px solid #000;border-collapse: collapse;">Inv Amount
+                                 <!-- <t t-if="partner['currency']!=''">
+                                    (<t t-esc="partner['currency']"/>)
+                                 </t>
+                                 <t t-if="partner['currency']==''">(AED)</t> -->
+                              </th>
+                              <th class="text-center" style="border:1px solid #000;border-collapse: collapse;">Paid Amt
+                                 <!-- <t t-if="partner['currency']!=''">
+                                    (<t t-esc="partner['currency']"/>)
+                                 </t>
+                                 <t t-if="partner['currency']==''">(AED)</t> -->
+                              </th>
+                              <th class="text-center" style="border:1px solid #000;border-collapse: collapse;">Balance
+                                 <!-- <t t-if="partner['currency']!=''">
+                                    (<t t-esc="partner['currency']"/>)
+                                 </t>
+                                 <t t-if="partner['currency']==''">(AED)</t> -->
+                              </th>
+                              <th class="text-center" style="border:1px solid #000;border-collapse: collapse;">PDC Amt
+                                 <!-- <t t-if="partner['currency']!=''">
+                                    (<t t-esc="partner['currency']"/>)
+                                 </t>
+                                 <t t-if="partner['currency']==''">(AED)</t> -->
+                              </th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                          <tr t-foreach="partner['info']" t-as="line" style="border:1px solid #000;border-collapse: collapse;">
+                            <td style="border:1px solid #000;border-collapse: collapse;text-align:center;">
+                                  <span t-esc="line['date']"/> 
+                                </td>
+                                <td style="border:1px solid #000;border-collapse: collapse;text-align:center;">
+                                  <span t-esc="line['doc_type']"/> 
+                                </td>
+                                <td style="border:1px solid #000;border-collapse: collapse;text-align:center;">
+                                  <span t-esc="line['inv_name']"/> 
+                                </td>
+                                <td  style="border:1px solid #000;border-collapse: collapse;text-align:center;">
+                                  <span t-esc="line['lpo_no']"/> 
+                                </td>
+                                <td style="border:1px solid #000;border-collapse: collapse;text-align: right;">
+                                  <span t-esc="'{0:,.2f}'.format(float(line['paid_amount']))"/>
+                                  <t t-set="paid_tot" t-value="paid_tot+(line['paid_amount'])"/>
+                                </td>
+                                <td  style="border:1px solid #000;border-collapse: collapse;text-align: right;">
+                                  <span t-esc="'{0:,.2f}'.format(float(line['inv_amount']))"/>
+                                  <t t-set="inv_tot" t-value="inv_tot+(line['inv_amount'])"/> 
+                                </td>
+                                <td  style="border:1px solid #000;border-collapse: collapse;text-align: right;">
+                                  <t t-set="cum_bal" t-value="cum_bal+(line['inv_amount']-line['paid_amount'])"/>
+                                  <span t-esc="'{0:,.2f}'.format(float(cum_bal))"/> 
+                                </td>
+                                <td style="border:1px solid #000;border-collapse: collapse;text-align: right;">
+                                  
+                                </td>                             
+                          </tr>
+                          <tr style="border:1px solid #000;border-collapse: collapse;">
+                              <td  colspan="4" style="border:1px solid #000;border-collapse: collapse;text-align: center;">
+                                <span><b>TOTAL</b></span>
+                              </td>
+                              <td  colspan="1" style="border:1px solid #000;border-collapse: collapse;text-align: right;"> 
+                                 <b> <span t-esc="'{0:,.2f}'.format(float(paid_tot))"/></b>
+                              </td>
+                              <td  colspan="1" style="border:1px solid #000;border-collapse: collapse;text-align: right;"> 
+                                 <b> <span t-esc="'{0:,.2f}'.format(float(inv_tot))"/></b>
+                              </td>
+                              <td  colspan="1" style="border:1px solid #000;border-collapse: collapse;text-align: right;"> 
+                                 <b> <span t-esc="'{0:,.2f}'.format(float(cum_bal))"/></b>
+                              </td>
+                              <td  colspan="1" style="border:1px solid #000;border-collapse: collapse;"> 
+                              </td>
+                          </tr>     
+                        </tbody>
+                    </table>
+                  </t>
+
+</div>
+</div>
+</div>
+</t>
+</t>
+</t>
+</template>
+</odoo>

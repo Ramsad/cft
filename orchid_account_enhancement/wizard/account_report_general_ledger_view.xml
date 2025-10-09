@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+
+    <record id="account_report_general_ledger_view" model="ir.ui.view">
+        <field name="name">General Ledger</field>
+        <field name="model">account.report.general.ledger</field>
+        <field name="inherit_id" ref="account.account_common_report_view"/>
+        <field name="arch" type="xml">
+        <data>
+        
+        <button name = "check_report" position="after">
+        <button name="print_excel" type="object" string="Excel" class="oe_highlight"/>
+        </button>
+
+        <field name="date_to" position="after">
+          <field name="od_template" widget="selection"/>
+        </field>
+
+        <button name="print_excel" position="after">
+                        <field name="excel_file" filename="file_name"/> 
+                        <field name="file_name" invisible="1"/>
+            </button>        
+          <button special="cancel" position="replace">  
+                      
+             <button string="Cancel" class="oe_link" special="cancel" invisible="1"/>
+          </button>  
+
+        <xpath expr="//field[@name='journal_ids']" position="replace">
+          <notebook>
+          
+               <page string="Partners">
+            
+                <field name="od_partner_ids"/>
+              </page>
+          <page string="Journals" name="journal" invisible="1">
+         <field name="journal_ids" widget="many2many_tags" options="{'no_create': True}"/>
+         </page>
+         
+
+         </notebook>
+         </xpath>
+          
+        </data>
+        </field>
+    </record>
+
+    <record id="od_account_report_general_ledger_view" model="ir.ui.view">
+        <field name="name">General Ledger</field>
+        <field name="model">account.report.general.ledger</field>
+        <field name="inherit_id" ref="account_report_general_ledger_view"/>
+        <field name="arch" type="xml">
+        <data>
+        <xpath expr="//page[@name='journal']" position="after">
+
+              <page string="Accounts">
+            
+                <field name="od_account_ids"/>
+              </page>
+              
+              <page string="Journal">
+            
+                <field name="od_journal_ids"/>
+              </page>
+              <page string="Analytic">
+            
+                <field name="od_analytic_ids"/>
+              </page>   
+              
+                <page string="Cost center">
+            
+                <field name="od_cost_center_ids"/>
+              </page>  
+               
+              <page string="Products">
+            
+                <field name="od_product_ids"/>
+              </page>  
+              
+<!--                <page string="Move Line" invisible="0">-->
+<!--            -->
+<!--                <field name="move_line_ids">-->
+<!--                  <list>-->
+<!--                        <field name="move_line_id"/>-->
+<!--                  </list>-->
+<!--                 -->
+<!--                </field>-->
+<!--                -->
+<!--                  -->
+<!--                       -->
+<!--              </page>           -->
+            
+          <page string="Journals" name="journal" invisible="1">
+         <field name="journal_ids" widget="many2many_tags" options="{'no_create': True}"/>
+         </page>
+         
+        </xpath>
+        </data>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+        <template id="collect_summary">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.html_container">
+                         <t t-call="web.external_layout">
+                        <t t-foreach="docs" t-as="o">
+                            <div class="header">
+                                <br/><br/><br/>
+                                <!-- <left><img t-att-src="'data:image/png;base64,%s' % o.x_company_id.logo" style="max-height:100px;"/></left> -->
+                            </div>
+                        </t>
+                        <div class="page" style="font-size:14px;">
+                            <div class="oe_structure"/>
+                            <b/>
+                            <b/>
+                            <div  style="padding:0px 0px 30px 0px;">
+                                <h2>
+                                    <span>Collection Report</span>
+                                </h2>
+                            </div>
+                            <b/>
+                            <b/>
+                            <t t-set="total" t-value="0"/>
+                            <t t-set="bank_total" t-value="0"/>
+                            <t t-set="cash_total" t-value="0"/>
+                            <t t-set="vat_total" t-value="0"/>
+                            <table class="table table-condensed" style="border-collapse:collapse;">
+                                <thead style="border-bottom:1px solid black;">
+                                    <tr>
+                                        <th style="text-align:center;">Date</th>
+                                        <th style="text-align:center;">Inv.No</th>
+                                        <th style="text-align:center;">RV No.</th>
+                                        <th style="text-align:center;">Sports</th>
+                                        <!-- <th style="text-align:center;">Coach</th> -->
+                                        <th style="text-align:center;">Academy</th>
+                                        <th style="text-align:center;">Dr.Account</th>
+                                        <th style="text-align:center;">Cheque</th>
+                                        <!-- <th>Cheque Date</th>
+                                        <th>Fees</th>
+                                        <th>Registration</th> -->
+                                        <th style="text-align:center;">Cash</th>
+                                        <th style="text-align:center;">Bank</th>
+                                        <th style="text-align:center;">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="docs" t-as="o">
+                                        <!-- <t t-set="col_date" t-value="o.date"></t>
+                                            <t t-if="col_date">
+                                                <tr>
+                                                    <td><b>Date:<span t-field="o.date"/></b></td>
+                                                </tr>
+                                            </t> -->
+                                        <tr style="border-bottom:1px solid grey;" t-foreach="o.receipt_line" t-as="l">
+                                            <td style="text-align:center;"><span t-field="l.receipt_id.date"></span></td>
+                                            <td style="text-align:center;"><span t-field="l.od_invoice_no"></span></td>
+                                            <td style="text-align:center;"><span t-field="l.rv_no"/></td>
+                                            <td style="text-align:center;"><span t-field="l.receipt_id.activities_id"/></td>
+                                            <!-- <td style="text-align:center;"><span t-field="l.receipt_id.coach_id.name"/></td> -->
+                                            <td style="text-align:center;"><span t-field="o.venue_id"/></td>
+                                            <td style="text-align:center;"><span t-field="l.payment_type_account_id.name"/></td>
+                                            <td style="text-align:center;"><span t-field="l.remarks"/></td>
+                                            <!-- <td><span t-field="l.amount"></span></td>
+                                            <td><span t-field="l.transportation"></span></td> -->
+                                            <td style="text-align:right;">
+                                                <t t-if="l.payment_type_account_id.id==330">
+                                                    <span t-esc="'{0:,.2f}'.format(float(l.grand_total))"/>
+                                                    <t t-set="cash_total" t-value="o.get_round(l.grand_total + cash_total)"/>
+                                                </t>
+                                                <t t-if="l.payment_type_account_id.id!=330">
+                                                    <span>0.00</span>
+                                                </t>
+                                            </td>
+                                            <td style="text-align:right;">
+                                                <t t-if="l.payment_type_account_id.id!=330">
+                                                    <span t-esc="'{0:,.2f}'.format(float(l.grand_total))"/>
+                                                    <t t-set="bank_total" t-value="l.grand_total + bank_total"/>
+                                                    <t t-set="bank_total" t-value="o.get_round(bank_total)"/>
+                                                </t>
+                                                <t t-if="l.payment_type_account_id.id==330">
+                                                    <span>0.00</span>
+                                                </t>
+                                            </td>
+                                            <td style="text-align:right;"><span t-esc="'{0:,.2f}'.format(float(l.grand_total))"></span></td>
+                                            <t t-set="total" t-value="l.grand_total + total"/>
+                                            <t t-set="total" t-value="o.get_round(total)"/>
+
+                                            <t t-set="vat_total" t-value="l.od_vat_amount + vat_total"/>
+                                        </tr>
+                                    </t>
+                                    <tr style="border-bottom:1px solid grey;">
+                                        <td style="border:1px solid grey;" colspan="7">Total</td>
+                                        <td style="border:1px solid grey;text-align:right;"><span><t t-esc="'{0:,.2f}'.format(float(cash_total))"/></span></td>
+                                        <td style="border:1px solid grey;text-align:right;"><span><t t-esc="'{0:,.2f}'.format(float(bank_total))"/></span></td>
+                                        <td style="border:1px solid grey;text-align:right;"><span t-esc="'{0:,.2f}'.format(float(total))"/></td>
+
+                                    </tr>
+
+                                    <tr style="border-bottom:1px solid grey;">
+                                        <td style="border:1px solid grey;" colspan="9">VAT Total</td>
+
+                                        <td style="border:1px solid grey;text-align:right;"><span><t t-esc="'{0:,.2f}'.format(float(vat_total))"/></span></td>
+
+                                    </tr>
+                                </tbody>
+
+                                <!-- <tfoot>
+                                    <t t-foreach="docs" t-as="o">
+                                    <tr>
+                                        <td class="text-right" colspan="10"><b>Total:</b></td>
+                                        <td><b><span t-esc="sum([l.total for l in o.receipt_line if l.payment_type_account_id.user_type.name=='Bank'])"/></b></td>
+                                        <td><b><span t-esc="sum([l.total for l in o.receipt_line if l.payment_type_account_id.user_type.name=='Cash'])"/></b></td>
+                                        <td><b><span t-esc="sum([l.total for l in o.receipt_line])"/></b></td>
+                                    </tr>
+                                    </t>
+                                </tfoot> -->
+                            </table>
+                        </div>
+
+                        <div class="footer">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <ul class="list-inline">
+                                        <li>Page:</li>
+                                        <li><span class="page"/></li>
+                                        <li>/</li>
+                                        <li><span class="topage"/></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!--    </t> -->
+                    </t>
+
+                </t>
+            </t>
+        </template>
+
+        <record id="action_jms_report" model="ir.actions.report">
+            <field name="name">Collection Print</field>
+            <field name="model">od.sports.receipt</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">orchid_sports_v10.collect_summary</field>
+            <field name="report_file">orchid_sports_v10.collect_summary</field>
+            <field name="binding_model_id" ref="model_od_sports_receipt"/>
+            <field name="binding_type">report</field>
+        </record>
+
+
+    </data>
+</odoo>

@@ -1,0 +1,18 @@
+# Auto-upgraded manifest for Odoo 18 scaffolding
+{'name': 'Orchid VAT 10',
+ 'version': '18.1',
+ 'summary': 'OrchidERP VAT 10',
+ 'author': 'OrchidERP',
+ 'website': 'http://www.orchiderp.com',
+ 'license': 'LGPL-3',
+ 'depends': ['base',
+             'sale',
+             'account',
+             'purchase'],
+ 'data': ['views/partner_inherit_view.xml',
+          'views/tax_inherit_view.xml',
+          'wizard/tax_register_wiz.xml',
+          'views/models_view.xml',
+          'wizard/tax_calculation_wiz_view.xml'],
+ 'demo': [],
+ 'qweb': []}

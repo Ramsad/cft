@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Student Profile (wizard) -->
+        <record id="od_report_partner_collection" model="ir.actions.report">
+            <field name="name">Student Profile</field>
+            <field name="model">partner.collection.wizard</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">orchid_sports_v10.report_partner_collection</field>
+            <field name="report_file">orchid_sports_v10.report_partner_collection</field>
+            <field name="print_report_name">'Student Profile - %s' % (object and (object.display_name or '') or '')</field>
+        </record>
+
+        <!-- Sports Receipt Line (invoice-style) -->
+        <record id="od_sports_receipt_line_pdf" model="ir.actions.report">
+            <field name="name">Print Invoice</field>
+            <field name="model">od.sports.receipt.line</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">orchid_sports_v10.od_sports_receipt_line_print</field>
+            <field name="report_file">orchid_sports_v10.od_sports_receipt_line_print</field>
+            <field name="print_report_name">'Receipt - %s' % (object and (object.rv_no or object.display_name or '') or '')</field>
+        </record>
+
+    </data>
+</odoo>

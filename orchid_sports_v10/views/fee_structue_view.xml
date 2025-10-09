@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    <record model="ir.ui.view" id="od_fee_structure_list">
+        <field name="name">od.fee.structure.pricelist</field>
+        <field name="model">od.fee.structure.pricelist</field>
+        <field name="arch" type="xml">
+            <list string="PriceList">
+            
+                                <field name="name"/>
+<!--                    <field name="type_id"/>-->
+<!--                    <field name="product_id"/>-->
+<!--                     <field name="t1"/> -->
+<!--                     <field name="t2"/>   -->
+<!--                      <field name="t3"/> -->
+<!--                     <field name="t4"/>   -->
+<!--                     -->
+<!--                     -->
+<!--                        <field name="no_of_class"/> -->
+<!--                     <field name="registration_fee"/>   -->
+<!--                     <field name="remarks"/>   -->
+<!--                     -->
+<!--                     -->
+<!--                        <field name="commission"/> -->
+<!--                     <field name="cost_centre_id"/>                                  -->
+                    
+            </list>
+       </field>
+    </record>
+
+ 
+
+  <record model="ir.ui.view" id="od_fee_structure_form">
+        <field name="name">od.fee.structure.pricelist</field>
+        <field name="model">od.fee.structure.pricelist</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                  <group>
+                      <group>
+
+            
+                                <field name="name" required="1"/>
+                                <field name="from_date"/>
+                                
+                                 <field name="to_date"/>
+                                 
+                                 
+                                 </group>
+                                 
+                                 <group></group>
+                                 
+                                 </group>
+                    <notebook>
+                    	<page string="Line">
+                    		<field name="pricelist_line">
+                    			<list editable="top">
+                    			                    <field name="type_id"/>
+                    <field name="product_id" invisible="1"/>
+                    <field name="cost_centre_id"/> 
+<!--                     <field name="t1"/> -->
+<!--                     <field name="t2"/>   -->
+<!--                      <field name="t3"/> -->
+                      
+                      
+                      
+                       <field name="t1"/> 
+                        <field name="t1_fee"/>
+                     <field name="t1_reg"/>   
+
+                      <field name="t1_total"/>                      
+                      
+                       <field name="t2"/> 
+                     
+                     
+                     
+                                           <field name="t2_fee"/>
+                                           <field name="t2_reg"/> 
+                      <field name="t2_total"/>                       
+                      
+                           <field name="t3"/> 
+                     
+                     
+                     
+                                           <field name="t3_fee"/>
+                                           <field name="t3_reg"/> 
+                      <field name="t3_total"/>             
+                     
+                        <field name="no_of_class" invisible="1"/> 
+                     <field name="registration_fee" invisible="1"/>   
+                     <field name="remarks"/>   
+                     
+                     
+                        <field name="commission"/> 
+                     
+                     
+                     </list>
+                     </field>
+                     </page>
+                     </notebook>
+                    				
+                 
+
+                  
+       </sheet>
+    </form>
+  </field>
+ </record>
+<record model="ir.actions.act_window" id="actionod_fee_structure">
+        <field name="name">PriceList</field>
+
+        <field name="res_model">od.fee.structure.pricelist</field>
+
+        <field name="view_mode">list,form</field>
+         <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Click to add new PriceList. 
+          </p>
+        </field>
+    </record>
+ </data>
+</odoo>

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="od_sports_receipt_line_print">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-foreach="docs" t-as="o">
+                    <!--<t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})"/>-->
+                    <div class="page">
+                        <div class="row" style="text-align:center;">
+                            <h2>
+                                <b>TAX INVOICE
+                                    <br/>
+                                    <span>فاتورة ضريبية</span>
+                                </b>
+                            </h2>
+                            <div>
+                                <h5>
+                                    <b>TRN No. 100255912600003</b>
+                                </h5>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <div class="col-6">
+                                <span>
+                                    <b>To</b>
+                                </span>
+                                <br/>
+                                <span t-field="o.partner_id"/>
+                                <span t-if="o.partner_id.street">
+                                    <t tesc="o.partner_id.street"/>
+                                </span>
+                                <span t-if="o.partner_id.street2">
+                                    <t tesc="o.partner_id.street2"/>
+                                </span>
+                                <span t-if="o.partner_id.city">
+                                    <t tesc="o.partner_id.city"/>
+                                </span>
+                                <span t-if="o.partner_id.state_id">
+                                    <t tesc="o.partner_id.state_id"/>
+                                </span>
+                                <span t-if="o.partner_id.zip">
+                                    <t tesc="o.partner_id.zip"/>
+                                </span>
+
+                                <span class="row;text-left" t-if="o.partner_id.vat">
+                                    <b>TRN#
+                                        <span t-field="o.partner_id.vat"/>
+                                    </b>
+                                </span>
+                            </div>
+
+                            <div class="col-6" style="text-align:right">
+                                <span>Date:</span>
+                                <span t-field="o.receipt_id.date"/>
+                                <br/>
+                                <span style="text-right">Inv.No.</span>
+                                <span style="text-right" t-field="o.od_invoice_no"/>
+                                <br/>
+
+                            </div>
+                        </div>
+
+
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <t t-set="sno" t-value="1"/>
+                        <table class="o_has_total_table table o_main_table table-borderless mb-0"
+                               style="width:100%;border:1px solid grey;border-collapse: collapse;">
+                            <thead>
+                                <tr>
+                                    <th style="width:5%;border:1px solid grey;border-collapse: collapse;text-align:center;font-size:15px;bold:0">
+                                        No.
+                                    </th>
+
+                                    <th style="width:15%;border:1px solid grey;border-collapse: collapse;text-align:center;font-size:15px;bold:0">
+                                        DESCRIPTION
+                                    </th>
+                                    <!-- <th class="hidden"  style="text-align:center;">Source Document</th> -->
+                                    <th style="width:5%;border:1px solid grey;border-collapse: collapse;text-align:center;font-size:15px">
+                                        QUANTITY
+                                    </th>
+
+                                    <th style="width:15%;border:1px solid grey;border-collapse: collapse;text-align:center;font-size:15px">
+                                        GROSS AMOUNT
+                                    </th>
+                                    <!-- <th t-if="display_discount"  style="text-align:center;" groups="sale.group_discount_per_so_line">Disc.(%)</th> -->
+                                    <th style="width:10%;border:1px solid grey;border-collapse: collapse;text-align:center;font-size:15px">
+                                        VAT AMOUNT
+                                    </th>
+                                    <th style="width:15%;border:1px solid grey;border-collapse: collapse;text-align:center;font-size:15px">
+                                        NET AMOUNT
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="invoice_tbody">
+
+                                <tr>
+                                    <td style="border:1px solid grey;border-collapse: collapse;">
+                                        <span t-esc="sno"/>
+                                    </td>
+
+                                    <td style="border:1px solid grey;border-collapse: collapse;">
+                                        <span t-field="o.type_id"/>
+                                        <span t-if="o.type_id.remarks">
+                                            (<span t-field="o.type_id.remarks"/>)
+                                        </span>
+                                    </td>
+                                    <!-- <td "border-bottom:1px solid grey;border-top:1px solid grey;border-left:1px solid grey;border-right:1px solid grey;" class="hidden"><span t-field="o.receipt_id.name"/></td> -->
+                                    <td style="border:1px solid grey;border-collapse: collapse;text-align:right">
+                                        <span>1</span>
+                                        <!-- <span t-field="l.uom_id" groups="product.group_uom"/> -->
+                                    </td>
+                                    <td style="border:1px solid grey;border-collapse: collapse;text-align:right">
+                                        <span t-esc="'%.2f'%o.total"/>
+                                    </td>
+                                    <td style="border:1px solid grey;border-collapse: collapse;text-align:right">
+                                        <t t-if="o.od_vat_amount">
+                                            <span t-esc="'%.2f'%o.od_vat_amount"/>
+                                        </t>
+                                    </td>
+                                    <td style="border:1px solid grey;border-collapse: collapse;text-align:right">
+                                        <span t-esc="'%.2f'%o.grand_total"/>
+                                    </td>
+                                </tr>
+                                <tr></tr>
+                                <tr></tr>
+                                <tr></tr>
+                                <tr></tr>
+                                <tr>
+                                    <td style="border:1px solid grey;border-collapse: collapse;text-align:right"/>
+                                    <td style="border:1px solid grey;border-collapse: collapse;text-align:center">
+                                        TOTAL
+                                    </td>
+                                    <td style="border:1px solid grey;border-collapse: collapse;text-align:right"/>
+                                    <td style="border:1px solid grey;border-collapse: collapse;text-align:right">
+                                        <span t-esc="'%.2f'%o.total"/>
+                                    </td>
+                                    <td style="border:1px solid grey;border-collapse: collapse;text-align:right">
+                                        <t t-if="o.od_vat_amount">
+                                            <span t-esc="'%.2f'%o.od_vat_amount"/>
+                                        </t>
+                                    </td>
+                                    <td style="border:1px solid grey;border-collapse: collapse;text-align:right">
+                                        <span t-esc="'%.2f'%o.grand_total"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br/>
+                        <br/>
+                        <div>
+                            (AED&#160;<span t-esc="round(o.grand_total)"
+                                            t-esc-options='{"widget": "num2words","case":"capital"}'/>&#160;only)
+                        </div>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <p>
+                            <b>Bank Details:
+                                <br/>
+                                C.F.T SPORTS SERVICES LLC
+                            </b>
+                            <br/>
+                            Bank Emirates NBD
+                            <br/>
+                            Branch Dubai Festival City, Dubai UAE
+                            <br/>
+                            Account No. 101 4047620 901
+                            <br/>
+                            IBAN Number: AE190260001014047620901
+                            <br/>
+                            Swift Code:       EBILAEAD
+                            <br/>
+                        </p>
+                    </div>
+
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="od_accounting_report_view" model="ir.ui.view">
+        <field name="name">Accounting Report</field>
+        <field name="model">accounting.report</field>
+        <field name="inherit_id" ref="account.accounting_report_view"/>
+        <field name="arch" type="xml">
+        <data>
+            <xpath expr="//field[@name='date_to']" position="after">
+                <field name="detail_report"/>
+            </xpath>
+        </data>
+        </field>
+    </record>
+
+</odoo>

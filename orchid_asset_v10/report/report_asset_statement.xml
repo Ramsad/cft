@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+   <data>
+      <template id="orchid_asset_v10.report_asset_statement">
+         <t t-foreach="docs" t-as="o">
+            <div class="page">
+            <div class="oe_structure"/>
+            <div><br/><br/></div>
+            <div><br/><br/></div>
+            <div class="row" style="background-color:#1E90FF">
+               <font color="white">
+                  <h1> Asset Report </h1>
+               </font>
+            </div>
+            <div/>
+            <br/>
+            <div/>
+               <!--  -->
+               <div>
+                  <h4>Date From:<span t-esc="datetime.datetime.strptime(filters['date_from'], '%Y-%m-%d').strftime('%m/%d/%Y')"/>
+
+                   <span>Date To:</span>
+                   <span t-esc="datetime.datetime.strptime(filters['date_to'], '%Y-%m-%d').strftime('%m/%d/%Y')"/>
+                </h4>
+               </div>
+               <div>
+                  <t t-set="cost_grnt_total" t-value="0"/>
+                  <t t-set="accd_grnt_total" t-value="0"/>
+                  <t t-set="acc_grnt_total" t-value="0"/>
+                  <t t-set="netcost_grnt_total" t-value="0"/>
+                  <t t-foreach="filters['category_ids']" t-as="category_id">
+
+                  	<t t-set="cost_total" t-value="0"/>
+               		<t t-set="acc_depr_total" t-value="0"/>
+               		<t t-set="depr_total" t-value="0"/>
+               		
+               		<t t-set="net_cost_total" t-value="0"/>
+                     <table class="table table-condensed" style="border: 1px solid black; width:100%;border-collapse: collapse;">
+                        <thead style="background-color:#ECF2E9">
+                           <tr>
+                              <!-- <th class="text-center" style="border:1px solid black;width:2%">Asset Code</th> -->
+                              <th class="text-center" style="border:1px solid black;width:8%">Reference Number</th>
+                              <!-- <th class="text-center" style="border:1px solid black; width:4%">
+                                 <center>Division</center>
+                              </th> -->
+                              <th class="text-center" style="border:1px solid black; width:25%">Asset</th>
+                              <th class="text-center" style="border:1px solid black; width:9%">
+                                 <center> D.O.P</center>
+                              </th>
+                              <th class="text-center" style="border:1px solid black; width:14%">
+                                 <right>Cost</right>
+                              </th>
+                              <th class="text-center" style="border:1px solid black; width:10%">
+                                 <center>Acc Depr</center>
+                              </th>
+                              <th class="text-center" style="border:1px solid black; width:10%">
+                                 <right>Depr</right>
+                              </th>
+                              <th class="text-center" style="border-left:1px solid black; width:14%">
+                                 <right>Net Cost</right>
+                              </th>
+                           </tr>
+                        </thead>
+
+
+                        <tbody style="border-bottom: 1px solid black;">
+                           <t t-set="count" t-value="1"/>
+                           <t t-set="depre_sum" t-value="0"/>
+                           <font color="#1E90FF">
+                              <h4>
+                                 <t t-esc="get_category_by_id(category_id)"/>
+                              </h4>
+                           </font>
+                           <t t-foreach="get_asset_by_category(category_id, filters)" t-as="asset">
+                           		<!-- Find Total -->
+                           		<t t-set="cost_total" t-value="cost_total + asset.od_cost"/>
+                           		<t t-set="acc_depr_total" t-value="acc_depr_total+get_acc_depreciation_amt(filters,asset)+ asset.od_depreciation"/>
+                           		<t t-set="depr_total" t-value="depr_total+get_depreciation_amt(filters,asset)"/>
+                           		<t t-set="net_cost" t-value="0"/>
+                           		<t t-set="net_cost" t-value="
+                           			(asset.od_cost)-
+                           			(get_acc_depreciation_amt(filters,asset)+ asset.od_depreciation)-
+
+                           			(get_depreciation_amt(filters,asset))"/>
+                           		<t t-set="net_cost_total" t-value="net_cost_total+net_cost"/>
+
+                              <tr>
+								<td style="border:1px solid black;"><span t-field="asset.od_sequence"/></td>
+								<td style="border:1px solid black;"><span t-field="asset.name"/></td>
+								<td style="border:1px solid black;"><center><span t-field="asset.od_purchase_date"/></center></td>
+								<td class="text-right" style="text-align:right;border:1px solid black;"><right>
+									<t t-esc="'{0:,.2f}'.format(float(asset.od_cost))"/>
+								</right></td>
+								<td class="text-right" style="text-align:right;border:1px solid black;"><right><t t-esc="'{0:,.2f}'.format(float(get_acc_depreciation_amt(filters,asset)+ asset.od_depreciation))"/>
+								</right>
+                     </td>
+                       <td class="text-right" style="text-align:right;border:1px solid black;">
+                           <right><span t-esc="'{0:,.2f}'.format(float(get_depreciation_amt(filters,asset)))"/></right>
+                       </td>	
+								<td class="text-right" style="text-align:right;border:1px solid black;"><right><t t-esc="'{0:,.2f}'.format(float(net_cost))"/></right></td>
+
+
+                              </tr>
+                           </t>
+                           <tr>
+                              <td><strong>TOTAL</strong></td>
+                              <td/>
+
+                              <td style="border-right:1px solid black;"/>
+                              <td class="text-right" style="text-align:right;border:1px solid black;">
+                                 <strong><span t-esc="'{0:,.2f}'.format(float(cost_total))"/></strong>
+                                 <t t-set="cost_grnt_total" t-value="cost_grnt_total + cost_total"/>
+                              </td>
+                              <td class="text-right" style="text-align:right;border:1px solid black;">
+                                 <strong><span t-esc="'{0:,.2f}'.format(float(acc_depr_total))"/>
+                                 </strong>
+                                 <t t-set="accd_grnt_total" t-value="accd_grnt_total+acc_depr_total"/>
+                              </td>
+                              <td class="text-right" style="text-align:right;border:1px solid black;">
+                                 <strong><span t-esc="'{0:,.2f}'.format(float(depr_total))"/></strong>
+                                 <t t-set="acc_grnt_total" t-value="acc_grnt_total+depr_total"/>
+                              </td>
+                              <td class="text-right" style="text-align:right;border:1px solid black;">
+                                 <strong><span t-esc="'{0:,.2f}'.format(float(net_cost_total))"/></strong>
+                                 <t t-set="netcost_grnt_total" t-value="netcost_grnt_total+net_cost_total"/>
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </t>
+                  <table style="border: 1px solid black; width:100%;border-collapse: collapse;padding:5px;">
+                     <tr>
+                        <td colspan="3" style="width:42%;">
+                           <strong>Grand Total</strong>
+                        </td>
+                        <td style="width:14%;text-align:right;border:1px solid black;">
+                           <strong><span t-esc="'{0:,.2f}'.format(float(cost_grnt_total))"/></strong>
+                        </td>
+                        <td style="width:10%;text-align:right;border:1px solid black;">
+                           <strong><span t-esc="'{0:,.2f}'.format(float(accd_grnt_total))"/></strong>
+                        </td>
+                        <td style="width:10%;text-align:right;border:1px solid black;">
+                           <strong><span t-esc="'{0:,.2f}'.format(float(acc_grnt_total))"/></strong>
+                        </td>
+                        <td style="width:14%;text-align:right;border:1px solid black;">
+                           <strong><span t-esc="'{0:,.2f}'.format(float(netcost_grnt_total))"/></strong>
+                        </td>
+
+                     </tr>
+                  </table>
+
+                  
+                  
+                  
+                  <br/>
+                  <br/>
+               </div>
+            </div>
+         </t>
+      </template>
+   </data>
+</odoo>

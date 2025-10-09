@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_account_journal_inherit_orchid" model="ir.ui.view">
+        <field name="name">account.journal.inherit.orchid</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="account.view_account_journal_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='default_credit_account_id']" position="after">
+                <field name="od_cheque_in_acc_id" domain="[('deprecated','=',False)]"/>
+                <field name="od_cheque_out_acc_id" domain="[('deprecated','=',False)]"/>
+            </xpath>
+
+            <xpath expr="//field[@name='account_control_ids']" position="after">
+                <field name="orchid_div_id"/>
+                <field name="orchid_br_id"/>
+                <field name="orchid_cc_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ======================= Payment form: inline fields ======================= -->
+    <record id="view_register_payment_form_orchid" model="ir.ui.view">
+        <field name="name">account.payment.inherit.orchid.inline</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='journal_id']" position="after">
+                <field name="od_type" invisible="1"/>
+                <field name="od_released" invisible="1"/>
+                <field name="od_check_no"
+                       invisible="od_type != 'bank'"
+                       required="od_type == 'bank'"
+                       readonly="od_released"/>
+                <field name="od_check_date"
+                       invisible="od_type != 'bank'"
+                       required="od_type == 'bank'"
+                       readonly="od_released"/>
+                <field name="od_bank_account"
+                       invisible="not journal_id"
+                       readonly="od_released"
+                       required="True"/>
+                <field name="od_check_amount_in_words" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ======================= Payment form: buttons, notebook, extras ======================= -->
+    <record id="view_account_payment_inherit_orchid" model="ir.ui.view">
+        <field name="name">account.payment.inherit.orchid</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Keep payment_type selectable but readonly outside draft -->
+            <xpath expr="//field[@name='payment_type']" position="replace">
+                <field name="payment_type" widget="selection"
+                       readonly="state != 'draft'"/>
+            </xpath>
+
+            <!-- Add buttons near Post -->
+            <xpath expr="//button[@name='action_post']" position="after">
+                <button name="release"
+                        type="object"
+                        class="oe_highlight"
+                        string="Release"
+                        invisible="(not is_clearing) or is_reverse or od_release_move_id or state != 'posted'"/>
+            </xpath>
+
+            <xpath expr="//button[@name='action_post']" position="after">
+                <button name="print_payment"
+                        type="object"
+                        class="oe_highlight"
+                        string="Print"
+                        invisible="state == 'draft'"/>
+            </xpath>
+
+            <xpath expr="//field[@name='ref']" position="after">
+                <field name="od_bank_account"
+                       invisible="not journal_id"
+                       readonly="od_released"/>
+                <field name="is_clearing"
+                       invisible="payment_type not in ('inbound','outbound','income','expense')"
+                       readonly="state != 'draft'"/>
+                <field name="od_released"
+                       invisible="payment_type not in ('inbound','outbound','income','expense')"
+                       readonly="state != 'draft'"/>
+                <field name="is_group"
+                       invisible="payment_type not in ('inbound',)"
+                       readonly="state != 'draft'"/>
+                <field name="od_clearing_account"
+                       invisible="not is_clearing"
+                       readonly="state != 'draft'"
+                       required="is_clearing"/>
+                <field name="od_release_move_id" readonly="1" invisible="not od_release_move_id"/>
+                <field name="od_group_move_id"   readonly="1" invisible="not od_group_move_id"/>
+                <field name="od_inex_move_id"    readonly="1" invisible="not od_inex_move_id"/>
+                <field name="is_reverse" invisible="1"/>
+            </xpath>
+
+            <!-- Extra cheque controls next to journal -->
+            <xpath expr="//field[@name='journal_id']" position="after">
+                <field name="od_type" invisible="1"/>
+                <field name="od_check_no"
+                       invisible="od_type != 'bank'"
+                       required="od_type == 'bank'"
+                       readonly="od_released"/>
+                <field name="od_check_date"
+                       invisible="od_type != 'bank'"
+                       required="od_type == 'bank'"
+                       readonly="od_released"/>
+                <field name="od_check_print"/>
+                <field name="od_check_to" invisible="not od_check_print"/>
+            </xpath>
+
+            <!-- Notebook -->
+            <xpath expr="//sheet" position="inside">
+                <notebook>
+                    <page name="orchid_group_pay" string="Group Pay" invisible="not is_group">
+                        <field name="group_line" readonly="state != 'draft'">
+                            <list editable="bottom">
+                                <field name="child_partner_id"/>
+                                <field name="pay_amount" sum="Total"/>
+                                <field name="name"/>
+                            </list>
+                        </field>
+                    </page>
+
+                    <page name="income_expense_line_page" string="Lines"
+                          invisible="payment_type not in ('income','expense')">
+                        <field name="od_income_expense_line" readonly="state != 'draft'">
+                            <list editable="bottom">
+                                <field name="account_id" required="1"/>
+                                <field name="label" required="1"/>
+                                <field name="partner_id"/>
+                                <field name="orchid_cc_id"/>
+                                <field name="analytic_account_id"/>
+                                <field name="amount" required="1" sum="Total"/>
+                            </list>
+                        </field>
+                    </page>
+                </notebook>
+                <group>
+                    <field name="od_internal_note"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

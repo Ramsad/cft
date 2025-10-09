@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+        <template id="report_vat_invoice">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.html_container">
+                    <t t-call="web.external_layout">
+                        <t t-foreach="docs" t-as="o">
+                            <!--<t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})"/>-->
+                            <div class="page" style="margin-left:40;margin-left:40;">
+                                <div class="row" style="text-align:center;">
+                                    <h3>
+                                        <b>TAX INVOICE
+                                            <br/>
+                                            <span>فاتورة ضريبية</span>
+                                        </b>
+                                    </h3>
+                                    <div>
+                                        <h5>
+                                            <b>TRN No. 100255912600003</b>
+                                        </h5>
+                                    </div>
+                                </div>
+                                <br/>
+                                <br/>
+                                <div>
+                                    <!-- <span class="row;text-left" >To</span><br/>
+                                    <address class="row;text-left"  t-field="o.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
+
+                                    <span class="row;text-left" t-if="o.partner_id.vat"><b>TRN# <span t-field="o.partner_id.vat"/></b></span>
+                 -->
+                                    <!-- <div > -->
+
+                                    <!-- <span style="text-right">Inv.No.</span>
+                                    <span style="text-right" t-field="o.od_invoice_no"/><br/><br/> -->
+                                    <!-- </div> -->
+
+                                    <!-- <table class="table table-condensed"> -->
+
+                                    <!-- <tbody>
+                                        <tr > -->
+
+
+                                    <div>
+                                        <span>
+                                            <b>To</b>
+                                        </span>
+                                        <br/>
+                                        <address class="row;text-left" t-field="o.partner_id"
+                                                 t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
+                                        <!-- <span t-field="o.partner_id.name"/><br/> -->
+                                        <!-- <t t-if="o.partner_id.street"><span t-field="o.partner_id.street"/></t><br/> -->
+                                        <!-- <t t-if="o.partner_id.street2"><span t-field="o.partner_id.street2"/></t><br/> -->
+                                        <!-- <t t-if="o.partner_id.city"><span t-field="o.partner_id.city"/></t><br/> -->
+                                        <!-- <t t-if="o.partner_id.state_id"><span t-field="o.partner_id.state_id"/></t><br/> -->
+                                        <!-- <t t-if="o.partner_id.zip"><span t-field="o.partner_id.zip"/></t><br/> -->
+                                        <!-- <t class="row;text-left" t-if="o.partner_id.vat"><b>TRN#<span t-field="o.partner_id.vat"/></b></t> -->
+                                    </div>
+
+                                    <!-- &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; -->
+
+
+                                    <div style="text-align:right">
+                                        <!-- &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; -->
+                                        <span>Date:</span>
+                                        <span t-field="o.invoice_date"/>
+                                        <br/>
+                                        <!-- &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; -->
+                                        <span style="text-right">Inv.No.</span>
+                                        <span style="text-right" t-field="o.name"/>
+                                        <br/>
+
+
+                                    </div>
+                                    <!-- </tr>
+                                </tbody>
+                            </table> -->
+
+                                </div>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <t t-set="sno" t-value="1"/>
+                                <table class="table table-condensed"
+                                       style="width:100%;border:1px solid grey;border-collapse: collapse;">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:5%;border:1px solid grey;border-collapse: collapse;text-align:center;font-size:15px;bold:0">
+                                                Sr. No.
+                                            </th>
+
+                                            <th style="width:15%;border:1px solid grey;border-collapse: collapse;text-align:center;font-size:15px;bold:0">
+                                                Descreption
+                                            </th>
+                                            <!-- <th class="hidden"  style="text-align:center;">Source Document</th> -->
+                                            <th style="width:5%;border:1px solid grey;border-collapse: collapse;text-align:center;font-size:15px">
+                                                Quantity
+                                            </th>
+
+                                            <th style="width:15%;border:1px solid grey;border-collapse: collapse;text-align:center;font-size:15px">
+                                                Amount Excl.VAT
+                                            </th>
+                                            <!-- <th t-if="display_discount"  style="text-align:center;" groups="sale.group_discount_per_so_line">Disc.(%)</th> -->
+                                            <th style="width:10%;border:1px solid grey;border-collapse: collapse;text-align:center;font-size:15px">
+                                                VAT Amount
+                                            </th>
+                                            <th style="width:15%;border:1px solid grey;border-collapse: collapse;text-align:center;font-size:15px">
+                                                Amount Incl.VAT
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="invoice_tbody">
+                                        <t t-foreach="o.invoice_line_ids" t-as="line">
+
+                                            <tr>
+                                                <td style="border:1px solid grey;border-collapse: collapse;">
+                                                    <span t-esc="sno"/>
+                                                    <t t-set="sno" t-value="sno+1"/>
+                                                </td>
+
+                                                <td style="border:1px solid grey;border-collapse: collapse;">
+                                                    <span t-field="line.name"/>
+                                                </td>
+                                                <td style="border:1px solid grey;border-collapse: collapse;text-align:right">
+                                                    <span t-esc="'%.2f'%line.quantity"/>
+
+                                                </td>
+                                                <td style="border:1px solid grey;border-collapse: collapse;text-align:right">
+                                                    <span t-esc="'%.2f'%line.price_subtotal"/>
+                                                </td>
+                                                <td style="border:1px solid grey;border-collapse: collapse;text-align:right">
+                                                    <t t-if="line.od_tax_amount">
+                                                        <span t-esc="'%.2f'%line.od_tax_amount"/>
+                                                    </t>
+                                                </td>
+                                                <td style="border:1px solid grey;border-collapse: collapse;text-align:right">
+                                                    <span t-esc="'%.2f'%line.od_net_amount"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                        <tr/>
+                                        <tr/>
+                                        <tr/>
+                                        <tr/>
+
+
+                                        <tr>
+                                            <td style="border:1px solid grey;border-collapse: collapse;text-align:right"/>
+                                            <td style="border:1px solid grey;border-collapse: collapse;text-align:center">
+                                                TOTAL
+                                            </td>
+                                            <td style="border:1px solid grey;border-collapse: collapse;text-align:right"/>
+                                            <td style="border:1px solid grey;border-collapse: collapse;text-align:right">
+                                                <span t-esc="'%.2f'%o.amount_untaxed"/>
+                                            </td>
+                                            <td style="border:1px solid grey;border-collapse: collapse;text-align:right">
+                                                <t t-if="o.amount_tax">
+                                                    <span t-esc="'%.2f'%o.amount_tax"/>
+                                                </t>
+                                            </td>
+                                            <td style="border:1px solid grey;border-collapse: collapse;text-align:right">
+                                                <span t-esc="'%.2f'%o.amount_total"/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <br/>
+                                <br/>
+                                <div>
+                                    (AED<span t-esc="o.amount_total"
+                                               t-esc-options='{"widget": "num2words","case":"capital"}'/>only)
+
+                                </div>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <p>
+                                    <b>Bank Details:
+                                        <br/>
+                                        C.F.T SPORTS SERVICES LLC
+                                    </b>
+                                    <br/>
+                                    Bank Emirates NBD
+                                    <br/>
+                                    Branch Dubai Festival City, Dubai UAE
+                                    <br/>
+                                    Account No. 101 4047620 901
+                                    <br/>
+                                    IBAN Number: AE190260001014047620901
+                                    <br/>
+                                    Swift Code:EBILAEAD
+                                    <br/>
+                                </p>
+                            </div>
+
+                        </t>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <record id="action_report_vat_invoice_print" model="ir.actions.report">
+            <field name="name">Vat Invoice Print</field>
+            <field name="model">account.move</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">orchid_sports_v10.report_vat_invoice</field>
+            <field name="report_file">orchid_sports_v10.report_vat_invoice</field>
+            <field name="binding_model_id" ref="model_account_move"/>
+            <field name="binding_type">report</field>
+        </record>
+
+
+    </data>
+</odoo>

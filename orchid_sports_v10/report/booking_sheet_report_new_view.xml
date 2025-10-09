@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Pivot view (v18 uses <pivot>) -->
+        <record model="ir.ui.view" id="booking_sheet_report_new_pivot">
+            <field name="name">booking.sheet.report.new.pivot</field>
+            <field name="model">booking.sheet.report.new</field>
+            <field name="arch" type="xml">
+                <pivot string="Booking Sheet Analysis">
+                    <field name="coach_id" type="row"/>
+                </pivot>
+            </field>
+        </record>
+
+        <!-- List view (keep <list>) -->
+        <record model="ir.ui.view" id="booking_sheet_report_new_list">
+            <field name="name">booking.sheet.report.new.list</field>
+            <field name="model">booking.sheet.report.new</field>
+            <field name="arch" type="xml">
+                <list string="Booking Sheet Analysis">
+                    <field name="date"/>
+                    <field name="day"/>
+                    <field name="coach_id"/>
+                    <field name="venue_id"/>
+                    <field name="duration"/>
+                    <field name="schedule_id"/>
+                    <field name="partner_id"/>
+                    <field name="activities_id"/>
+                    <field name="amount"/>
+                    <field name="booked_lesson"/>
+                    <field name="no_of_lesson"/>
+                    <field name="pending_lesson"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Search view (icons removed; add names) -->
+        <record id="booking_sheet_report_new_search" model="ir.ui.view">
+            <field name="name">booking.sheet.report.new.search</field>
+            <field name="model">booking.sheet.report.new</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="date"/>
+                    <field name="day"/>
+                    <field name="coach_id"/>
+                    <field name="venue_id"/>
+                    <field name="duration"/>
+                    <field name="schedule_id"/>
+                    <field name="partner_id"/>
+                    <field name="activities_id"/>
+                    <field name="amount"/>
+                    <field name="booked_lesson"/>
+                    <field name="no_of_lesson"/>
+                    <field name="pending_lesson"/>
+
+                    <group expand="1" string="Group By">
+                        <filter string="Student"  name="group_partner"   context="{'group_by':'partner_id'}"/>
+                        <filter string="Program"  name="group_activity"  context="{'group_by':'activities_id'}"/>
+                        <filter string="Venue"    name="group_venue"     context="{'group_by':'venue_id'}"/>
+                        <filter string="Schedule" name="group_schedule"  context="{'group_by':'schedule_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action (use list,pivot) -->
+        <record model="ir.actions.act_window" id="action_booking_sheet_report_new">
+            <field name="name">Booking Sheet Analysis</field>
+            <field name="res_model">booking.sheet.report.new</field>
+            <field name="view_mode">list,pivot</field>
+            <field name="search_view_id" ref="booking_sheet_report_new_search"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create"/>
+            </field>
+        </record>
+
+    </data>
+</odoo>

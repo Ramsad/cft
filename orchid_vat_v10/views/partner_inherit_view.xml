@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+		<record id="customer_form_view_inherit" model="ir.ui.view">
+            <field name="name">customer.inherit form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"></field>
+            <field name="arch" type="xml">
+               <xpath expr="//div[2]" position="after">
+                  <label for="vat" string="TRN"/>
+                    <field name="vat" style="width:30%%" string="TRN"/>
+              </xpath>
+            </field>
+    </record>
+  </data>
+</odoo>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="report_payment_collection">
+	<t t-call="report.external_layout">
+		<t t-call="report.html_container">
+			<t t-foreach="docs" t-as="o">
+			<div class="page">
+
+<div class="row">
+          
+             <p>Collection Register</p>   
+              <table class="table table-condensed" style="width:100%;border:1px solid #000;border-collapse: collapse;">
+                     
+                        <thead>
+                           <tr style="border:1px solid #000;border-collapse: collapse;">
+                              <th class="text-center" style="border:1px solid #000;border-collapse: collapse;">Payment Date</th>
+                              <th class="text-center" style="border:1px solid #000;border-collapse: collapse;">Customer</th>
+                              <th class="text-center" style="border:1px solid #000;border-collapse: collapse;">Salesman</th>
+                              <th class="text-center" style="border:1px solid #000;border-collapse: collapse;">Amount</th>
+                              <th class="text-center" style="border:1px solid #000;border-collapse: collapse;">Journal</th>
+                              <th class="text-center" style="border:1px solid #000;border-collapse: collapse;">Group Pay</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                         
+                           
+                           <tr t-foreach="lines" t-as="line" style="border:1px solid #000;border-collapse: collapse;">
+                           
+                              
+                              <td style="border:1px solid #000;border-collapse: collapse;">
+                                 <span t-esc="line['PaymentDate']"/>
+                              </td>
+                              
+                               <td style="border:1px solid #000;border-collapse: collapse;">
+                                 <span t-esc="line['Customer']"/>
+                              </td>
+                              
+                               <td style="border:1px solid #000;border-collapse: collapse;">
+                                 <span t-esc="line['Salesman']"/>
+                              </td>
+                              
+                              <td style="border:1px solid #000;border-collapse: collapse;">
+                                 <span t-esc="line['Amount']"/>
+                              </td>
+                              
+                               <td style="border:1px solid #000;border-collapse: collapse;">
+                                 <span t-esc="line['Journal']"/>
+                              </td>
+                              
+                               <td style="border:1px solid #000;border-collapse: collapse;">
+                                 <span t-esc="line['group_pay']"/>
+                              </td>
+                              
+                              
+                              
+                             
+                          
+                           </tr>
+                         
+                        </tbody>
+                     </table>
+       </div>
+          
+	</div>
+	</t>
+	</t>
+	</t>
+</template>
+</odoo>

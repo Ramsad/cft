@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    <record model="ir.ui.view" id="od_camp_type_list">
+        <field name="name">od.camp.type</field>
+        <field name="model">od.camp.type</field>
+        <field name="arch" type="xml">
+            <list>
+                    <field name="name"/>
+                    <field name="cost_centre_id"/>
+            </list>
+       </field>
+    </record>
+
+    <record model="ir.ui.view" id="od_camp_type_search">
+        <field name="name">od.camp.type</field>
+        <field name="model">od.camp.type</field>
+        <field name="arch" type="xml">
+            <search>
+                    <field name="name"/>
+                    <field name="cost_centre_id"/>
+            </search>
+       </field>
+    </record>
+
+  <record model="ir.ui.view" id="od_camp_type_form">
+        <field name="name">od.camp.type</field>
+        <field name="model">od.camp.type</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                  <group>
+                      <group>
+
+                         <label for="name"/>
+                         <h2><field name="name"/></h2>
+                      </group>
+                      <group></group>
+                  </group>
+
+                  <group>
+                  		<field name="cost_centre_id"/>
+                           <field name="remarks"/>
+                  </group>
+       </sheet>
+    </form>
+  </field>
+ </record>
+<record model="ir.actions.act_window" id="action_od_employee_type">
+        <field name="name">Type</field>
+
+        <field name="res_model">od.camp.type</field>
+
+        <field name="view_mode">list,form</field>
+         <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Click to add new Type. 
+          </p>
+        </field>
+    </record>
+
+        <menuitem id="od_empoyee_type_menu" name="Fees Type" parent="menu_sports_configuration" action="action_od_employee_type" sequence="1"/>
+
+    </data>
+</odoo>

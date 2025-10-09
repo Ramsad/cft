@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- list view -->
+    <record id="od_sports_receipt_list_view" model="ir.ui.view">
+        <field name="name">od.sports.receipt.list.view</field>
+        <field name="model">od.sports.receipt</field>
+        <field name="arch" type="xml">
+            <list string="Collection">
+                <field name="state" widget="statusbar" statusbar_visible="draft,confirm,cancel" invisible="True"/>
+                <field name="name" readonly="1"/>
+                <field name="date" readonly="state in ('confirm','cancel')"/>
+                <field name="activities_id" domain="[('state','=','draft')]" options="{'no_create': True}"
+                       readonly="state in ('confirm','cancel')"/>
+                <field name="coach_id"/>
+                <field name="od_commission_perc"/>
+                <field name="venue_id"/>
+                <field name="venue_comm" invisible="1"/>
+                <field name="academy_id" invisible="1"/>
+                <field name="collection_account_ids" widget="many2many_tags" invisible="1"/>
+
+                <field name="term_id" required="True"/>
+                <field name="od_amount_total"/>
+
+                <field name="od_transportation_total"/>
+                <field name="od_total_vat"/>
+                <field name="od_grand_total"/>
+
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Search view -->
+    <record id="od_sports_receipt_search_view" model="ir.ui.view">
+        <field name="name">od.sports.receipt.search.view</field>
+        <field name="model">od.sports.receipt</field>
+        <field name="arch" type="xml">
+            <search string="Collection">
+                <field name="name"/>
+                <field name="activities_id"/>
+                <field name="coach_id"/>
+                <field name="venue_id"/>
+                <field name="term_id"/>
+                <field name="date"/>
+
+                <group expand="0" string="Group By">
+                    <filter string="Name" name="group_name" context="{'group_by':'name'}"/>
+                    <filter string="Programme" name="group_programme" context="{'group_by':'activities_id'}"/>
+                    <filter string="Coach" name="group_coach" context="{'group_by':'coach_id'}"/>
+                    <filter string="Venue" name="group_venue" context="{'group_by':'venue_id'}"/>
+                    <filter string="Term" name="group_term" context="{'group_by':'term_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Form view -->
+    <record id="od_sports_receipt_form_view" model="ir.ui.view">
+        <field name="name">od.sports.receipt.form.view</field>
+        <field name="model">od.sports.receipt</field>
+        <field name="arch" type="xml">
+            <form string="Collection">
+                <header>
+                    <button name="action_confirm" type="object" string="Confirm" invisible="state != 'draft'"/>
+                    <button name="action_cancel" type="object" string="Cancel" invisible="state != 'confirm'"/>
+                    <button name="set_to_draft" type="object" string="Reset Draft" invisible="state != 'cancel'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirm,cancel"/>
+                </header>
+
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="activities_id" domain="[('state','=','draft')]" options="{'no_create': True}"
+                                   readonly="state in ('confirm','cancel')"/>
+                            <field name="coach_id" required="True" readonly="state in ('confirm','cancel')"/>
+                            <field name="venue_id" required="True" readonly="state in ('confirm','cancel')"/>
+                            <field name="venue_comm" readonly="state in ('confirm','cancel')"/>
+                            <field name="od_commission_perc" readonly="state in ('confirm','cancel')"/>
+                            <field name="academy_id" invisible="1"/>
+                            <field name="collection_account_ids" widget="many2many_tags" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="date" readonly="state in ('confirm','cancel')"/>
+                            <field name="term_id" required="True" readonly="state in ('confirm','cancel')"/>
+                            <field name="move_id" invisible="not move_id" string="Collection Entry"/>
+                            <field name="provision_move_id" invisible="not provision_move_id"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Details">
+                            <field name="receipt_line" readonly="state in ('confirm','cancel')">
+                                <list editable="top">
+                                    <field name="receipt_id" invisible="1" string="Name"/>
+                                    <field name="rv_no"/>
+                                    <!-- in modern Odoo, use customer_rank to detect customers -->
+                                    <field name="partner_id" domain="[('customer_rank','>',0)]"/>
+                                    <field name="payment_type_account_id"/>
+                                    <field name="type_id" string="Fees type"/>
+                                    <field name="remarks"/>
+                                    <field name="date"/>
+                                    <field name="amount" sum="Total"/>
+                                    <field name="coach_commision" sum="Total"/>
+                                    <field name="od_venue_commission" invisible="1" sum="Total"/>
+                                    <field name="no_of_clases"/>
+                                    <field name="transportation" sum="Total"/>
+                                    <field name="total" sum="Total"/>
+                                    <field name="od_vat_id" domain="[('type_tax_use','=','sale')]"/>
+                                    <field name="od_vat_amount" sum="Total"/>
+                                    <field name="grand_total" sum="Total"/>
+                                    <field name="od_invoice_no" readonly="1"/>
+                                    <button name="od_print_invoice" string="Invoice" type="object"
+                                            class="oe_highlight"/>
+                                    <button name="%(menu_collection_history_detai)d" string="History" type="action"
+                                            class="oe_highlight"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="od_sports_receipt_action" model="ir.actions.act_window">
+        <field name="name">Collection</field>
+        <field name="res_model">od.sports.receipt</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Click to add new Collection.</p>
+        </field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="menu_od_sports_receipt" name="Collection"
+              action="od_sports_receipt_action" parent="menu_sports" sequence="7"/>
+
+</odoo>

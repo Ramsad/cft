@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Pivot view -->
+        <record model="ir.ui.view" id="od_lesson_transfer_analysis_view_pivot">
+            <field name="name">od.lesson.transfer.analysis.view.pivot</field>
+            <field name="model">od.lesson.transfer.analysis.view</field>
+            <field name="arch" type="xml">
+                <pivot string="Lesson Transfer Analysis">
+                    <field name="lesson_id" type="row"/>
+                    <field name="od_amount" type="measure"/>
+                    <field name="od_no_of_clases" type="measure"/>
+                    <field name="od_coach_commision" type="measure"/>
+                    <field name="od_trn_amount" type="measure"/>
+                    <field name="od_trn_no_of_clases" type="measure"/>
+                    <field name="od_trn_transportation" type="measure"/>
+                    <field name="od_trn_coach_comm" type="measure"/>
+                    <field name="od_trn_coach_per" type="measure"/>
+                    <field name="od_new_coach_per" type="measure"/>
+                    <field name="od_new_coach_comm" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <!-- List view (keep <list> in v18) -->
+        <record model="ir.ui.view" id="od_lesson_transfer_analysis_view_list">
+            <field name="name">od.lesson.transfer.analysis.view.list</field>
+            <field name="model">od.lesson.transfer.analysis.view</field>
+            <field name="arch" type="xml">
+                <list string="Lesson Transfer Analysis">
+                    <field name="date"/>
+                    <field name="od_partner_id" string="Client name"/>
+                    <field name="od_type_id"/>
+                    <field name="od_no_of_clases" string="Number of Lesson"/>
+                    <field name="od_trn_amount" sum="Total"/>
+                    <field name="od_trn_transportation" sum="Total"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Search view (icons removed; group_by kept) -->
+        <record id="od_lesson_transfer_analysis_view_search" model="ir.ui.view">
+            <field name="name">od.lesson.transfer.analysis.view.search</field>
+            <field name="model">od.lesson.transfer.analysis.view</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="lesson_id"/>
+                    <field name="od_partner_id"/>
+                    <field name="od_activities_id"/>
+                    <field name="state"/>
+                    <field name="venue_id" string="New venue"/>
+                    <field name="old_venue_id" string="Old venue"/>
+                    <field name="od_type_id"/>
+
+                    <group expand="1" string="Group By">
+                        <filter string="Lesson"       name="group_lesson"        context="{'group_by':'lesson_id'}"/>
+                        <filter string="Partner"      name="group_partner"       context="{'group_by':'od_partner_id'}"/>
+                        <filter string="New Program"  name="group_new_program"   context="{'group_by':'od_new_activities_id'}"/>
+                        <filter string="Program"      name="group_program"       context="{'group_by':'od_activities_id'}"/>
+                        <filter string="New Venue"    name="group_new_venue"     context="{'group_by':'venue_id'}"/>
+                        <filter string="Old Venue"    name="group_old_venue"     context="{'group_by':'old_venue_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action (match defined views) -->
+        <record model="ir.actions.act_window" id="action_od_lesson_transfer_analysis_view">
+            <field name="name">Lesson Transfer Analysis</field>
+            <field name="res_model">od.lesson.transfer.analysis.view</field>
+            <field name="view_mode">pivot,list</field>
+            <field name="search_view_id" ref="od_lesson_transfer_analysis_view_search"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create"/>
+            </field>
+        </record>
+
+        <menuitem id="menu_od_lesson_transfer_analysis_view"
+                  name="Lesson Transfer Analysis"
+                  action="action_od_lesson_transfer_analysis_view"
+                  parent="menu_sports_reporting"
+                  sequence="10"/>
+
+    </data>
+</odoo>

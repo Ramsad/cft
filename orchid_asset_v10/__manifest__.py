@@ -1,0 +1,16 @@
+# Auto-upgraded manifest for Odoo 18 scaffolding
+{'name': 'Orchid Asset',
+ 'version': '18.0',
+ 'summary': 'Orchid Asset',
+ 'author': 'OrchidERP',
+ 'website': 'https://orchiderp.com',
+ 'license': 'LGPL-3',
+ 'depends': ['base',
+             'account_asset',
+             'orchid_account_enhancement'],
+ 'data': ['wizard/asset_report.xml',
+          'report/report_asset_statement.xml',
+          'report/report.xml',
+          'account_asset_view.xml'],
+ 'demo': [],
+ 'qweb': []}

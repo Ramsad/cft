@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+   <data>
+        <!-- Inherit quotation report (from module sale) -->
+        <template id="report_payment_print_inherit" inherit_id="orchid_account_enhancement.report_account_payment">
+	    <!-- Finds the first table with as class table table-condensed and gives the ability to modify it
+		 This will replace everything withing tr (including tr)-->
+	    <xpath expr="//div[12]" position="replace">
+              	<div class="row" >
+                    <div class="col-xs-4" style="text-align:center;">
+                        <strong>____________________</strong><br/>
+                        <strong>Prepared by</strong><br/>
+                        <strong><span t-field="o.create_uid"/></strong><br/>
+                    </div>
+                    <div class="col-xs-4" style="text-align:center;">
+                        <strong>____________________ </strong><br/>
+                        <strong>Received by</strong><br/>                    
+                    </div>
+                    <div class="col-xs-4" style="text-align:center;">
+                        <strong>____________________</strong><br/>
+                        <strong>Approved By</strong><br/>
+                    </div>
+                </div> 
+              </xpath>
+
+        </template>
+    </data>
+</odoo>

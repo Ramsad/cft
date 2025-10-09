@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="overdue_wizard_form" model="ir.ui.view">
+            <field name="name">Overdue Report</field>
+            <field name="model">od.overdue.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Partner Statement">
+                 <group>
+                    <group>
+                        <field name="account_type" class="oe_inline" widget="radio"
+                            />
+                        <field name="mode" class="oe_inline" widget="radio" required="1"/>
+                        <button name="list_partner" type="object" string="List Partners" />
+                        <button name="update_account_type" type="object" string="List Accounts" />
+                    </group>
+                    <group>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <field name="salesman_id" widget="selection"/>  
+                        <field name="currency_id" string="Currency"/>
+                    </group>
+                </group>
+                <notebook>
+                <page string="Partners">
+                        <field name="partner_ids" required="0"/>
+                </page>
+                <page string="Accounts">
+                        <field name="account_ids" required="0"/>
+                </page>
+                </notebook>
+                    <footer>
+                        <!-- <button name="generate" string="Analysis" type="object"/> -->
+                        <!-- <button name="psp_generate" string="Analysis" type="object"/> -->
+                        
+                        <!-- <button name="check_report" string="Print" type="object"/> -->
+                        <button name="generate_statement_sum_xls" string="Summary" type="object"/>
+                        <button string="PDF" name="generate_statement" type="object"/>
+                        <button string= "Statement" name="generate_statement_xls" type="object"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                        <field name="excel_file" filename="file_name"/> 
+                        <field name="file_name" invisible="1"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_overdue_wizard" model="ir.actions.act_window">
+            <field name="name">Partner Statement</field>
+            <field name="res_model">od.overdue.wizard</field>
+
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+
+  <menuitem action="action_overdue_wizard" id="menu_action_overdue_wizard" parent="account.menu_finance_reports" sequence="20" />
+
+</odoo>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="collection_history_detail_wizard_form" model="ir.ui.view">
+            <field name="name">Collection Wizard</field>
+            <field name="model">collection.history.detail.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Collection Wizard">
+                 <group>
+                    <group>
+                        <field name="amount_total" invisible="1"/> 
+
+                    </group>
+                    <group>
+                    
+                    </group>
+                </group>
+                <notebook>
+                	<page string="Details">
+                  		<field name="wizard_line" readonly="1">
+                  			<list editable="bottom">
+                  				<field name="wizard_id"/>
+                  				<field name="receipt_id"/>
+                          <field name="receipt_date"/>                  				
+                  				<field name="rv_no"/>                  				
+                   				<field name="partner_id"/> 
+                  				<field name="amount" sum="Total"/>                				
+                   				<field name="transportation"/> 
+                  				<field name="total" sum="Total"/>
+                  				
+                  				<field name="payment_type_account_id"/>                				
+                   				<field name="remarks"/> 
+                  				<field name="date"/>
+                                  				<field name="type_id"/>                    				                    				
+                  			</list>
+                  			</field>      	
+                	</page>
+                
+                </notebook>
+                </form>
+            </field>
+        </record>
+        
+
+        <record id="menu_collection_history_detai" model="ir.actions.act_window">
+            <field name="name">Collection Wizard</field>
+
+            <field name="res_model">collection.history.detail.wizard</field>
+
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+ 
+
+
+    </data>
+    </odoo>

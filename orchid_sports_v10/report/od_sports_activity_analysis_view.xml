@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+<record model="ir.ui.view" id="od_sports_activity_analysis_view_graph">
+        <field name="name">od.sports.activity.analysis.view.graph</field>
+        <field name="model">od.sports.activity.analysis.view</field>
+        <field name="arch" type="xml">
+            <graph string="Activity Analysis" type="pivot">
+                     <field name="attendance_id" />
+                    
+            </graph>
+       </field>
+    </record>
+
+
+
+
+
+
+
+
+
+
+<record model="ir.actions.act_window" id="action_od_sports_activity_analysis_view">
+        <field name="name">Activity Analysis</field>
+
+        <field name="res_model">od.sports.activity.analysis.view</field>
+
+        <field name="view_mode">graph</field>
+<!--        <field name="search_view_id" ref="od_sports_attenadance_analysis_view_search"/>-->
+         <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+          </p>
+        </field>
+    </record>
+
+
+<menuitem id="menu_activity_analysis" name="Activity Analysis" action="action_od_sports_activity_analysis_view" parent="menu_sports_reporting" sequence="10"/>
+
+ </data>
+</odoo>

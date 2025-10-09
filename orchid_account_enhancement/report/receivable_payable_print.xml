@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="report_receivable_payable">
+	<t t-name="orchid_account_enhancement.report_receivable_payable">
+        <t>
+            <div class="page">
+                <div class="row">
+                    <div class="col-xs-4">
+                            <img t-if="docs[0].company_id.logo" t-att-src="'data:image/png;base64,%s' % docs[0].company_id.logo" style="max-height: 100px;"/>
+                    </div>
+                    <strong>    
+                        <div class="col-xs-8">
+                            <h4><span t-field="docs[0].company_id" /></h4>
+                            <span t-field="docs[0].company_id.street"/><span t-field="docs[0].company_id.zip"/>
+                            <span t-field="docs[0].company_id.state_id"/>,<br/>
+                            <span t-field="docs[0].company_id.city"/>,
+                            <span t-field="docs[0].company_id.country_id"/><br/>
+                            Tel: <span t-field="docs[0].company_id.phone"/> Fax: <span t-field="docs[0].company_id.fax"/>
+                        </div>
+                    </strong>
+                </div>
+                    
+                <br/>
+                <div class="row">
+                    <table class="table table-condensed" style="border:1px solid black;border-collapse:collapse;">
+                    <thead >
+                        <th class="text-left" style="border:1px solid black; width:10%">DOC TYPE</th>
+                        <th class="text-center" style="border:1px solid black; width:20%">DOC NO</th>
+                        <th class="text-center" style="border:1px solid black; width:15%">TRANSACTION DATE</th>
+                        <th class="text-left" style="border:1px solid black; width:10%">PARTY</th>
+                        <th class="text-center" style="border:1px solid black; width:10%">CHQ NO</th>
+                        <th class="text-center" style="border:1px solid black; width:15%">CHQ DATE</th>
+                        <th class="text-left" style="border:1px solid black; width:10%">AMOUNT</th>
+                        <th class="text-center" style="border:1px solid black; width:10%">BANK</th>
+                    </thead>
+                    <tbody> 
+                        <t t-set="amount_total" t-value="0"/>
+                        <tr t-foreach="matching_lines" t-as="line" style="border:1px solid black;">
+                            <td class="text-left" style="border:1px solid black;">
+                                <span t-esc="line['type']"/>
+                            </td>
+                            <td class="text-left" style="border:1px solid black;">
+                                <span t-esc="line['name']"/>
+                            </td>
+                            <td class="text-left" style="border:1px solid black;">
+                                <span t-esc="line['transaction_date']"/>
+                            </td>
+                            <td class="text-left" style="border:1px solid black;">
+                                <span t-esc="line['party']"/>
+                            </td>
+                            <td class="text-left" style="border:1px solid black;">
+                                <span t-esc="line['chq_no']"/>
+                            </td>
+                            <td class="text-left" style="border:1px solid black;">
+                                <span t-esc="line['chq_date']"/>
+                            </td>
+                            <td style="border:1px solid black;text-align:right;">
+                                <span t-esc="'{0:,.2f}'.format(float(line['amount']))"/>
+                                <t t-set="amount_total" t-value="amount_total + line['amount']"/>
+                            </td>
+                            <td class="text-left" style="border:1px solid black;">
+                                <span t-esc="line['bank']"/>
+                            </td>
+                        </tr>
+                        <tr style="border:1px solid black;">
+                            <td colspan="6" style="text-align:centre;">
+                                <strong>GRAND TOTAL</strong>
+                            </td>
+                            <td style="border:1px solid black;text-align:right;">
+                                <strong><span t-esc="'{0:,.2f}'.format(float(amount_total))"/></strong>
+                            </td>
+                            <td style="border:1px solid black;">
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>    
+                </div>
+                <div class="oe_structure"/>
+            </div>
+        </t> 
+</t>    
+</template>
+</odoo>

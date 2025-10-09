@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report 
+            id="report_account_payment_document"
+            string="Voucher Print"
+            model="account.payment" 
+            report_type="qweb-pdf"
+            file="orchid_account_enhancement.report_account_payment" 
+            name="orchid_account_enhancement.report_account_payment" 
+        />
+
+        <report 
+            id="report_account_receivable_payable"
+            string="Print Receivable Payable"
+            model="account.payment" 
+            report_type="qweb-pdf"
+            file="orchid_account_enhancement.report_receivable_payable" 
+            name="orchid_account_enhancement.report_receivable_payable" 
+        />
+        
+        
+        
+                <report 
+            id="report_partner_overdue_document"
+            string="New Due Payments"
+            model="res.partner" 
+            report_type="qweb-pdf"
+            file="orchid_account_enhancement.report_partner_overdue" 
+            name="orchid_account_enhancement.report_partner_overdue" 
+        />
+
+        <report 
+            id="report_financial_inherit_document"
+            string="New Due Payments"
+            model="account.financial.report" 
+            report_type="qweb-pdf"
+            file="orchid_account_enhancement.od_report_financial" 
+            name="orchid_account_enhancement.od_report_financial" 
+        />
+        <report 
+            id="report_payment_collection_document"
+            string="Collection Register"
+            model="account.payment" 
+            report_type="qweb-pdf"
+            file="orchid_account_enhancement.report_payment_collection" 
+            name="orchid_account_enhancement.report_payment_collection" 
+        />
+
+        <report 
+            id="report_orchid_invoice_aging_document"
+            string="Invoice Wise Aging"
+            model="account.move" 
+            report_type="qweb-pdf"
+            file="orchid_account_enhancement.report_od_invoice_aging" 
+            name="orchid_account_enhancement.report_od_invoice_aging" 
+        />
+
+        <report 
+            id="report_orchid_partner_statement_document"
+            string="Partner Statement"
+            model="res.partner" 
+            report_type="qweb-pdf"
+            file="orchid_account_enhancement.report_od_partner_statement" 
+            name="orchid_account_enhancement.report_od_partner_statement" 
+        />
+
+    </data>
+</odoo>

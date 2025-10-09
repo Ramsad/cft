@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    <record model="ir.ui.view" id="od_sports_date_selection_tre">
+        <field name="name">od.sports.date.selection.list.view</field>
+        <field name="model">od.sports.date.selection</field>
+        <field name="arch" type="xml">
+            <list string="Date">
+                     <field name="name"/>
+            </list>
+       </field>
+    </record>
+
+    <record model="ir.ui.view" id="od_sports_date_selection_form">
+        <field name="name">od.sports.date.selection.form.view</field>
+        <field name="model">od.sports.date.selection</field>
+        <field name="priority">60</field>
+        <field name="arch" type="xml">
+            <form string="Date">
+<!--              <sheet>-->
+
+                   <div class="oe_title">
+                        <label for="name"/>
+                            <h2><field name="name"/>
+                            </h2>
+                   </div>
+<!--                 <group>-->
+<!--                        <field name="notes" nolabel="1" placeholder="Remarks............."/>-->
+<!--                 </group>-->
+<!--              </sheet>-->
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_od_sports_date_selection">
+        <field name="name">Date</field>
+
+        <field name="res_model">od.sports.date.selection</field>
+
+        <field name="view_mode">list,form</field>
+
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Click to add new Important Date. 
+          </p>
+        </field>
+    </record>
+
+<!--  <menuitem id="menu_od_event_costing_sheet_date_selection_view" name="Date" action="action_od_event_costing_sheet_date_selection_view"  parent="orchid_event.menu_od_profile_setting" sequence="37"/>-->
+ </data>
+</odoo>

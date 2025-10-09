@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="od_invoice_aging_form" model="ir.ui.view">
+            <field name="name">Invoice Wise Aging</field>
+            <field name="model">od.invoice.aging</field>
+            <field name="arch" type="xml">
+                <form string="Invoice Wise Aging">
+                 <group>
+                    <group>
+                        <field name="account_type" class="oe_inline" widget="radio"/>
+                        <field name="report_type" class="oe_inline" widget="radio"/>
+                    </group>
+                    <group>
+                        <field name="date_from"/>
+                        <field name="period_length"/>
+                    </group>
+                </group>
+                <notebook>
+                <page string="Partners">
+                        <field name="partner_ids" required="0"/>
+                </page>
+                <page string="Accounts">
+                        <field name="account_ids" required="0"/>
+                </page>
+                </notebook>
+                    <footer>
+                        <button name="generate_excel" string="Excel" type="object"/>
+                        <button name="generate_pdf" string="PDF" type="object"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                        <field name="excel_file" filename="file_name"/> 
+                        <field name="file_name" invisible="1"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_invoice_aging" model="ir.actions.act_window">
+            <field name="name">Invoice Wise Aging</field>
+
+            <field name="res_model">od.invoice.aging</field>
+
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+  <menuitem action="action_invoice_aging" id="menu_invoice_aging" parent="account.menu_finance_reports" sequence="50" />
+
+</odoo>

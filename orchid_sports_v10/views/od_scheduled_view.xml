@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- List view -->
+    <record id="od_scheduled_list_view" model="ir.ui.view">
+        <field name="name">od.scheduled.list.view</field>
+        <field name="model">od.scheduled</field>
+        <field name="arch" type="xml">
+            <list string="Schedule">
+                <field name="state" widget="statusbar" statusbar_visible="draft,confirm,cancel" invisible="True"/>
+                <field name="name"/>
+                <field name="activities_id" readonly="state in ('confirm','cancel')"/>
+                <field name="day" required="True"/>
+                <field name="venue_id" required="True"/>
+                <field name="coach_id" domain="[('od_coach','=',True)]" required="True"/>
+                <field name="percentage" invisible="1"/>
+                <field name="academy_id" invisible="1"/>
+                <field name="cost_centre_id" required="True"/>
+
+                <field name="x_date_from"/>
+                <field name="x_date_to"/>
+
+                <field name="date_from" widget="float_time" required="True" readonly="state in ('confirm','cancel')"/>
+                <field name="date_to"   widget="float_time" required="True" readonly="state in ('confirm','cancel')"/>
+                <field name="duration"  widget="float_time"/>
+                <field name="term_id" required="True"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form view -->
+    <record id="od_scheduled_form_view" model="ir.ui.view">
+        <field name="name">od.scheduled.form.view</field>
+        <field name="model">od.scheduled</field>
+        <field name="arch" type="xml">
+            <form string="Schedule">
+                <header>
+                    <button name="action_confirm" type="object" string="Confirm"      invisible="state != 'draft'"/>
+                    <button name="action_cancel"  type="object" string="Cancel"       invisible="state != 'confirm'"/>
+                    <button name="set_to_draft"   type="object" string="Reset To Draft" invisible="state != 'cancel'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirm,cancel"/>
+                </header>
+
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button" options="{'terminology': 'archive'}"/>
+                        </button>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="activities_id" domain="[('is_non_revenue','=',False)]" readonly="state in ('confirm','cancel')"/>
+                            <field name="day" required="True"/>
+                            <field name="venue_id" required="True"/>
+                            <field name="coach_id" domain="[('od_coach','=',True)]" required="True"/>
+                            <field name="percentage" invisible="1"/>
+                            <field name="academy_id" invisible="1"/>
+                            <field name="cost_centre_id" required="True"/>
+                        </group>
+
+                        <group>
+                            <group>
+                                <field name="x_date_from"/>
+                                <field name="x_date_to"/>
+
+                                <field name="date_from" widget="float_time" required="True" readonly="state in ('confirm','cancel')"/>
+                                <field name="date_to"   widget="float_time" required="True" readonly="state in ('confirm','cancel')"/>
+                                <field name="duration"  widget="float_time"/>
+                                <field name="term_id" required="True"/>
+                            </group>
+                            <group/>
+                            <field name="move_id" invisible="state in ('draft','cancel')"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Details">
+                            <field name="scheduled_line" readonly="state in ('confirm','cancel')">
+                                <list editable="top">
+                                    <field name="scheduled_id" invisible="1" string="Name"/>
+                                    <field name="partner_id"/>
+                                    <field name="type_id" string="Fees Type"
+                                           context="{'term_id': parent.term_id, 'collection': True, 'activities_id': parent.activities_id}"/>
+                                    <field name="mobile_no"/>
+                                    <field name="remarks"/>
+                                    <field name="no_of_classes"/>
+                                    <field name="fees" sum="Total"/>
+                                    <field name="jv" string="Attendance" invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search view -->
+    <record id="od_scheduled_search_view" model="ir.ui.view">
+        <field name="name">od.scheduled.search</field>
+        <field name="model">od.scheduled</field>
+        <field name="arch" type="xml">
+            <search string="Scheduled">
+                <group expand="0" string="Group By...">
+                    <filter string="Program" name="group_program" context="{'group_by':'activities_id'}"/>
+                    <filter string="Term"    name="group_term"    context="{'group_by':'term_id'}"/>
+                    <filter string="Coach"   name="group_coach"   context="{'group_by':'coach_id'}"/>
+                </group>
+
+                <!-- Simple 'Today' filter without python libs -->
+<!--                <filter string="Today" name="today" domain="[('date','=', context_today().date())]"/>-->
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_scheduled" model="ir.actions.act_window">
+        <field name="name">Schedule</field>
+        <field name="res_model">od.scheduled</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to add new Schedule.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="menu_schedule" name="Schedule"
+              action="action_scheduled" parent="menu_sports" sequence="9"/>
+
+</odoo>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="orchid_account_enhancement.report_od_invoice_aging">
+		<t t-call="report.external_layout">
+			<t t-call="report.html_container">
+				<t t-foreach="docs" t-as="o">
+					<div class="page">
+						<div class="row">
+							<p>
+						 		<b>DOCUMENT: INVOICE WISE AGING</b><br/>
+						 	</p>
+						 </div>
+						 <table class="table table-condensed" style="width:100%;border:1px solid #000;border-collapse: collapse;">
+		                    <thead>
+		                        <tr style="border:1px solid #000;border-collapse: collapse;">
+		                        	<th style="border:1px solid #000;border-collapse: collapse;">PARTNER</th>
+		                            <th style="border:1px solid #000;border-collapse: collapse;">NAME</th>
+		                            <th class="text-right" style="border:1px solid #000;border-collapse: collapse;"><span t-esc="periods['6']['name']"/></th>
+		                            <th class="text-right" style="border:1px solid #000;border-collapse: collapse;"><span t-esc="periods['5']['name']"/></th>
+		                            <th class="text-right" style="border:1px solid #000;border-collapse: collapse;"><span t-esc="periods['4']['name']"/></th>
+		                            <th class="text-right" style="border:1px solid #000;border-collapse: collapse;"><span t-esc="periods['3']['name']"/></th>
+		                            <th class="text-right" style="border:1px solid #000;border-collapse: collapse;"><span t-esc="periods['2']['name']"/></th>
+		                            <th class="text-right" style="border:1px solid #000;border-collapse: collapse;"><span t-esc="periods['1']['name']"/></th>
+		                            <th class="text-right" style="border:1px solid #000;border-collapse: collapse;"><span t-esc="periods['0']['name']"/></th>
+		                            <th class="text-right" style="border:1px solid #000;border-collapse: collapse;">Total</th>
+		                        </tr>
+		                    </thead>
+		                    <tbody> 
+		                        <tr t-foreach="move_lines" t-as="line" style="border:1px solid black;">
+		                            <td class="text-left" style="border:1px solid black;">
+		                                <span t-esc="line['partner']"/>
+		                            </td>
+		                            <td class="text-left" style="border:1px solid black;">
+		                                <span t-esc="line['name']"/>
+		                            </td>
+		                            <td class="text-left" style="border:1px solid black;">
+		                                <span t-esc="'%.2f'%line['6']"/>
+		                            </td>
+		                            <td class="text-left" style="border:1px solid black;">
+		                                <span t-esc="'%.2f'%line['5']"/>
+		                            </td>
+		                            <td class="text-left" style="border:1px solid black;">
+		                                <span t-esc="'%.2f'%line['4']"/>
+		                            </td>
+		                            <td class="text-left" style="border:1px solid black;">
+		                                <span t-esc="'%.2f'%line['3']"/>
+		                            </td>
+		                            <td class="text-left" style="border:1px solid black;">
+		                                <span t-esc="'%.2f'%line['2']"/>
+		                            </td>
+		                            <td class="text-left" style="border:1px solid black;">
+		                                <span t-esc="'%.2f'%line['1']"/>
+		                            </td>
+		                            <td class="text-left" style="border:1px solid black;">
+		                                <span t-esc="'%.2f'%line['0']"/>
+		                            </td>
+		                            <td class="text-left" style="border:1px solid black;">
+		                                <span t-esc="'%.2f'%line['total']"/>
+		                            </td>
+		                        </tr>
+		                    </tbody>
+		                </table>
+					</div>
+				</t>
+			</t>
+		</t>
+	</template>
+</odoo>

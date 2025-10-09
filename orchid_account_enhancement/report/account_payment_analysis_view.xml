@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+
+
+    <record id="account_payment_analysis_graph" model="ir.ui.view">
+         <field name="name">account.payment.analysis.graph</field>
+         <field name="model">account.payment.analysis</field>
+         <field name="arch" type="xml">
+             <graph string="Payment Analysis" >
+                 <field name="company_id"/>
+                 <field name="amount" type="measure"/>
+             </graph>
+         </field>
+    </record>
+    
+                <record model="ir.ui.view" id="account_payment_analysis_pivot">
+            <field name="name">account.payment.analysis</field>
+            <field name="model">account.payment.analysis</field>
+            <field name="arch" type="xml">
+                <pivot string="Payment Analysis">
+                   <field name="company_id"/>
+                 <field name="amount" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+ 
+        
+        
+            <record id="account_payment_analysis_search" model="ir.ui.view">
+        <field name="name">account.payment.analysis.search</field>
+        <field name="model">account.payment.analysis</field>
+        <field name="arch" type="xml">
+            <search string="Payment Analysis">
+                <field name="partner_id"/>
+                <field name="company_id"/>
+                 <field name="currency_id"/>
+                 
+                 <field name="journal_id"/>
+                    <field name="state"/>
+                <field name="payment_type"/>
+                 <field name="partner_type"/>
+                  <field name="od_bank_account"/>  
+                  
+                 <field name="is_clearing"/>
+                 <field name="is_group"/>
+                  <field name="od_released"/>  
+                  
+
+                  <field name="user_id"/>                    
+                 
+                 
+                <group expand="1" string="Group By">
+                    <filter string="Group" name="od_group_id" context="{'group_by':'od_group_id'}"/>
+                    <filter string="Salesman" name='inv_salesman_id' context="{'group_by':'user_id'}"/>
+                    <filter string="Partner" name='partner_id' context="{'group_by':'partner_id'}"/>
+                    
+                    
+                    <filter string="Company" name="company_id" context="{'group_by':'company_id'}"/>
+                    <filter string="Currency" name='currency_id' context="{'group_by':'currency_id'}"/>
+                    <filter string="Journal" name='journal_id' context="{'group_by':'journal_id'}"/>
+                    
+                    <filter string="State" name="state" context="{'group_by':'state'}"/>
+                    <filter string="Payment Type" name='payment_type' context="{'group_by':'payment_type'}"/>
+                    <filter string="Partner Type" name='partner_type' context="{'group_by':'partner_type'}"/>
+                    
+                    
+                    
+                    <filter string="Bank Account" name="od_bank_account" context="{'group_by':'od_bank_account'}"/>
+                    <filter string="Released" name='od_released' context="{'group_by':'od_released'}"/>
+                    <filter string="Group Payment" name='is_group' context="{'group_by':'is_group'}"/>
+                     <filter string="PDC" name='is_clearing' context="{'group_by':'is_clearing'}"/>
+                     
+ 
+                </group>
+            </search>
+        </field>
+    </record>
+
+    
+       <record id="actionaccount_payment_analysis" model="ir.actions.act_window">
+        <field name="name">Payment Analysis</field>
+        <field name="res_model">account.payment.analysis</field>
+         <field name="search_view_id" ref="account_payment_analysis_search"/>
+
+        <field name="view_mode">pivot</field>        
+    </record>
+    
+
+
+ 
+ 
+
+
+    <menuitem name="Payment Analysis" id="menu_account_payment_analysis_id" action="actionaccount_payment_analysis" parent="account.menu_finance_reports" sequence="21"/>
+
+</data>
+</odoo>

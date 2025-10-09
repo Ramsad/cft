@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- List view -->
+    <record id="od_sports_attenadance_list_view" model="ir.ui.view">
+        <field name="name">od.sports.attendance.list.view</field>
+        <field name="model">od.sports.attendance</field>
+        <field name="arch" type="xml">
+            <list string="Attendance">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="coach_id"/>
+                <field name="od_scheduled"/>
+                <field name="activities_id"/>
+                <field name="venue_id"/>
+                <field name="day"/>
+                <field name="cost_centre_id"/>
+                <field name="state" widget="statusbar" statusbar_visible="draft,confirm,cancel" invisible="True"/>
+
+                <field name="date_from" widget="float_time" required="True"
+                       readonly="state in ('confirm','cancel')" string="Time From"/>
+                <field name="date_to"   widget="float_time" required="True"
+                       readonly="state in ('confirm','cancel')" string="Time To"/>
+
+                <field name="duration" widget="float_time"/>
+                <field name="term_id" required="True"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form view -->
+    <record id="od_sports_attenadance_form_view" model="ir.ui.view">
+        <field name="name">od.sports.attendance.form.view</field>
+        <field name="model">od.sports.attendance</field>
+        <field name="arch" type="xml">
+            <form string="Attendance">
+                <header>
+                    <button name="action_confirm" type="object" string="Confirm"
+                            invisible="state != 'draft'"/>
+                    <button name="action_cancel"  type="object" string="Cancel"
+                            invisible="state != 'confirm'"/>
+                    <button name="set_to_draft"   type="object" string="Reset To Draft"
+                            invisible="state != 'cancel'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirm,cancel" invisible="True"/>
+                </header>
+
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="date" readonly="state in ('confirm','cancel')"/>
+                            <field name="day" invisible="1"/>
+                            <field name="coach_id" domain="[('od_coach','=',True)]" required="True"/>
+                            <field name="od_scheduled" required="True" readonly="state in ('confirm','cancel')"/>
+                            <field name="activities_id" domain="[('is_non_revenue','=',False)]"
+                                   readonly="state in ('confirm','cancel')"/>
+                            <field name="venue_id" required="True"/>
+                            <field name="percentage" invisible="1"/>
+                            <field name="academy_id" invisible="1"/>
+                            <field name="cost_centre_id" required="True" readonly="state in ('confirm','cancel')"/>
+                        </group>
+
+                        <group>
+                            <field name="date_from" widget="float_time" required="True"
+                                   readonly="state in ('confirm','cancel')" string="Time From"/>
+                            <field name="date_to"   widget="float_time" required="True"
+                                   readonly="state in ('confirm','cancel')" string="Time To"/>
+                            <field name="duration" widget="float_time"/>
+                            <field name="term_id" required="True" readonly="state in ('confirm','cancel')"/>
+                        </group>
+
+                        <group>
+                            <field name="move_id"            invisible="not move_id"/>
+                            <field name="provision_move_id"  invisible="not provision_move_id"/>
+                            <field name="booking_move_id"    invisible="not booking_move_id"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Details">
+                            <field name="attendance_line" readonly="state in ('confirm','cancel')">
+                                <list editable="top">
+                                    <field name="tick_me" invisible="1"/>
+                                    <field name="attendance_id" invisible="1" string="Name"/>
+                                    <field name="partner_id"/>
+                                    <field name="type_id" string="Fees Type"/>
+                                    <field name="mobile_no"/>
+                                    <field name="remarks"/>
+                                    <field name="fees" sum="Total"/>
+                                    <field name="jv" string="Absent"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search view -->
+    <record id="od_sports_attendance_search_view" model="ir.ui.view">
+        <field name="name">od.sports.attendance.search</field>
+        <field name="model">od.sports.attendance</field>
+        <field name="arch" type="xml">
+            <search string="Booking Sheet">
+                <group expand="0" string="Group By...">
+                    <filter string="Program" name="group_program" context="{'group_by':'activities_id'}"/>
+                    <filter string="Term"    name="group_term"    context="{'group_by':'product_id'}"/>
+                    <filter string="Coach"   name="group_coach"   context="{'group_by':'coach_id'}"/>
+                </group>
+
+                <!-- Simple safe date filter (Today) without python libs in domain -->
+                <filter string="Today" name="today" domain="[('date','=', context_today().date())]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_od_sports_attenadance" model="ir.actions.act_window">
+        <field name="name">Booking Sheet</field>
+        <field name="res_model">od.sports.attendance</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to add new Attendance.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="menu_od_sports_attenadance" name="Booking Sheet"
+              action="action_od_sports_attenadance" parent="menu_sports" sequence="10"/>
+
+</odoo>

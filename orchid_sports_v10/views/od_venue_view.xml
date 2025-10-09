@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="od_venue_sports_list" model="ir.ui.view">
+            <field name="name">od.venue.list</field>
+            <field name="model">od.venue</field>
+            <field name="arch" type="xml">
+                <list string="Venue">
+                    <field name="name"/>
+                    <field name="management_id"/>
+                    <field name="owner"/>
+                    <field name="commission"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="od_venue_sports_form" model="ir.ui.view">
+            <field name="name">od.venue.form</field>
+            <field name="model">od.venue</field>
+            <field name="arch" type="xml">
+                <form string="Venue">
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h2>
+                                <field name="name" default_focus="1" placeholder="Venue"/>
+                            </h2>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="image" widget="image" class="oe_right" nolabel="1"
+                                       />
+                            </group>
+                            <group>
+                                <field name="management_id" />
+                                <field name="owner" />
+                                <field name="commission"/>
+                                <field name="analytic_acc_id"
+                                       readonly="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="action_od_venue_sports">
+            <field name="name">Venue</field>
+
+            <field name="res_model">od.venue</field>
+
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to add new Venue.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

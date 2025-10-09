@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="new_collection_history_wiz" model="ir.ui.view">
+            <field name="name">Collection Analysis Wizard</field>
+            <field name="model">od.new.collection.report.wiz</field>
+            <field name="arch" type="xml">
+                <form string="Collection Wizard">
+                    <!--                    <sheet>-->
+                    <group>
+                        <group>
+                            <field name="from_date"/>
+                        </group>
+                        <group>
+                            <field name="to_date"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button type="object" name="generate_print" string="Print"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="menu_new_collection_history_detail" model="ir.actions.act_window">
+            <field name="name">Collection Report Wizard</field>
+            <field name="res_model">od.new.collection.report.wiz</field>
+
+            <field name="view_mode">list,form</field>
+            <field name="view_id" ref="new_collection_history_wiz"/>
+            <field name="target">new</field>
+        </record>
+
+
+
+
+    </data>
+</odoo>

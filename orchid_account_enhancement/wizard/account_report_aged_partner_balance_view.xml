@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <record id="od_account_aged_balance_view" model="ir.ui.view">
+        <field name="name">Aged Partner Balance</field>
+        <field name="model">account.aged.trial.balance</field>
+        <field name="inherit_id" ref="account.account_aged_balance_view"/>
+        <field name="arch" type="xml">
+        <data>
+        
+          	<button name="check_report" position="after">
+        		<button name = "print_excel_report" string="Excel Report" type="object" class="oe_highlight"/>
+        	</button>
+        	
+        	
+          	<button name="print_excel_report" position="after">
+                        <field name="excel_file" filename="file_name"/> 
+                    	<field name="file_name" invisible="1"/>
+        	</button>  
+        	
+        	
+        	          	<button special="cancel" position="replace">  
+        	          	
+        	          	 <button string="Cancel" class="oe_link" special="cancel" invisible="1"/>
+        	          	</button>    
+        <xpath expr="//group" position="replace">
+        <group>
+
+                <group>
+                		
+                        <!--<field name="od_group_id" widget="selection"/>
+                        <field name="od_sub_group_id" widget="selection"/> -->
+                        <field name="salesman_id" widget="selection"/>
+                        <!-- <field name="od_area_id" widget="selection"/>  -->
+                        <field name="od_account_id" />
+                    	<field name="od_is_slab"/>
+                     	<field name="od_is_invoice_date"/>
+                    	<field name="period_length" attrs="{'invisible': [('od_is_slab', '!=', False)]}"/>
+                         <button name="list_partner" type="object" string="List Partners" />
+                         
+
+                </group>
+                <group>
+                     <field name="date_from"/>
+
+                    <field name="target_move" widget="radio"/>
+                    <field name="result_selection" widget="radio"/>
+
+                </group>
+                       
+                </group>
+        
+        </xpath>
+        
+               
+        <xpath expr="//group" position="after">
+        	<notebook>
+        	
+         	<page string="Partners">
+        	<field name="od_partner_ids"/>
+        	</page>
+        	<page string="Period Slab" attrs="{'invisible': [('od_is_slab', '=', False)]}">
+        	<group>
+        		<group>
+        	<field name="od_period_lenght1" attrs="{'invisible': [('od_is_slab', '=', False)],'required': [('od_is_slab', '!=', False)]}"/>
+            <field name="od_period_lenght2" attrs="{'invisible': [('od_is_slab', '=', False)],'required': [('od_is_slab', '!=', False)]}"/>
+
+            </group>
+             <group>
+             <field name="od_period_lenght3" attrs="{'invisible': [('od_is_slab', '=', False)],'required': [('od_is_slab', '!=', False)]}"/>
+            <field name="od_period_lenght4" attrs="{'invisible': [('od_is_slab', '=', False)],'required': [('od_is_slab', '!=', False)]}"/>
+            </group>
+            
+            <group>
+             <field name="od_period_lenght5" attrs="{'invisible': [('od_is_slab', '=', False)],'required': [('od_is_slab', '!=', False)]}"/>
+            <field name="od_period_lenght6" attrs="{'invisible': [('od_is_slab', '=', False)],'required': [('od_is_slab', '!=', False)]}"/>
+            </group>
+            
+            
+            </group>
+        	</page>
+        	
+
+
+  
+        	</notebook>
+<!--          	<button name="check_report" position="after">-->
+<!--        		<button name = "print_excel_report" string="Excel Report" type="object"/>-->
+<!--        	</button>      -->
+        </xpath>
+        </data>
+        </field>
+    </record>
+
+</odoo>

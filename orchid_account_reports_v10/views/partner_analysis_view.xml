@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+
+
+    <record id="view_partner_analysis_graph" model="ir.ui.view">
+         <field name="name">orchid.partner.analysis.graph</field>
+         <field name="model">orchid.partner.analysis</field>
+         <field name="arch" type="xml">
+             <graph string="Partner Analysis" >
+                 <field name="company_currency_id"/>
+                 <field name="balance" type="measure"/>
+             </graph>
+         </field>
+    </record>
+    
+                <record model="ir.ui.view" id="view_partner_analysis_pivot">
+            <field name="name">orchid.partner.analysis</field>
+            <field name="model">orchid.partner.analysis</field>
+            <field name="arch" type="xml">
+                <pivot string="Partner Analysis">
+                   <field name="company_currency_id"/>
+                 <field name="balance" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+        
+        
+            <record id="view_partner_analysis_search" model="ir.ui.view">
+        <field name="name">orchid.partner.analysis.search</field>
+        <field name="model">orchid.partner.analysis</field>
+        <field name="arch" type="xml">
+            <search string="Partner Analysis">
+                <field name="partner_id"/>
+                <!-- <field name="od_group_id"/> -->
+              <field name="internal_type"/>
+              <field name="inv_salesman_id"/>
+              
+          <filter string="Payable" name="od_payable" domain="[('internal_type','=','payable')]"/>
+          <filter string="Receivable" name="od_receivable" domain="[('internal_type','=','receivable')]"/>
+                <group expand="1" string="Group By">
+                <!--    <filter string="Group" name="od_group_id" context="{'group_by':'od_group_id'}"/>-->
+                    <filter string="Salesman" name='inv_salesman_id' context="{'group_by':'inv_salesman_id'}"/>
+                    <filter string="Partner" name='partner_id' context="{'group_by':'partner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    
+       <record id="menu_action_orchid_partner_analysis" model="ir.actions.act_window">
+        <field name="name">Partner Analysis</field>
+        <field name="res_model">orchid.partner.analysis</field>
+         <field name="search_view_id" ref="view_partner_analysis_search"/>
+
+        <field name="view_mode">graph,pivot</field>        
+    </record>
+    
+
+
+ 
+ 
+
+
+
+    <menuitem name="Partner Analysis" id="action_partner_analysis" action="menu_action_orchid_partner_analysis" parent="account.menu_finance_reports" sequence="25"/>
+
+</data>
+</odoo>

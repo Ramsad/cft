@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Server action: Update prepayment lines -->
+    <record id="update_prepayment_lines" model="ir.actions.server">
+        <field name="name">Update Prepayment Lines</field>
+        <field name="model_id" ref="model_orchid_prepayment_lines"/>
+        <field name="state">code</field>
+        <!-- Run on the selected records -->
+        <field name="code">action = records.load_prepayment_line()</field>
+        <field name="binding_model_id" ref="model_orchid_prepayment_lines"/>
+        <field name="binding_type">action</field>
+    </record>
+
+    <!-- Server action: Generate Prepayment Board -->
+    <record id="action_orchid_generate_prepayment_board" model="ir.actions.server">
+        <field name="name">Generate Prepayment Board</field>
+        <field name="model_id" ref="model_orchid_prepayment_lines"/>
+        <field name="state">code</field>
+        <field name="code">action = records.generate_prepayment_board()</field>
+        <field name="binding_model_id" ref="model_orchid_prepayment_lines"/>
+        <field name="binding_type">action</field>
+    </record>
+
+    <!-- Account form: add prepaid flag -->
+    <record id="view_prepaymnt_account_form" model="ir.ui.view">
+        <field name="name">account.account.form.orchid.prepaid</field>
+        <field name="model">account.account</field>
+        <field name="inherit_id" ref="account.view_account_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='deprecated']" position="after">
+                <field name="od_prepaid_account"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Prepayment Lines list -->
+    <record id="orchid_prepayment_list" model="ir.ui.view">
+        <field name="name">orchid.prepayment.lines.list</field>
+        <field name="model">orchid.prepayment.lines</field>
+        <field name="arch" type="xml">
+            <list create="0">
+                <field name="account_id" readonly="1"/>
+                <field name="move_id"/>
+                <field name="date"/>
+                <field name="partner_id"/>
+                <field name="debit"/>
+                <field name="credit"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="expense_account_id"/>
+                <field name="cost_center"/>
+                <field name="linked_partner_id"/>
+                <field name="journal_id"/>
+                <field name="analytic_account_id"/>
+                <field name="remark"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="orchid_prepayment_form" model="ir.ui.view">
+        <field name="name">orchid.prepayment.lines.form</field>
+        <field name="model">orchid.prepayment.lines</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <!-- visible only in draft -->
+                    <button name="generate_prepayment_board" string="Generate" type="object"
+                            class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="button_confirm" string="Confirm" type="object"
+                            class="oe_highlight" invisible="state != 'draft'"/>
+                    <!-- hidden in done/cancel -->
+                    <button name="button_cancel" string="Cancel" type="object"
+                            class="oe_highlight" invisible="state in ['done','cancel']"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="account_id" readonly="1"/>
+                            <!-- these were readonly in all states via attrs; keep them readonly -->
+                            <field name="move_id"   readonly="1"/>
+                            <field name="date"      readonly="1"/>
+                            <field name="partner_id" readonly="1"/>
+                            <field name="debit"     readonly="1"/>
+                            <field name="credit"    readonly="1"/>
+                        </group>
+                        <group>
+                            <!-- editable only in draft -->
+                            <field name="date_start"          readonly="state != 'draft'"/>
+                            <field name="date_end"            readonly="state != 'draft'"/>
+                            <field name="expense_account_id"  readonly="state != 'draft'"/>
+                            <field name="cost_center"         readonly="state != 'draft'"/>
+                            <field name="linked_partner_id"   readonly="state != 'draft'"/>
+                            <field name="journal_id"          readonly="state != 'draft'"/>
+                            <field name="analytic_account_id" readonly="state != 'draft'"/>
+                            <field name="remark"              readonly="state != 'draft'" required="1"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Entry Board" name="entry_board">
+                            <field name="line_history_ids">
+                                <list>
+                                    <field name="date" readonly="1"/>
+                                    <field name="account_id" invisible="1"/>
+                                    <field name="debit_account_id" readonly="1"/>
+                                    <!-- these conditions apply to the line's own state -->
+                                    <field name="partner_id"          readonly="state in ['closed','cancel']"/>
+                                    <field name="cost_center"         readonly="state in ['closed','cancel']"/>
+                                    <field name="analytic_account_id" readonly="state in ['closed','cancel']"/>
+                                    <field name="amount" readonly="1" sum="Total"/>
+                                    <field name="journal_id" invisible="1"/>
+                                    <field name="state" readonly="1"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <!-- Window action + menu -->
+    <record id="action_orchid_prepayment" model="ir.actions.act_window">
+        <field name="name">Prepayments</field>
+        <field name="res_model">orchid.prepayment.lines</field>
+        <field name="view_mode">list,form</field>
+        <field name="views" eval="[(ref('orchid_prepayment_list'), 'list'), (ref('orchid_prepayment_form'), 'form')]"/>
+    </record>
+
+    <menuitem id="orchid_prepayment_lines"
+              name="Prepayments"
+              parent="account.menu_finance_entries"
+              action="action_orchid_prepayment"
+              sequence="53"/>
+
+</odoo>

@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_orchid_account_division,orchid.account.division,model_orchid_account_division,account.group_account_user,1,1,1,0
+access_orchid_account_branch,orchid.account.branch,model_orchid_account_branch,account.group_account_user,1,1,1,0
+access_orchid_account_cost_center,orchid.account.cost.center,model_orchid_account_cost_center,account.group_account_user,1,1,1,0
+access_orchid_account_partial_reconcile_view,orchid.account.partial.reconcile.view,model_orchid_account_partial_reconcile_view,account.group_account_user,1,1,1,0
+access_account_payment_analysis,account.payment.analysis,model_account_payment_analysis,account.group_account_user,1,1,1,0
+access_od_income_expense_line,od.income.expense.line,model_od_income_expense_line,account.group_account_user,1,1,1,0
+access_od_overdue,od.overdue,model_od_overdue,account.group_account_user,1,1,1,0
+access_orchid_group_payment,orchid.group.payment,model_orchid_group_payment,account.group_account_user,1,1,1,0
+access_od_payment_collection_report_wizard,od.payment.collection.report.wizard,model_od_payment_collection_report_wizard,base.group_user,1,1,1,0
+access_orchid_account_group,orchid.account.group,model_orchid_account_group,account.group_account_user,1,1,1,0

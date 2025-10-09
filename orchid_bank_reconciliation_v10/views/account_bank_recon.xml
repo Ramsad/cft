@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_orchid_bank_reconciliation_tree" model="ir.ui.view">
+            <field name="name">orchid.bank.reconciliation.tree</field>
+            <field name="model">orchid.bank.reconciliation</field>
+            <field name="arch" type="xml">
+                <list string="Bank Reconcile">
+                    <field name="name"/>
+                    <field name="account_id"/>
+                    <field name="date"/>
+                    <field name="to_date" />
+                    <field name="state" invisible="1"/>
+                </list>
+            </field>
+        </record>
+
+
+        <record id="view_orchid_bank_reconciliation_form" model="ir.ui.view">
+            <field name="name">orchid.bank.reconciliation.form</field>
+            <field name="model">orchid.bank.reconciliation</field>
+            <field name="arch" type="xml">
+                <form string="Bank Reconcile">
+                 <header>
+<!--                    <button name="od_open_bank_stmt_reconcile" string="Open" type="object" states="draft"/>-->
+<!--                    <button name="od_reconcile_bank_stmt_reconcile" string="Reconcile" type="object" states="open"/>-->
+                    <field name="state" widget="statusbar" invisible="1" nolabel="1" />
+                    
+                 </header>
+
+<!--attrs="{'invisible':[('state','=','draft')],'readonly':[('state','!=','draft')]}"-->
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" class="oe_inline"  />
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group>
+<!--                            <field name="name"/>-->
+                            <field name="account_id" />
+                            <field name="date"/>
+                              <field name="to_date" />
+                            <field name="type" widget="radio"/>
+                            <button name="od_open_bank_stmt_reconcile" string="Search" type="object" />
+                           
+<!--                            <field name="date" attrs="{'invisible':[('state','=','draft')],'readonly':[('state','!=','draft')]}"/>-->
+<!--                            <field name="date" attrs="{'invisible':[('state','=','draft')],'readonly':[('state','!=','draft')]}"/>-->
+<!-- -->
+                        </group>
+                        <group>
+<!--                            <field name="book_balance" attrs="{'invisible':[('state','=','draft')],'readonly':[('state','!=','draft')]}"/>-->
+<!--                            <field name="bank_balance" attrs="{'invisible':[('state','=','draft')],'readonly':[('state','!=','draft')]}"/>-->
+
+<!--                            <field name="fc_book_balance" attrs="{'invisible':[('state','=','draft')],'readonly':[('state','!=','draft')]}" groups="base.group_multi_company"/>-->
+<!--                            <field name="fc_bank_balance" attrs="{'invisible':[('state','=','draft')],'readonly':[('state','!=','draft')]}" groups="base.group_multi_company"/>-->
+
+<!--                            <field name="reconciled_balance" attrs="{'invisible':[('state','=','draft')],'readonly':[('state','!=','draft')]}"/>-->
+<!--                            <field name="unconciled_balance" attrs="{'invisible':[('state','=','draft')],'readonly':[('state','!=','draft')]}"/>-->
+
+
+
+                            <field name="book_balance" />
+                            <field name="bank_balance" />
+
+                            <field name="fc_book_balance"  groups="base.group_multi_company"/>
+                            <field name="fc_bank_balance"  groups="base.group_multi_company"/>
+
+                            <field name="reconciled_balance" />
+                            <field name="unconciled_balance" />
+
+                             <button name="button_dummy" string="Reconcile" type="object" />
+                            <button name="update_all_with_effective_date"  string="Fill Bank Date" type="object" icon="gtk-execute" help="Will update the reconcile/bank date with Effective date" states="open"/>
+
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Entries">
+<!--                            <field name="move_line_ids" attrs="{'readonly':[('state','!=','open')]}">-->
+                            <field name="move_line_ids" >
+                                <list editable="bottom" create="false" delete="false">
+                                <field name="move_id" readonly="1"/>
+                                <field name="name" readonly="1"/>
+                                <field name="date" readonly="1"/>
+                                <field name="od_check_vnumber"/>
+                                <field name="ref" readonly="1"/>
+                                <field name="partner_id" readonly="1"/>
+<!--                                <field name="od_check_date" readonly="1"/>-->
+                                <field name="debit" readonly="1" sum="Debit"/>
+                                <field name="credit" readonly="1" sum="Credit"/>
+                                <field name="amount_currency" readonly="1"/>
+                                <field name="currency_id" readonly="1"/>
+                                
+                                 <button name="od_fill_date" string="Fill Date" type="object" icon="gtk-execute" />
+                                <field name="od_reconcile_date"/>
+                                <field name="od_reconcile_id" invisible="1"/>
+                                </list>
+        
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="action_orchid_bank_reconciliation" model="ir.actions.act_window">
+            <field name="name">Bank Reconcile</field>
+            <field name="res_model">orchid.bank.reconciliation</field>
+
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'bank':True}</field>
+        </record>
+
+
+		<menuitem id="orchid_bank_reconciliation_menu" name="Bank Reconciliation" parent="account.menu_finance_entries" action="action_orchid_bank_reconciliation" sequence="11"/>
+    
+    </data>
+</odoo>

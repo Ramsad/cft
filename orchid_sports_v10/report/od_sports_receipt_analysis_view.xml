@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Minimal, known-good Pivot (add measures back once this loads) -->
+        <record id="od_sports_receipt_analysis_view_pivot" model="ir.ui.view">
+            <field name="name">od.sports.receipt.analysis.view.pivot</field>
+            <field name="model">od.sports.receipt.analysis.view</field>
+            <field name="arch" type="xml">
+                <pivot string="Collection Analysis">
+                    <!-- Row/group field should be groupable (many2one/char/date/...): -->
+                    <field name="receipt_id" type="row"/>
+                    <!-- Measure must be numeric & aggregatable (sql column or compute store=True): -->
+                    <field name="total" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <!-- Your List view (unchanged, keeping <list>) -->
+        <record id="od_sports_receipt_analysis_view_list" model="ir.ui.view">
+            <field name="name">od.sports.receipt.analysis.view.list</field>
+            <field name="model">od.sports.receipt.analysis.view</field>
+            <field name="arch" type="xml">
+                <list string="Collection Analysis">
+                    <field name="date"/>
+                    <field name="partner_id" string="Client name"/>
+                    <field name="rv_no"/>
+                    <field name="type_id"/>
+                    <field name="no_of_class" string="Number of Lesson"/>
+                    <field name="amount" string="Amount Paid" sum="Total"/>
+                    <field name="transportation" string="Reg.Fee" sum="Total"/>
+                    <field name="total" string="Fee Total" sum="Total"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Search (icons removed; Today filter kept) -->
+        <record id="od_sports_receipt_analysis_view_search" model="ir.ui.view">
+            <field name="name">od.sports.receipt.analysis.view.search</field>
+            <field name="model">od.sports.receipt.analysis.view</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="receipt_id"/>
+                    <field name="rv_no"/>
+                    <field name="partner_id"/>
+                    <field name="activities_id"/>
+                    <field name="remarks"/>
+                    <field name="venue_id"/>
+                    <field name="coach_id"/>
+                    <field name="term_id"/>
+
+                    <filter name="today"
+                            string="Today"
+                            domain="[('date','&gt;=', context_today().strftime('%%Y-%%m-%%d 00:00:00')),
+                           ('date','&lt;=', context_today().strftime('%%Y-%%m-%%d 23:59:59'))]"/>
+
+                    <group expand="1" string="Group By">
+                        <filter string="Term"       name="group_term"       context="{'group_by':'term_id'}"/>
+                        <filter string="Name"       name="group_receipt"    context="{'group_by':'receipt_id'}"/>
+                        <filter string="Student"    name="group_partner"    context="{'group_by':'partner_id'}"/>
+                        <filter string="Program"    name="group_activities" context="{'group_by':'activities_id'}"/>
+                        <filter string="Venue"      name="group_venue"      context="{'group_by':'venue_id'}"/>
+                        <filter string="Coach"      name="group_coach"      context="{'group_by':'coach_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_od_sports_receipt_analysis_view" model="ir.actions.act_window">
+            <field name="name">Collection Analysis</field>
+            <field name="res_model">od.sports.receipt.analysis.view</field>
+            <field name="view_mode">pivot,list</field>
+            <field name="search_view_id" ref="od_sports_receipt_analysis_view_search"/>
+            <field name="context">{'search_default_today': 1}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create"/>
+            </field>
+        </record>
+
+        <menuitem id="menu_od_sports_receipt_analysis_view"
+                  name="Collection Analysis"
+                  action="action_od_sports_receipt_analysis_view"
+                  parent="menu_sports_reporting"
+                  sequence="9"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_partner_overdue">
+        <t t-call="report.external_layout">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <div class="page">
+
+                        <div class="row">
+
+                            <p>
+                                Document: Customer account statement
+                                <br/>
+                                <!-- Date: <span t-esc="date.strftime('%d-%m-%Y')"/><br/> -->
+                                <t t-if="form_filters['date_from']">
+                                    Date From:
+                                    <span t-esc="form_filters['date_from']"/>
+                                    <br/>
+                                </t>
+                                <t t-if="form_filters['date_to']">
+                                    Date To:
+                                    <span t-esc="form_filters['date_to']"/>
+                                    <br/>
+                                </t>
+                                <!-- <span t-esc="partner_info.name"/><br/> -->
+                            </p>
+                            <t t-set="grand_total_bal" t-value="0"/>
+                            <t t-set="grand_total_inv" t-value="0"/>
+                            <t t-set="grand_total_paid" t-value="0"/>
+                            <t t-set="grand_total_pdc" t-value="0"/>
+                            <div t-foreach="get_overdue_lines" t-as="partner" t-if="partner['info']">
+                                <t t-if="partner_index>0">
+                                    <p style="page-break-before:always;"></p>
+                                </t>
+                                Name:
+                                <span t-esc="partner['name']"/>
+                                <t t-esc="partner_index"/>
+                                <br/>
+                                <t t-if="not partner['company']">
+                                    Address:
+                                    <span t-esc="partner['street']"/>
+                                    <span t-esc="partner['city']"/>
+                                    <span t-esc="partner['zip']"/>
+                                    <br/>
+                                    Accountant:
+                                    <span t-esc="partner['accountant_name']"/>
+                                    <br/>
+                                    Contact:
+                                    <span t-esc="partner['accountant_contact']"/>
+                                </t>
+
+                                <table class="table table-condensed"
+                                       style="width:100%;border:1px solid #000;border-collapse: collapse;">
+                                    <colgroup>
+                                        <col width='10%'/>
+                                        <col width='10%'/>
+                                        <col width='15%'/>
+                                        <col width='15%'/>
+                                        <col width='15%'/>
+                                        <col width='15%'/>
+                                        <col width='10%'/>
+                                        <col width='10%'/>
+                                    </colgroup>
+                                    <thead>
+                                        <tr style="border:1px solid #000;border-collapse: collapse;">
+                                            <th class="text-center"
+                                                style="border:1px solid #000;border-collapse: collapse;">Inv Date
+                                            </th>
+                                            <th class="text-center"
+                                                style="border:1px solid #000;border-collapse: collapse;">Doc Type
+                                            </th>
+                                            <th class="text-center"
+                                                style="border:1px solid #000;border-collapse: collapse;">Inv No.
+                                            </th>
+                                            <th class="text-center"
+                                                style="border:1px solid #000;border-collapse: collapse;">Lpo Number
+                                            </th>
+                                            <th class="text-center"
+                                                style="border:1px solid #000;border-collapse: collapse;">Inv Amount
+                                                <t t-if="partner['currency']!=''">
+                                                    (<t t-esc="partner['currency']"/>)
+                                                </t>
+                                                <t t-if="partner['currency']==''">(AED)</t>
+                                            </th>
+                                            <th class="text-center"
+                                                style="border:1px solid #000;border-collapse: collapse;">Paid Amt
+                                                <t t-if="partner['currency']!=''">
+                                                    (<t t-esc="partner['currency']"/>)
+                                                </t>
+                                                <t t-if="partner['currency']==''">(AED)</t>
+                                            </th>
+                                            <th class="text-center"
+                                                style="border:1px solid #000;border-collapse: collapse;">Balance
+                                                <t t-if="partner['currency']!=''">
+                                                    (<t t-esc="partner['currency']"/>)
+                                                </t>
+                                                <t t-if="partner['currency']==''">(AED)</t>
+                                            </th>
+                                            <th class="text-center"
+                                                style="border:1px solid #000;border-collapse: collapse;">PDC Amt
+                                                <t t-if="partner['currency']!=''">
+                                                    (<t t-esc="partner['currency']"/>)
+                                                </t>
+                                                <t t-if="partner['currency']==''">(AED)</t>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-set="previous" t-value="0"/>
+                                        <t t-set="pdc_total" t-value="0"/>
+                                        <t t-set="inv_total" t-value="0"/>
+                                        <t t-set="paid_total" t-value="0"/>
+
+                                        <tr t-foreach="partner['info']" t-as="line"
+                                            style="border:1px solid #000;border-collapse: collapse;">
+                                            <!-- <t  t-if="int(line['debit']) != 0 and not line['od_released']"> -->
+
+                                            <td style="border:1px solid #000;border-collapse: collapse;">
+                                                <span t-esc="line['date'].strftime('%d-%m-%Y')"/>
+
+                                            </td>
+                                            <td style="border:1px solid #000;border-collapse: collapse;text-align:right;">
+                                                <span t-esc="line['journal_code']"/>
+
+                                            </td>
+                                            <td style="border:1px solid #000;border-collapse: collapse;">
+                                                <span t-esc="line['number']"/>
+                                            </td>
+                                            <td style="border:1px solid #000;border-collapse: collapse;">
+                                                <span t-esc="line['label']"/>
+                                            </td>
+                                            <td style="border:1px solid #000;border-collapse: collapse;text-align:right;">
+                                                <t t-esc="'%.2f'%(line['debit'])"/>
+                                                <t t-set="inv_total" t-value="inv_total + line['debit']"/>
+                                            </td>
+                                            <td style="border:1px solid #000;border-collapse: collapse;text-align:right;">
+                                                <t t-esc="'%.2f'%(line['credit'])"/>
+                                                <t t-set="paid_total" t-value="paid_total +line['credit']"/>
+                                            </td>
+                                            <td style="border:1px solid #000;border-collapse: collapse;text-align:right;">
+                                                <span t-esc="'%.2f'%(previous+line['debit']-line['credit'])"/>
+                                                <t t-set="previous" t-value="previous+line['debit']-line['credit']"/>
+                                            </td>
+                                            <td style="border:1px solid #000;border-collapse: collapse;text-align:right;">
+                                                <t t-if="line['pdc'] and not line['od_released']">
+                                                    <t t-if="line['debit'] and line['credit']">
+                                                        <t t-if="0 > (line['debit'] - line['credit'])">
+                                                            <span t-esc="'%.2f'%(line['debit'] - line['credit'])"/>
+                                                            <t t-set="pdc_total"
+                                                               t-value="pdc_total + line['debit'] - line['credit']"/>
+                                                        </t>
+                                                    </t>
+                                                    <t t-elif="line['credit'] and not line['debit']">
+                                                        <t t-esc="'%.2f'%(0-line['credit'])"/>
+                                                        <t t-set="pdc_total" t-value="pdc_total - line['credit']"/>
+                                                    </t>
+                                                </t>
+                                            </td>
+                                            <!-- </t> -->
+                                        </tr>
+                                        <tr>
+
+                                            <td colspan="3"/>
+                                            <td>
+                                                <span>
+                                                    <strong>Total</strong>
+                                                </span>
+                                            </td>
+                                            <td style="border:1px solid #000;border-collapse: collapse;text-align:right;">
+                                                <strong>
+                                                    <span t-esc="'%.2f'%(inv_total)"/>
+                                                    <t t-set="grand_total_inv" t-value="grand_total_inv + inv_total"/>
+                                                </strong>
+                                            </td>
+                                            <td style="border:1px solid #000;border-collapse: collapse;text-align:right;">
+                                                <strong>
+                                                    <span t-esc="'%.2f'%(paid_total)"/>
+                                                    <t t-set="grand_total_paid"
+                                                       t-value="grand_total_paid + paid_total"/>
+                                                </strong>
+                                            </td>
+                                            <td style="border:1px solid #000;border-collapse: collapse;text-align:right;">
+                                                <strong>
+                                                    <span t-esc="'%.2f'%(previous)"/>
+                                                </strong>
+                                                <t t-set="grand_total_bal" t-value="grand_total_bal + previous"/>
+                                            </td>
+                                            <td style="border:1px solid #000;border-collapse: collapse;text-align:right;">
+                                                <strong>
+                                                    <span t-esc="'%.2f'%(pdc_total)"/>
+                                                    <t t-set="grand_total_pdc" t-value="grand_total_pdc + pdc_total"/>
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <table>
+
+                                <tr>
+                                    <td colspan="2">
+                                    </td>
+                                    <td colspan="1">
+                                        <strong>GRAND TOTAL:</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                    </td>
+                                    <td colspan="1">
+                                        <strong>Invoice:</strong>
+                                    </td>
+                                    <td colspan="2">
+                                    </td>
+
+                                    <td>
+                                        <span t-esc="grand_total_inv"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                    </td>
+                                    <td colspan="1">
+                                        <strong>Paid Amount:</strong>
+                                    </td>
+                                    <td colspan="2">
+                                    </td>
+                                    <td>
+                                        <span t-esc="grand_total_paid"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                    </td>
+                                    <td colspan="1">
+                                        <strong>Balance Amount:</strong>
+                                    </td>
+                                    <td colspan="2">
+                                    </td>
+                                    <td>
+                                        <span t-esc="grand_total_bal"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                    </td>
+                                    <td colspan="1">
+                                        <strong>Pdc:</strong>
+                                    </td>
+                                    <td colspan="2">
+                                    </td>
+                                    <td>
+                                        <span t-esc="grand_total_pdc"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

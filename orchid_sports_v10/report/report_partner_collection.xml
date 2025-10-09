@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_partner_collection">
+        <t t-call="report.external_layout">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <div class="page">
+                        <span>
+                            <h1>
+                                <t t-if="o.partner_id.name">
+                                    <t t-esc="o.partner_id.name"/>
+                                </t>
+                            </h1>
+                        </span>
+
+
+                        <div class="row" style="border:1px solid black;">
+                            <table width="100%">
+                                <tr>
+                                    <t t-if="o.partner_id.street or o.partner_id.street2 or o.partner_id.city or o.partner_id.state_id or o.partner_id.country_id">
+                                        <td>Address:</td>
+                                        <td>
+                                            <t t-esc="o.partner_id.street"/>
+                                            <br/>
+                                            <t t-esc="o.partner_id.street2"/>
+                                            <br/>
+                                            <t t-esc="o.partner_id.city"/>
+                                            <br/>
+                                            <t t-if="o.partner_id.state_id">
+                                                <t t-esc="o.partner_id.state_id.name"/>
+                                                <br/>
+                                            </t>
+                                            <t t-if="o.partner_id.country_id">
+                                                <t t-esc="o.partner_id.country_id.name"/>
+                                            </t>
+                                        </td>
+                                    </t>
+
+
+                                </tr>
+                                <tr>
+                                    <td>Racket Info:</td>
+                                    <td>
+                                        <t t-esc="o.partner_id.racket_info"/>
+                                    </td>
+                                    <td>Gender:</td>
+                                    <td>
+                                        <t t-esc="o.partner_id.od_gender"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Email:</td>
+                                    <td>
+                                        <t t-esc="o.partner_id.email"/>
+                                    </td>
+                                    <td>Mobile:</td>
+                                    <td>
+                                        <t t-esc="o.partner_id.mobile"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Dob:</td>
+                                    <td>
+                                        <t t-esc="o.partner_id.od_dob"/>
+                                    </td>
+                                    <td>Age:</td>
+                                    <td>
+                                        <t t-esc="o.partner_id.od_age"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <t t-if="o.school_id">
+                                        <td>School:</td>
+                                        <td>
+                                            <t t-esc="o.school_id.name"/>
+                                        </td>
+                                    </t>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <br/>
+                        <br/>
+                        <table width="100%" style="border-collapse: collapse;border:1px solid #dddddd;font-size:12px;">
+                            <tr style="border:1px solid #dddddd;">
+                                <th style="border:1px solid #dddddd;">RV No</th>
+                                <th style="border:1px solid #dddddd;">Amt Paid</th>
+                                <th style="border:1px solid #dddddd;">Lesson</th>
+                                <th style="border:1px solid #dddddd;">Payment Date</th>
+                                <th style="border:1px solid #dddddd;">Booked Lesson</th>
+                                <th style="border:1px solid #dddddd;">Coach</th>
+                                <!-- <th>Lesson Taken</th>
+                                <th>Pending Lesson</th> -->
+                            </tr>
+                            <tr t-foreach="o.wizard_line_ids" t-as="line" style="border:1px solid #dddddd;">
+                                <td style="border:1px solid #dddddd;">
+                                    <t t-esc="line.rv_no"/>
+                                </td>
+                                <td style="border:1px solid #dddddd;text-align:right;">
+                                    <right>
+                                        <t t-esc="line.total"/>
+                                    </right>
+                                </td>
+                                <td style="border:1px solid #dddddd;">
+                                    <t t-if="line.type_id">
+                                        <t t-esc="line.type_id.name"/>
+                                    </t>
+                                </td>
+                                <td style="border:1px solid #dddddd;">
+                                    <t t-esc="line.date"/>
+                                </td>
+                                <td style="border:1px solid #dddddd;text-align:right;">
+                                    <right>
+                                        <t t-esc="line.no_of_clases"/>
+                                    </right>
+                                </td>
+                                <td style="border:1px solid #dddddd;">
+                                    <t t-if="line.coach_id">
+                                        <t t-esc="line.coach_id.name"/>
+                                    </t>
+                                </td>
+                                <!-- <td>No Data
+                                </td>
+                                <td>No Data
+                                </td> -->
+
+                            </tr>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

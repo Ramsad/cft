@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="account_invoice_inherited_acc_enhnacement" model="ir.ui.view">
+        <field name="name">account.move.orchid</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='button_request_cancel']" position="after">
+                <!-- Visible only when amount_total == 0 AND state == 'paid' -->
+                <button name="revert_to_draft"
+                        type="object"
+                        string="Reset"
+                        invisible="(amount_total != 0) or (state != 'paid')"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

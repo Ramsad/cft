@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+        <record model="ir.ui.view" id="od_registration_list_view">
+            <field name="name">od.registration.list.view</field>
+            <field name="model">od.registration</field>
+            <field name="arch" type="xml">
+                <list string="Registration">
+                    <field name="name"/>
+                    <field name="activities_id"/>
+                    <field name="date"/>
+                </list>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="od_registration_form_view">
+            <field name="name">od.registration.form.view</field>
+            <field name="model">od.registration</field>
+            <field name="arch" type="xml">
+                <form string="Registration">
+                    <header>
+                        <button name="action_confirm" type="object" states="draft" string="Confirm"/>
+                        <button name="action_cancel" type="object" string="Cancel" states="confirm"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirm,cancel"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" readonly="1"/>
+                                <field name="activities_id" readonly="[('state','in', ('confirm','cancel'))]"/>
+                                <field name="venue_id"/>
+                                <field name="coach_id"/>
+                                <field name="academy_id"/>
+
+
+                            </group>
+                            <group>
+
+
+                                <field name="date" readonly="[('state','in', ('confirm','cancel'))]"/>
+
+                                <field name="product_id"/>
+                                <field name="fees"/>
+                                <field name="no_of_class"/>
+
+
+                            </group>
+                        </group>
+
+
+                        <notebook>
+
+                            <page String="Details">
+                                <field name="registration_line" readonly="[('state','in', ('confirm','cancel'))]">
+                                    <list editable="top">
+                                        <field name="registration_id" invisible="1" string="Name"/>
+
+                                        <field name="partner_id"/>
+                                        <field name="rv_no" string="Mobile"/>
+                                        <field name="payment_type_account_id" invisible="1"/>
+                                        <field name="types" invisible="1"/>
+
+
+                                        <field name="allergies"/>
+                                        <field name="transportation"/>
+                                        <field name="no_of_classes"/>
+                                        <field name="week_ids" widget="many2many_tags"/>
+
+                                        <field name="remarks" invisible="1"/>
+                                        <field name="amount" sum="Total"/>
+
+
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="od_registration_action">
+            <field name="name">Registration</field>
+
+            <field name="res_model">od.registration</field>
+
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to add new Registration.
+                </p>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

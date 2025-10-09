@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="od_account_enh_move_form" model="ir.ui.view">
+        <field name="name">account.move.form.orchid</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='ref']" position="after">
+                <field name="od_check_print"/>
+                <field name="od_check_date" invisible="not od_check_print"/>
+                <field name="od_check_to" invisible="not od_check_print"/>
+                <field name="od_check_amount" invisible="not od_check_print"/>
+                <field name="od_check_amount_in_words" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

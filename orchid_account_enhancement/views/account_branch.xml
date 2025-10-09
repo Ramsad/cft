@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+        <record model="ir.ui.view" id="orchid_accont_branch_list_view">
+            <field name="name">orchid.account.branch.list</field>
+            <field name="model">orchid.account.branch</field>
+            <field name="type">list</field>
+            <field name="arch" type="xml">
+			    <list string="list_string">
+					<field name="name" />
+					<field name="code" />
+                </list>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="orchid_accont_branch_form_view">
+            <field name="name">orchid.account.branch.form</field>
+            <field name="model">orchid.account.branch</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="form_string">
+					<sheet>
+						<group>
+							<field name="code" placeholder="Code" />
+                            <field name="name" placeholder="Name" />
+						</group>
+					</sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_orchid_accont_branch_list_view">
+            <field name="name">Account Branch</field>
+            <field name="res_model">orchid.account.branch</field>
+
+            <field name="view_mode">list,form</field>
+            <field name="view_id" ref="orchid_accont_branch_list_view"/>
+        </record>
+
+		<menuitem id="orchid_accont_branch_menu" name="Branch" parent="account.account_account_menu" action="action_orchid_accont_branch_list_view" sequence="11"/>
+    
+</odoo>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- List view -->
+    <record id="od_pdc_release_list_view" model="ir.ui.view">
+        <field name="name">od.pdc.release.list</field>
+        <field name="model">od.pdc.release</field>
+        <field name="arch" type="xml">
+            <list string="list_string">
+                <field name="journal_id"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form view -->
+    <record id="od_pdc_release_form_view" model="ir.ui.view">
+        <field name="name">od.pdc.release.form</field>
+        <field name="model">od.pdc.release</field>
+        <field name="arch" type="xml">
+            <form string="form_string">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="journal_id"/>
+                            <field name="account_id"/>
+                            <field name="from_date"/>
+                            <field name="to_date"/>
+                            <field name="type" widget="radio"/>
+                            <button name="od_open_receipt" string="Show" type="object" class="oe_link"/>
+                        </group>
+                        <group/>
+                    </group>
+
+                    <notebook>
+                        <page string="Line">
+                            <field name="line_ids">
+                                <list editable="bottom" create="false" delete="false">
+                                    <field name="rv_no"/>
+                                    <field name="partner_id"/>
+                                    <field name="payment_type_account_id"/>
+                                    <field name="type_id"/>
+                                    <field name="remarks"/>
+                                    <field name="date"/>
+                                    <field name="amount" sum="Total"/>
+                                    <field name="transportation"/>
+                                    <field name="total" sum="Total"/>
+                                    <field name="od_account_id"/>
+<!--                                    <button string="Entry" type="object"/>-->
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_od_pdc_release_list_view" model="ir.actions.act_window">
+        <field name="name">PDC Release</field>
+        <field name="res_model">od.pdc.release</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="od_pdc_release_list_view"/>
+    </record>
+
+</odoo>

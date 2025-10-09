@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_tax_register_form" model="ir.ui.view">
+            <field name="name">orchid.tax.register.form</field>
+            <field name="model">orchid.tax.register</field>
+            <field name="arch" type="xml">
+                <form string="Vat Register ">
+                    <!-- <sheet> -->
+                    <group>
+                        <group>
+                            <field name="from_date" required="1"/>
+                            <field name="to_date" required="1"/>
+                            
+                            <field name="od_product"/>
+                        </group>
+                        <group>
+                            <field name="excel_file" filename="file_name"/>
+                            <field name ="file_name" invisible="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <notebook>
+                            <page string="Journal">
+                                <field name="journal_id"/>
+                            </page>
+                            <page string="Account">
+                                <field name="account_id"/>
+                            </page>
+                        </notebook>
+                    </group>
+                    <!-- </sheet> -->
+                    <footer>
+                        <button string="Generate" name="generate" type="object" class="btn-primary"/>
+                    </footer>
+               </form>
+            </field>
+        </record>
+
+        <record id="action_view_tax_register" model="ir.actions.act_window">
+            <field name="name">Vat Register</field>
+            <field name="res_model">orchid.tax.register</field>
+
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_tax_register_form"/>
+            <field name="target">new</field>
+        </record>
+
+
+      
+         <menuitem
+            id="menu_view_tax_register"
+            name="Vat Register"
+            parent="account.menu_finance_reports"
+            sequence="150"
+            action="action_view_tax_register" />
+
+        
+
+
+        
+    </data>
+</odoo>

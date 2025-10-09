@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+    <record id="view_orchid_invoice_report_pivot" model="ir.ui.view">
+         <field name="name">orchid.invoice.report.pivot</field>
+         <field name="model">orchid.account.move.report</field>
+         <field name="arch" type="xml">
+             <pivot string="Invoice Analysis" disable_linking="True">
+                 <field name="user_id" type="row" />
+                 <field name="product_qty" type="measure"/>
+                 <field name="price_total" type="measure"/>
+                 <field name="cost" type="measure"/>
+                 <field name="profit" type="measure"/>
+                 <field name="paid_amount" type="measure"/>
+                 <field name="residual" type="measure"/>
+             </pivot>
+         </field>
+    </record>
+
+    <record id="view_orchid_invoice_report_graph" model="ir.ui.view">
+         <field name="name">orchid.invoice.report.graph</field>
+         <field name="model">orchid.account.move.report</field>
+         <field name="arch" type="xml">
+             <graph string="Invoice Analysis">
+                 <field name="categ_id"/>
+                 <field name="price_total" type="measure"/>
+             </graph>
+         </field>
+    </record>
+    
+    
+    
+<!--    <record id="view_orchid_invoice_report_tree" model="ir.ui.view">-->
+<!--         <field name="name">orchid.invoice.report.tree</field>-->
+<!--         <field name="model">orchid.account.move.report</field>-->
+<!--         <field name="arch" type="xml">-->
+<!--             <list string="Invoice Analysis">-->
+<!--                 <field name="number"/>-->
+<!--                 <field name="name"/>-->
+<!--                 <field name="date"/>-->
+<!--                 <field name="product_id"/>                 -->
+
+<!--                 <field name="product_qty"/>-->
+<!--                 <field name="journal_id"/> -->
+<!--                 -->
+<!--                   <field name="partner_id"/>-->
+<!--                 <field name="account_id"/> -->
+<!--                   <field name="state"/>-->
+<!--                 <field name="price_total"/> -->
+<!--             </list>-->
+<!--         </field>-->
+<!--    </record>-->
+
+    <!-- Custom reports (aka filters) -->
+    <record id="filter_invoice_salespersons" model="ir.filters">
+        <field name="name">By Salespersons</field>
+        <field name="model_id">orchid.account.move.report</field>
+        <field name="domain">[]</field>
+        <field name="user_id" eval="False"/>
+        <field name="context">{'group_by': ['user_id']}</field>
+    </record>
+    <record id="filter_invoice_product" model="ir.filters">
+        <field name="name">By Product</field>
+        <field name="model_id">orchid.account.move.report</field>
+        <field name="domain">[]</field>
+        <field name="user_id" eval="False"/>
+        <field name="context">{'group_by': ['product_id'], 'set_visible':True, 'residual_invisible':True}</field>
+    </record>
+    <record id="filter_invoice_product_category" model="ir.filters">
+        <field name="name">By Product Category</field>
+        <field name="model_id">orchid.account.move.report</field>
+        <field name="domain">[]</field>
+        <field name="user_id" eval="False"/>
+        <field name="context">{'group_by': [ 'categ_id'], 'residual_invisible':True}</field>
+    </record>
+    <record id="filter_invoice_refund" model="ir.filters">
+        <field name="name">By Refund</field>
+        <field name="model_id">orchid.account.move.report</field>
+        <field name="domain">[('type', '=', 'out_refund')]</field>
+        <field name="user_id" eval="False"/>
+        <field name="context">{'group_by': [ 'user_id']}</field>
+    </record>
+    <record id="filter_invoice_country" model="ir.filters">
+        <field name="name">By Country</field>
+        <field name="model_id">orchid.account.move.report</field>
+        <field name="domain">[]</field>
+        <field name="user_id" eval="False"/>
+        <field name="context">{'group_by': [ 'country_id']}</field>
+    </record>
+
+    <record id="view_orchid_invoice_report_search" model="ir.ui.view">
+        <field name="name">orchid.invoice.report.search</field>
+        <field name="model">orchid.account.move.report</field>
+        <field name="arch" type="xml">
+            <search string="Invoice Analysis">
+                <field name="date"/>
+                <filter string="This Year" name="thisyear" domain="['|', ('date', '=', False), '&amp;',('date','&lt;=', time.strftime('%%Y-12-31')),('date','&gt;=',time.strftime('%%Y-01-01'))]" help="Journal invoices with period in current year"/>
+                <separator/>
+                <filter string="To Invoice" domain="[('state','=','draft')]" help = "Draft Invoices"/>
+                <filter string="Pro-forma" domain="['|', ('state','=','proforma'),('state','=','proforma2')]"/>
+                <filter string="Invoiced" name="current" domain="[('state','not in', ('draft','cancel','proforma','proforma2'))]"/>
+                <separator/>
+                <filter string="Customer" name="customer" domain="['|', ('type','=','out_invoice'),('type','=','out_refund')]"/>
+                <filter string="Vendor" name="supplier" domain="['|', ('type','=','in_invoice'),('type','=','in_refund')]"/>
+                <separator/>
+                <filter string="Invoice" domain="['|', ('type','=','out_invoice'),('type','=','in_invoice')]"/>
+                <filter string="Refund" domain="['|', ('type','=','out_refund'),('type','=','in_refund')]"/>
+                <field name="partner_id" operator="child_of"/>
+                <field name="user_id" />
+                <field name="categ_id" filter_domain="[('categ_id', 'child_of', self)]"/>
+                <group expand="1" string="Group By">
+                    <filter string="Partner" name="partner_id" context="{'group_by':'partner_id','residual_visible':True}"/>
+                    <filter string="Salesperson" name='user' context="{'group_by':'user_id'}"/>
+                    <filter string="Product Category" name="category_product" context="{'group_by':'categ_id','residual_invisible':True}"/>
+                    <filter string="Status" context="{'group_by':'state'}"/>
+                    <filter string="Company" context="{'group_by':'company_id'}" groups="base.group_multi_company"/>
+                    <separator orientation="vertical" />
+                    <filter string="Date" context="{'group_by':'date'}"/>
+                    <filter string="Due Month" context="{'group_by':'date_due:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_orchid_invoice_report_all_supp" model="ir.actions.act_window">
+        <field name="name">Invoice Analysis</field>
+        <field name="res_model">orchid.account.move.report</field>
+
+        <field name="view_mode">pivot,graph</field>
+        <field name="context">{'search_default_current':1, 'search_default_supplier':1, 'group_by':[], 'group_by_no_leaf':1, 'search_default_year': 1}</field>
+        <field name="search_view_id" ref="view_orchid_invoice_report_search"/>
+        <field name="help">From this report, you can have an overview of the amount invoiced from your vendors. The search tool can also be used to personalise your Invoices reports and so, match this analysis to your needs.</field>
+    </record>
+    <record id="menu_action_orchid_invoice_report" model="ir.actions.act_window">
+        <field name="name">Invoice Analysis</field>
+        <field name="res_model">orchid.account.move.report</field>
+
+        <field name="view_mode">pivot,graph</field>
+        <field name="context">{'search_default_current':1, 'search_default_customer':1, 'group_by':[], 'group_by_no_leaf':1, 'search_default_year': 1}</field>
+        <field name="search_view_id" ref="view_orchid_invoice_report_search"/>
+        <field name="help">From this report, you can have an overview of the amount invoiced to your customers. The search tool can also be used to personalise your Invoices reports and so, match this analysis to your needs.</field>
+    </record>
+
+    <menuitem name="Invoice Analysis" id="action_orchid_invoice_report" action="menu_action_orchid_invoice_report" parent="account.menu_finance_reports" sequence="22"/>
+
+    <act_window
+        id="act_orchid_invoice_partner_relation"
+        name="Monthly Turnover"
+        groups="account.group_account_manager"
+        context="{'search_default_partner_id':[active_id], 'search_default_month':1,'search_default_user':1,'group_by_no_leaf':1,'group_by':[]}"
+        res_model="orchid.account.move.report"
+        src_model="res.partner"
+        view_mode="graph"/>
+        
+    <record id="od_view_move_line_pivot" model="ir.ui.view">
+         <field name="name">account.move.line</field>
+         <field name="model">account.move.line</field>
+         <field name="arch" type="xml">
+             <pivot string="Entry Analysis">
+                 <field name="user_type_id" type="row"/>
+                <field name="balance" type="measure"/>
+             </pivot>
+         </field>
+    </record>  
+    
+            <record id="account.view_move_line_tree" model="ir.ui.view">
+            <field name="name">account.move.line.tree</field>
+            <field name="model">account.move.line</field>
+            <field eval="1" name="priority"/>
+            <field name="arch" type="xml">
+                <list string="Journal Items" create="false" edit="false">
+                    <field name="date"/>
+                    <field name="move_id" required="0"/>
+                    <field name="journal_id" options='{"no_open":True}'/>
+                    <field name="name"/>
+                    <field name="ref"/>
+                    <field name="statement_id" invisible="1"/>
+                    <field name="partner_id"/>
+                    <field name="account_id" options='{"no_open":True}' domain="[('company_id', '=', company_id)]"/>
+                    <field name="analytic_account_id" groups="analytic.group_analytic_accounting"/>
+                    <field name="reconciled" invisible="1"/>
+                    <field name="full_reconcile_id"/>
+                    <field name="debit" sum="Total Debit"/>
+                    <field name="credit" sum="Total Credit"/>
+                    <field name="amount_currency" readonly="1" groups="base.group_multi_currency"/>
+                    <field name="currency_id" readonly="1" invisible="1" />
+                    <field name="date_maturity"/>
+                    <field name="company_currency_id" invisible="1"/>
+                    <field name="company_id" invisible="1"/>
+                </list>
+            </field>
+        </record> 
+        
+        
+           <record id="account.view_move_line_form" model="ir.ui.view">
+            <field name="name">account.move.line.form</field>
+            <field name="model">account.move.line</field>
+            <field eval="2" name="priority"/>
+            <field name="arch" type="xml">
+                <form string="Journal Item" edit="false" create="false">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="ref"/>
+                                <field name="partner_id"
+                                    domain="['|', ('parent_id', '=', False), ('is_company', '=', True)]"/>
+                            </group>
+                            <group>
+                                <field name="journal_id"/>
+                                <field name="date"/>
+                                <field name="company_id" required="1" groups="base.group_multi_company"/>
+                            </group>
+                        </group>
+                        <notebook colspan="4">
+                            <page string="Information">
+                                <group>
+                                    <group string="Amount">
+                                        <field name="account_id" domain="[('company_id', '=', company_id)]"/>
+                                        <field name="debit"/>
+                                        <field name="credit"/>
+                                        <field name="quantity"/>
+                                    </group>
+                                    <group string="Accounting Documents">
+                                        <field name="move_id" required="False"/>
+                                        <field name="statement_id" readonly="1"/>
+                                    </group>
+                                    <group string="Dates">
+                                        <field name="date_maturity"/>
+                                    </group>
+                                    <group string="Taxes">
+                                        <field name="tax_line_id" readonly="1"/>
+                                        <field name="tax_ids" widget="many2many_tags" readonly="1"/>
+                                    </group>
+                                    <group string="Matching">
+                                        <label for="full_reconcile_id"/>
+                                        <div>
+                                            <field name="full_reconcile_id"/>
+                                            <field name="reconciled" invisible="1"/>
+                                            <field name="matched_debit_ids" invisible="1"/>
+                                            <field name="matched_credit_ids" invisible="1"/>
+                                            <button name="open_reconcile_view"
+                                                class="oe_link"
+                                                type="object"
+                                                string="-> View partially reconciled entries"
+                                                attrs="{'invisible': ['|', ('full_reconcile_id', '=', True), '&amp;', ('matched_debit_ids', '=', []),('matched_credit_ids', '=', [])]}">
+                                            </button>
+                                        </div>
+                                    </group>
+                                    <group string="Currency" groups="base.group_multi_currency">
+                                        <field name="currency_id" invisible="1"/>
+                                        <field name="amount_currency"/>
+                                    </group>
+                                    <group string="States">
+                                        <field name="blocked"/>
+                                    </group>
+                                    <group groups="analytic.group_analytic_accounting" string="Analytic">
+                                        <field name="analytic_account_id"/>
+                                        <field name="analytic_tag_ids" widget="many2many_tags"/>
+                                    </group>
+                                </group>
+                                <field name="narration" colspan="4" nolabel="1" placeholder="Add an internal note..."/>
+                            </page>
+                            <page string="Analytic Lines" groups="analytic.group_analytic_accounting">
+                                <field name="analytic_line_ids" context="{'default_general_account_id':account_id, 'default_name': name, 'default_date':date, 'amount': (debit or 0.0)-(credit or 0.0)}"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>          
+        
+        
+        
+        
+         <record id="od_action_account_moves_all_a" model="ir.actions.act_window">
+            <field name="context">{'journal_type':'general'}</field>
+            <field name="name">Journal Items</field>
+            <field name="res_model">account.move.line</field>
+            <field name="view_id" ref="od_view_move_line_pivot"/>
+            <field name="view_mode">pivot,tree,form</field>
+        </record>       
+        
+<!--                <menuitem action="od_action_account_moves_all_a" id="od_menu_action_account_moves_all" parent="account.menu_finance_reports" name="Entry Analysis" sequence="1"/>-->
+
+</data>
+</odoo>

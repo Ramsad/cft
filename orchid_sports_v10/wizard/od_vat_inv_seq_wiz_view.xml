@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="orchid_vatinvseq_report_list" model="ir.ui.view">
+            <field name="name">report.orchid.vat_inv_seq</field>
+            <field name="model">report.orchid.vat_inv_seq</field>
+            <field name="arch" type="xml">
+                <list string="Vat Invoice Sequence" create="false">
+                    <field name="inv_no"/>
+                    <field name="partner_id"/>
+                    <field name="date"/>
+                    <field name="amount"/>
+                    <field name="vat"/>
+                    <field name="total"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="orchid_vatinvseq_report_search" model="ir.ui.view">
+            <field name="name">report.orchid.vat_inv_seq.search</field>
+            <field name="model">report.orchid.vat_inv_seq</field>
+            <field name="arch" type="xml">
+                <search string="Search Vat Invoice Sequence">
+                    <field name="inv_no"/>
+                    <field name="partner_id"/>
+                    <filter name="date"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Invoice" name="Invoice" context="{'group_by':'inv_no'}"/>
+                        <filter string="Partner" name="Partner" context="{'group_by':'partner_id'}"/>
+                        <filter string="Date" name="Date" context="{'group_by':'date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_orchid_vatinvseq_report_list" model="ir.actions.act_window">
+            <field name="name">Vat Invoice Sequence</field>
+            <field name="res_model">report.orchid.vat_inv_seq</field>
+            <field name="view_mode">list,form</field>
+            <field name="filter" eval="True"/>
+            <field name="search_view_id" ref="orchid_vatinvseq_report_search"/>
+        </record>
+
+        <record id="orchid_vatinvseq_wizard_form" model="ir.ui.view">
+            <field name="name">orchid.vatinvseq.wizard</field>
+            <field name="model">orchid.vatinvseq.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Vat Invoice Sequence">
+                    <group>
+                        <group>
+                            <field name="date_from" required="1"/>
+                            <field name="date_to" required="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Journal">
+                            <field name="journal_id" domain="[('type','in',('sale','purchase'))]"/>
+                        </page>
+                    </notebook>
+                    <footer>
+                        <button type="object" name="generate_report" string="View Report"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="action_orchid_vatinvseq_wizard" model="ir.actions.act_window">
+            <field name="name">Vat Invoice Sequence</field>
+            <field name="res_model">orchid.vatinvseq.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="menu_orchid_vatinvseq_wizard" name="Vat Invoice Sequence" action="action_orchid_vatinvseq_wizard"
+                  parent="account.menu_finance_reports" sequence="3"/>
+
+
+    </data>
+</odoo>

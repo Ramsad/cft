@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo> 
+    <data>
+        <record id="view_tax_calculation_wiz_form" model="ir.ui.view">
+            <field name="name">od.account.tax.calculation.form</field>
+            <field name="model">od.account.tax.calculation</field>
+            <field name="arch" type="xml">
+                <form string="Recompute Tax">
+                    <p class="oe_grey">
+                        Recompute Tax and Total in invoice lines
+                    </p>
+                    <footer>
+                        <button string="Compute" name="recompute_tax" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_view_tax_calculation_wiz" model="ir.actions.act_window">
+            <field name="name">Recompute Tax</field>
+            <field name="res_model">od.account.tax.calculation</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_tax_calculation_wiz_form"/>
+            <field name="target">new</field>
+        </record>
+
+<!--        <record model="ir.values" id="action_tax_calculation_wiz">-->
+<!--            <field name="name">Recompute Tax</field>-->
+<!--            <field name="key2">client_action_multi</field>-->
+<!--            <field name="value" eval="'ir.actions.act_window,' +str(ref('action_view_tax_calculation_wiz'))" />-->
+<!--            <field name="key">action</field>-->
+<!--            <field name="model">account.move</field>-->
+<!--        </record>-->
+        
+    </data>
+</odoo>

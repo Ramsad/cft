@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+<!-- <record model="ir.ui.view" id="od_activity_analysis_view_graph">
+        <field name="name">od.activity.analysis.view.graph</field>
+        <field name="model">od.activity.analysis.view</field>
+        <field name="arch" type="xml">
+            <graph string="Activity Analysis" type="pivot">
+                     <field name="name" />
+                    
+            </graph>
+       </field>
+    </record> -->
+
+    <record model="ir.ui.view" id="orchid_sports_master_report_view_pivot">
+        <field name="name">orchid.sports.master.report.view.pivot</field>
+        <field name="model">orchid.sports.master.report.view</field>
+        <field name="arch" type="xml">
+            <pivot string="Master Report">
+                     <field name="name" />
+                    
+            </pivot>
+       </field>
+    </record>
+    
+    <record model="ir.ui.view" id="orchid_sports_master_report_view_tree">
+        <field name="name">orchid.sports.master.report.view.tree</field>
+        <field name="model">orchid.sports.master.report.view</field>
+        <field name="arch" type="xml">
+            <list string="Master Report">
+                     <field name="partner_id" />
+                      <field name="name" />
+                       <field name="fee" /> 
+                        <field name="classes" /> 
+                        
+                        
+                       <field name="registartion" />
+                      <field name="activities_id" />
+                       <field name="term_id" /> 
+                        <field name="sch_classes" /> 
+                        
+                     <field name="sch_activities_id" />
+                      <field name="sch_term_id" />
+                       <field name="classes_done" /> 
+                        <field name="abst" />                         
+                        
+                        
+                     <field name="attnd" />
+                      <field name="att_activities_id" />
+                       <field name="att_term_id" /> 
+                                              
+            </list>
+       </field>
+    </record>
+
+
+<record id="orchid_sports_master_report_view_search" model="ir.ui.view">
+        <field name="name">orchid.sports.master.report.view.search</field>
+        <field name="model">orchid.sports.master.report.view</field>
+        <field name="arch" type="xml">
+            <search >
+                    <field name="partner_id" />
+                   
+                    <field name="activities_id" />
+                    
+                    <field name="term_id"/>
+                    <field name="sch_activities_id"/>
+                    <field name="sch_term_id"/>
+                    <field name="att_activities_id"/>
+                    <field name="att_term_id"/>
+
+                     <group expand="1" string="Group By...">
+
+                     <filter string="Student" icon="terp-personal" name="partner_id" context="{'group_by':'partner_id'}"/>
+                    <filter string="Program" icon="terp-personal" name="activities_id" context="{'group_by':'activities_id'}"/>
+                     <filter string="Term" icon="terp-personal" name="term_id" context="{'group_by':'term_id'}"/>
+                      <filter string="Sch.Program" icon="terp-personal" name="sch_activities_id" context="{'group_by':'sch_activities_id'}"/>
+                      <filter string="Sch.Term" icon="terp-personal" name="sch_term_id" context="{'group_by':'sch_term_id'}"/>
+                      <filter string="Att.Program" icon="terp-personal" name="att_activities_id" context="{'group_by':'att_activities_id'}"/>
+                     <filter string="Att.Term" icon="terp-personal" name="att_term_id" context="{'group_by':'att_term_id'}"/>
+            </group>
+            </search>
+        </field>
+    </record>
+
+<record model="ir.actions.act_window" id="action_orchid_sports_master_report">
+        <field name="name">Master Report</field>
+
+        <field name="res_model">orchid.sports.master.report.view</field>
+
+        <field name="view_mode">tree,pivot</field>
+        <field name="search_view_id" ref="orchid_sports_master_report_view_search"/>
+         <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+          </p>
+        </field>
+    </record>
+
+
+
+ </data>
+</odoo>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--        todo fix it later -->
+        <!--    <record id="view_res_partner_inherit_from_account" model="ir.ui.view">-->
+        <!--            <field name="name">res.partner.inherit</field>-->
+        <!--            <field name="model">res.partner</field>-->
+        <!--            <field name="inherit_id" ref="account.partner_view_buttons"/>-->
+        <!--            <field name="arch" type="xml">-->
+        <!--                <xpath expr="//header" position="inside">-->
+
+        <!--                        <button type="object" class="oe_stat_button" name="od_btn_open_program" icon="fa-list" string="Program">-->
+        <!--&lt;!&ndash;                        <field string="Program" name="od_program_count" widget="statinfo"/>&ndash;&gt;-->
+        <!--                        </button>-->
+        <!--                        <button type="object" class="oe_stat_button" name="od_btn_open_collection" icon="fa-list" string="Collection">-->
+        <!--&lt;!&ndash;                        <field string="Collection" name="od_collection_count" widget="statinfo"/>&ndash;&gt;-->
+        <!--                        </button>-->
+        <!--                        <button type="object" class="oe_stat_button" name="od_btn_open_attendance" icon="fa-list" string="Attendance">-->
+        <!--&lt;!&ndash;                        <field string="Attendance" name="od_attendance_count" widget="statinfo"/>&ndash;&gt;-->
+        <!--                        </button>-->
+        <!--                        -->
+        <!--                         <button type="object" class="oe_stat_button" name="od_btn_open_schedule" icon="fa-list" string="Schedule">-->
+        <!--                        </button>-->
+        <!--                </xpath>-->
+
+        <!--            </field>-->
+
+        <!--    </record>-->
+
+
+        <record id="view_res_partner_list_view_inherit" model="ir.ui.view">
+            <field name="name">res.partner.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_tree"/>
+            <field name="arch" type="xml">
+                <field name="email" position="after">
+                    <field name="mobile"/>
+
+                    <field name="is_company" string="Parent"/>
+                    <field name="od_student"/>
+
+                    <field name="od_coach"/>
+                </field>
+
+            </field>
+
+        </record>
+
+        <record id="customer_form_view_inherit" model="ir.ui.view">
+            <field name="name">customer.inherit form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form" />
+            <field name="arch" type="xml">
+
+                <field name="type" position="before">
+                    <field name="vat" style="width:30%%" string="TIN"/>
+                </field>
+
+            </field>
+        </record>
+
+
+        <record id="view_res_partner_inherit_from_sports" model="ir.ui.view">
+            <field name="name">res.partner.inherit.sports.v18</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+
+                <!-- Make Mobile required -->
+                <xpath expr="//field[@name='mobile']" position="attributes">
+                    <attribute name="required">1</attribute>
+                </xpath>
+
+                <!-- Add custom fields after Title -->
+                <xpath expr="//field[@name='title']" position="after">
+                    <field name="school_id"/>
+                    <field name="racket_info"/>
+                    <field name="od_age"/>
+                    <field name="od_dob"/>
+                    <field name="od_gender"/>
+                    <field name="od_percent"/>
+                </xpath>
+
+                <!-- Student/Coach toggles next to Is a Company -->
+                <xpath expr="//field[@name='is_company']" position="after">
+                    <field name="od_student" class="oe_inline" string="Student"/>
+                    <field name="od_coach"   class="oe_inline" string="Coach"/>
+                </xpath>
+
+                <!-- Name field tweaks -->
+                <xpath expr="//field[@name='name']" position="attributes">
+                    <attribute name="placeholder">Student</attribute>
+                    <attribute name="default_focus">1</attribute>
+                </xpath>
+
+                <!-- Parent field: replace old attrs with v18-style invisible -->
+                <xpath expr="//field[@name='parent_id']" position="attributes">
+                    <attribute name="placeholder">Parent</attribute>
+                    <attribute name="domain">[('is_company','=',True)]</attribute>
+                    <attribute name="context">{'default_is_company': True}</attribute>
+                    <!-- old: attrs="{'invisible': [('is_company','=', True), ('parent_id','=', False)]}" -->
+                    <attribute name="invisible">is_company and (not parent_id)</attribute>
+                </xpath>
+
+                <!-- Ensure tags use tags widget -->
+                <xpath expr="//field[@name='category_id']" position="attributes">
+                    <attribute name="widget">many2many_tags</attribute>
+                    <attribute name="placeholder">Tags...</attribute>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- list view -->
+    <record id="od_activities_sports_list" model="ir.ui.view">
+        <field name="name">od.activities.list</field>
+        <field name="model">od.activities</field>
+        <field name="arch" type="xml">
+            <list string="Activities">
+                <field name="name"/>
+                <field name="coach_id"/>
+                <field name="manager_id"/>
+                <field name="admin_incharge_id"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Search view -->
+    <record id="od_activities_sports__opt_search" model="ir.ui.view">
+        <field name="name">od.activities.search</field>
+        <field name="model">od.activities</field>
+        <field name="arch" type="xml">
+            <search string="Activities">
+                <field name="name"/>
+                <field name="coach_id"/>
+                <field name="manager_id"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <group expand="0" string="Group By">
+                    <filter string="Name"    name="group_name"    context="{'group_by':'name'}"/>
+                    <filter string="Coach"   name="group_coach"   context="{'group_by':'coach_id'}"/>
+                    <filter string="Manager" name="group_manager" context="{'group_by':'manager_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Form view -->
+    <record id="od_activities_sports_form" model="ir.ui.view">
+        <field name="name">od.activities.form</field>
+        <field name="model">od.activities</field>
+        <field name="arch" type="xml">
+            <form string="Venue">
+                <header>
+                    <button name="od_session_end" type="object" string="Session End"
+                            class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="set_to_draft" type="object" string="Set To Draft"
+                            class="oe_highlight" groups="account.group_account_manager"
+                            invisible="state != 'done'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+
+                <sheet>
+                    <h1>
+                        <field name="sequence" invisible="types in ('camp','internal','provider')"/>
+                        <field name="name" placeholder="Program name..." class="oe_inline"/>
+                    </h1>
+
+                    <group>
+                        <group>
+                            <field name="is_non_revenue" string="Direct Service"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="types" required="True" invisible="1"/>
+                            <field name="venue_id" invisible="1"/>
+                            <field name="coach_id" invisible="types in ('rental')" required="True"/>
+                            <field name="coach_percentage" invisible="1"/>
+                            <field name="academy_id" invisible="1"/>
+                            <field name="academy_percentage" invisible="1"/>
+                            <field name="manager_id"/>
+                            <field name="admin_incharge_id"/>
+                            <field name="product_id" invisible="1"/>
+                            <field name="cost_centre_id" invisible="1"/>
+                            <field name="collection_journal_id" required="True"/>
+                            <field name="return_journal_id" required="True"/>
+                            <field name="attendance_journal_id" invisible="1"/>
+                            <field name="provision_journal_id" required="True"/>
+                            <field name="attendance_pro_journal" invisible="1"/>
+                            <field name="attendance_booking_journal_id" invisible="1"/>
+                            <field name="transfer_journal_id"/>
+
+                            <field name="customer_id"
+                                   invisible="(types in ('camp','internal','provider')) or is_non_revenue"
+                                   required="types in ('rental')"/>
+                        </group>
+
+                        <group string="Account Settings">
+                            <field name="fees"
+                                   invisible="(types in ('camp','internal','provider','rental','lesson')) or is_non_revenue"/>
+                            <field name="no_of_class"
+                                   invisible="(types in ('camp','internal','provider','rental','lesson')) or is_non_revenue"/>
+                            <field name="prepaid_revenue_account_id" invisible="1"/>
+                            <field name="prepaid_expense_account_id" invisible="1"/>
+                            <field name="income_account_id" invisible="1"/>
+                            <field name="academy_commission_acc_id" invisible="1"/>
+                            <field name="provider_commission_acc_id" invisible="1"/>
+                            <field name="registration_acc_id" invisible="0"/>
+                            <field name="account_acdmy_comm_prov_id" invisible="1"/>
+                            <field name="account_coach_comm_prov_id" invisible="1"/>
+                            <field name="account_coach_comm_collected_id" invisible="1"/>
+                            <field name="revenue_account_id" invisible="1"/>
+                            <field name="nonrevenue_account_id" required="True"/>
+                            <field name="academy_comm_exp_id" required="True"/>
+                            <field name="coach_comm_exp_id" required="True"/>
+                            <field name="collection_account_ids" widget="many2many_tags" required="True"/>
+                            <field name="invoice_id" invisible="not invoice_id"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Rental" invisible="types in ('camp','internal','provider','lesson')">
+                            <button name="od_generate_rent" string="Generate" type="object"/>
+                            <button name="generate_invoice" type="object" string="Generate Invoice" invisible="1"/>
+                            <field name="rental_line">
+                                <list editable="top">
+                                    <field name="activities_id" invisible="1"/>
+                                    <field name="venue_id"/>
+                                    <field name="period_id"/>
+                                    <field name="amount"/>
+                                    <field name="posted_flag"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <page string="Fees Structure" invisible="types in ('rental')">
+                            <field name="camp_line">
+                                <list editable="top">
+                                    <field name="activities_id" invisible="1"/>
+                                    <field name="type_id"/>
+                                    <field name="product_id" invisible="1"/>
+                                    <field name="cost_centre_id" readonly="1"/>
+                                    <field name="remarks" invisible="1"/>
+                                    <field name="commission" invisible="1"/>
+                                    <field name="t1"/>
+                                    <field name="t1_fee"/>
+                                    <field name="t1_reg"/>
+                                    <field name="t1_total"/>
+                                    <field name="t2"/>
+                                    <field name="t2_fee"/>
+                                    <field name="t2_reg"/>
+                                    <field name="t2_total"/>
+                                    <field name="t3"/>
+                                    <field name="t3_fee"/>
+                                    <field name="t3_reg"/>
+                                    <field name="t3_total"/>
+                                    <field name="fees" invisible="1"/>
+                                    <field name="registration_fee" invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <page string="Registration" invisible="types in ('rental')">
+                            <field name="registration_line">
+                                <list editable="top">
+                                    <field name="activities_id" invisible="1" string="Name"/>
+                                    <field name="partner_id"/>
+                                    <field name="rv_no" string="Mobile"/>
+                                    <field name="payment_type_account_id" invisible="1"/>
+                                    <field name="types" invisible="1"/>
+                                    <field name="email"/>
+                                    <field name="od_dob"/>
+                                    <field name="no_of_classes"/>
+                                    <field name="remarks" invisible="1"/>
+                                    <field name="amount" sum="Total"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Window action -->
+    <record id="od_action_od_activities_sports" model="ir.actions.act_window">
+        <field name="name">Program</field>
+        <field name="res_model">od.activities</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Click to add new Activities.</p>
+        </field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="od_menu_od_activities_sports"
+              name="Program"
+              action="od_action_od_activities_sports"
+              parent="menu_sports"
+              sequence="5"/>
+
+</odoo>

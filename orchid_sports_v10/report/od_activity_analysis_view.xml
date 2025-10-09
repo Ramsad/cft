@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+<!-- <record model="ir.ui.view" id="od_activity_analysis_view_graph">
+        <field name="name">od.activity.analysis.view.graph</field>
+        <field name="model">od.activity.analysis.view</field>
+        <field name="arch" type="xml">
+            <graph string="Activity Analysis" type="pivot">
+                     <field name="name" />
+                    
+            </graph>
+       </field>
+    </record> -->
+
+    <record model="ir.ui.view" id="od_activity_analysis_view_pivot">
+        <field name="name">od.activity.analysis.view.pivot</field>
+        <field name="model">od.activity.analysis.view</field>
+        <field name="arch" type="xml">
+            <pivot string="Activity Analysis">
+                     <field name="name" />
+                    
+            </pivot>
+       </field>
+    </record>
+
+
+
+
+
+<record id="od_activity_analysis_view_search" model="ir.ui.view">
+        <field name="name">od.activity.analysis.view.search</field>
+        <field name="model">od.activity.analysis.view</field>
+        <field name="arch" type="xml">
+            <search >
+                    <field name="venue_id" />
+                   
+                    <field name="coach_id" />
+                    
+                    <field name="manager_id"/>
+                    <field name="academy_id"/>
+                    <field name="cost_centre_id"/>
+
+
+
+
+
+                    <field name="division_id" />
+                    <field name="name"/>
+
+                    <field name="product_id"/>
+
+                     <group expand="1" string="Group By...">
+                     <filter string="Term" icon="terp-personal" name="product_id" context="{'group_by':'product_id'}"/>
+                     <filter string="Activity" icon="terp-personal" name="name" context="{'group_by':'name'}"/>
+                    <filter string="Division" icon="terp-personal" name="division_id" context="{'group_by':'division_id'}"/>
+
+                     <filter string="Cost Centre" icon="terp-personal" name="cost_centre_id" context="{'group_by':'cost_centre_id'}"/>
+                    <filter string="Academy" icon="terp-personal" name="academy_id" context="{'group_by':'academy_id'}"/>
+
+                     <filter string="Manager" icon="terp-personal" name="manager_id" context="{'group_by':'manager_id'}"/>
+                    <filter string="Coach" icon="terp-personal" name="coach_id" context="{'group_by':'coach_id'}"/>
+
+                     <filter string="Venue" icon="terp-personal" name="venue_id" context="{'group_by':'venue_id'}"/>
+
+
+
+            </group>
+            </search>
+        </field>
+    </record>
+
+<record model="ir.actions.act_window" id="action_od_activity_analysis_view">
+        <field name="name">Activity Analysis</field>
+
+        <field name="res_model">od.activity.analysis.view</field>
+
+        <field name="view_mode">pivot,graph</field>
+        <field name="search_view_id" ref="od_activity_analysis_view_search"/>
+         <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+          </p>
+        </field>
+    </record>
+
+
+
+ </data>
+</odoo>

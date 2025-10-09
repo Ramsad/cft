@@ -1,0 +1,2 @@
+# Auto-upgraded manifest for Odoo 18 scaffolding
+{'name': 'Orchid Priod Closing', 'version': '18.1', 'summary': 'Accounts Localization by Orchid Infosys', 'author': 'Orchid Infosys', 'website': 'http://www.orchidinfosys.com', 'license': 'LGPL-3', 'depends': ['base', 'account'], 'data': ['security/ir.model.access.csv', 'views/views.xml', 'wizard/od_period_closing.xml', 'views/menu.xml'], 'demo': [], 'qweb': []}

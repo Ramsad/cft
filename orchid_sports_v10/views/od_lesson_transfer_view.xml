@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- List view -->
+    <record id="od_lesson_transfer_list_view" model="ir.ui.view">
+        <field name="name">od.lesson.transfer.list</field>
+        <field name="model">od.lesson.transfer</field>
+        <field name="arch" type="xml">
+            <list string="Lesson Transfer">
+                <field name="date"/>
+                <field name="od_activities_id"/>
+                <field name="od_term_id"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form view -->
+    <record id="od_lesson_transfer_form_view" model="ir.ui.view">
+        <field name="name">od.lesson.transfer.form</field>
+        <field name="model">od.lesson.transfer</field>
+        <field name="arch" type="xml">
+            <form string="Lesson Transfer">
+                <header>
+                    <button name="action_process" class="oe_highlight" type="object" string="Process"
+                            invisible="state != 'draft'"/>
+                    <button name="action_confirm" class="oe_highlight" type="object" string="Confirm"
+                            invisible="state != 'draft'"/>
+                    <button name="action_cancel" type="object" string="Cancel"
+                            invisible="state != 'confirm'"/>
+                    <button name="set_to_draft" type="object" string="Reset Draft"
+                            invisible="state != 'cancel'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirm,cancel"/>
+                </header>
+
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="date" required="True" readonly="state in ('confirm','cancel')"/>
+                            <field name="od_activities_id" required="True" readonly="state in ('confirm','cancel')"/>
+                        </group>
+                        <group>
+                            <field name="od_term_id" required="True"/>
+                            <field name="move_id" readonly="state in ('confirm','cancel')" invisible="not move_id"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Lesson Transfer Lines">
+                            <field name="lesson_line" readonly="state in ('confirm','cancel')">
+                                <list create="false" edit="false">
+                                    <field name="od_partner_id" readonly="1"/>
+                                    <field name="od_type_id" string="Fees type" readonly="1"/>
+                                    <field name="old_venue_id" string="Old Venue" readonly="1"/>
+                                    <field name="od_no_of_clases" readonly="1"/>
+                                    <field name="od_amount" readonly="1"/>
+                                    <field name="od_transportation" readonly="1"/>
+                                    <field name="od_coach_commision" readonly="1"/>
+
+                                    <field name="od_trn_no_of_clases"/>
+                                    <field name="od_trn_transportation"/>
+                                    <field name="od_trn_amount"/>
+                                    <field name="od_trn_coach_per"/>
+                                    <field name="od_trn_coach_comm"/>
+                                    <field name="od_new_activities_id"/>
+                                    <field name="venue_id"/>
+                                    <field name="od_new_coach_per"/>
+                                    <field name="od_new_coach_comm"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_od_lesson_transfer_list_view" model="ir.actions.act_window">
+        <field name="name">Lesson Transfer</field>
+        <field name="res_model">od.lesson.transfer</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="od_lesson_transfer_list_view"/>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="od_lesson_transfer_menu" name="Lesson Transfer"
+              parent="menu_sports" sequence="40"
+              action="action_od_lesson_transfer_list_view"/>
+
+</odoo>

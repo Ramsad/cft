@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Pivot view (use <pivot> in v18) -->
+        <record id="od_sports_attenadance_analysis_view_pivot" model="ir.ui.view">
+            <field name="name">od.sports.attenadance.analysis.view.pivot</field>
+            <field name="model">od.sports.attenadance.analysis.view</field>
+            <field name="arch" type="xml">
+                <pivot string="Attendance Analysis">
+                    <!-- Add dimensions/measures as needed; keeping minimal like your original -->
+                    <field name="partner_id"/>
+                </pivot>
+            </field>
+        </record>
+
+        <!-- List view (keep <list> for OWL views in v18) -->
+        <record id="od_sports_attenadance_analysis_view_list" model="ir.ui.view">
+            <field name="name">od.sports.attenadance.analysis.view.list</field>
+            <field name="model">od.sports.attenadance.analysis.view</field>
+            <field name="arch" type="xml">
+                <list string="Attendance Analysis">
+                    <field name="date"/>
+                    <field name="day"/>
+                    <field name="coach_id"/>
+                    <field name="venue_id"/>
+                    <field name="date_from" string="Time From"/>
+                    <field name="date_to" string="Time To"/>
+                    <field name="od_scheduled"/>
+                    <field name="partner_id"/>
+                    <field name="activities_id"/>
+                    <field name="fees"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Search view -->
+        <record id="od_sports_attenadance_analysis_view_search" model="ir.ui.view">
+            <field name="name">od.sports.attenadance.analysis.view.search</field>
+            <field name="model">od.sports.attenadance.analysis.view</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="mobile_no"/>
+                    <field name="activities_id"/>
+                    <field name="remarks"/>
+                    <field name="venue_id"/>
+                    <field name="partner_id"/>
+                    <field name="term_id"/>
+
+                    <!-- Optional "Group By" section (icons removed in v18)
+                    <group expand="1" string="Group By">
+                      <filter string="Program" name="group_activities" context="{'group_by':'activities_id'}"/>
+                      <filter string="Venue" name="group_venue" context="{'group_by':'venue_id'}"/>
+                      <filter string="Coach" name="group_coach" context="{'group_by':'coach_id'}"/>
+                      <filter string="Student" name="group_partner" context="{'group_by':'partner_id'}"/>
+                      <filter string="Term" name="group_term" context="{'group_by':'term_id'}"/>
+                    </group>
+                    -->
+                </search>
+            </field>
+        </record>
+
+        <!-- Action (use 'list' instead of 'tree' in v18; include pivot + list) -->
+        <record id="action_od_sports_attenadance_analysis_view" model="ir.actions.act_window">
+            <field name="name">Booking Sheet Analysis</field>
+            <field name="res_model">od.sports.attenadance.analysis.view</field>
+            <field name="view_mode">pivot,list</field>
+            <field name="search_view_id" ref="od_sports_attenadance_analysis_view_search"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create"/>
+            </field>
+        </record>
+
+    </data>
+</odoo>

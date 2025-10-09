@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+  <menuitem name="Operation" id="menu_parent_sports" sequence="22"
+            web_icon="orchid_sports_v10,static/description/icon.png" />
+
+  <menuitem id="menu_sports" name="Operation" parent="menu_parent_sports" sequence="1"/>
+  <menuitem id="menu_sports_reporting" name="Reporting" parent="menu_parent_sports" sequence="2"/>
+  <menuitem id="menu_sports_configuration" name="Configuration" parent="menu_parent_sports" sequence="3"/>
+
+  <menuitem id="menu_od_venue_sports" name="Venue" action="action_od_venue_sports" parent="menu_sports" sequence="3"/>
+
+
+
+<menuitem id="od_cost_center_menu" name="Cost Center" parent="menu_sports_configuration" action="orchid_account_enhancement.action_orchid_accont_cost_center_list_view" sequence="3"/>
+<!--<menuitem id="actionod_fee_structure_menu" name="PriceList" parent="menu_sports_configuration" action="actionod_fee_structure" sequence="3"/>-->
+
+
+<!-- <menuitem id="menu_od_sports_attenadance_analysis_view" name="Booking Sheet Analysis" action="action_od_sports_attenadance_analysis_view" parent="menu_sports_reporting" sequence="6"/>-->
+
+
+<!--  <menuitem id="menu_action_orchid_sports_master_report" name="Master Report" action="action_orchid_sports_master_report" parent="menu_sports_reporting" sequence="6"/> -->
+
+<!--  <menuitem id="menu_activity_analysis" name="Activity Analysis" parent="menu_sports_reporting" sequence="7"/>-->
+
+<!--  <menuitem id="menu_student_analysis" name="Student Analysis" parent="menu_sports_reporting" sequence="8"/>-->
+
+
+
+
+
+
+<!--  <menuitem id="menu_activityanalysis" name="Activity Analysis" action="action_od_activity_analysis_view" parent="menu_sports_reporting" sequence="10"/>-->
+
+        <menuitem id="menu_menu_new_collection_history_detail" name="Collection Report"
+                  action="menu_new_collection_history_detail" parent="menu_sports_reporting" sequence="20"/>
+
+
+
+    </data>
+</odoo>

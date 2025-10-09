@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+         <menuitem
+            id="menu_view_tax_register_sales"
+            name="Vat Sales Register"
+            parent="account.menu_finance_reports"
+            sequence="150"
+            action="action_view_tax_register_sales" />
+
+         <menuitem
+            id="menu_view_tax_register_purchase"
+            name="Vat Purchase Register"
+            parent="account.menu_finance_reports"
+            sequence="151"
+            action="action_view_tax_register_purchase" />
+
+    </data>
+</odoo>

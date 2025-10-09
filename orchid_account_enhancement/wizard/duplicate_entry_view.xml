@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <record id="wiz_duplicate_entry_form" model="ir.ui.view">
+            <field name="name">Entry Duplicate</field>
+            <field name="model">od.duplicate.entry</field>
+            <field name="arch" type="xml">
+                <form string="Session">
+                    <group string="Duplicate">
+                      <group>
+                      	<field name="freq" />
+                      	<field name="auto_post" />
+                      </group>
+                      <group></group>
+                    </group>
+                <footer>
+                    <button string="Duplicate" name="duplicate" type="object" class="oe_highlight"/>
+                </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="duplicate_entry_wiz_action" model="ir.actions.act_window">
+            <field name="name">Multi Duplicate Entry</field>
+            <field name="res_model">od.duplicate.entry</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        
+        
+       
+
+        <record model="ir.values" id="action_duplicate_mutli_entry">
+            <field name="name">Multi Duplicate Entry</field>
+            <field name="key2">client_action_multi</field>
+            <field name="value" eval="'ir.actions.act_window,' +str(ref('duplicate_entry_wiz_action'))" />
+            <field name="key">action</field>
+            <field name="model">account.move</field>
+        </record>
+
+       
+</odoo>

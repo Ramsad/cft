@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- List view -->
+    <record id="od_schedule_sports_list" model="ir.ui.view">
+        <field name="name">od.schedule.list</field>
+        <field name="model">od.schedule</field>
+        <field name="arch" type="xml">
+            <list string="Schedule" editable="top">
+                <field name="coach_id"/>
+                <field name="venue_id"/>
+                <field name="activities_id"/>
+                <field name="date"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="duration" widget="float_time"/>
+                <field name="hourly_rate"/>
+                <field name="fees"/>
+                <field name="total"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form view -->
+    <record id="od_schedule_sports_form" model="ir.ui.view">
+        <field name="name">od.schedule.form</field>
+        <field name="model">od.schedule</field>
+        <field name="arch" type="xml">
+            <form string="Schedule">
+                <header>
+                    <button name="action_confirm" type="object" string="Confirm" invisible="state != 'draft'"/>
+                    <button name="action_cancel"  type="object" string="Cancel"  invisible="state != 'confirm'"/>
+                    <button name="set_to_draft"   type="object" string="Reset To Draft" invisible="state != 'cancel'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirm,cancel"/>
+                </header>
+
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="activities_id" readonly="state in ('confirm','cancel')"/>
+                            <field name="date"         readonly="state in ('confirm','cancel')"/>
+                            <field name="venue_id"     required="True"/>
+                            <field name="coach_id"     domain="[('od_coach','=',True)]" required="True"/>
+                            <field name="percentage"   invisible="1"/>
+                            <field name="academy_id"   invisible="1"/>
+                            <field name="cost_centre_id" required="True"/>
+                        </group>
+
+                        <group>
+                            <group>
+                                <field name="date_from" widget="float_time" required="True" readonly="state in ('confirm','cancel')"/>
+                                <field name="date_to"   widget="float_time" required="True" readonly="state in ('confirm','cancel')"/>
+                                <field name="duration"  widget="float_time"/>
+                                <field name="product_id" required="True"/>
+                            </group>
+                            <group/>
+                            <field name="move_id" invisible="state in ('draft','cancel')"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Details">
+                            <field name="tick_all"/>
+                            <button name="od_fill"       type="object" string="Fill"/>
+                            <button name="od_delete_me"  type="object" string="Delete"/>
+                            <field name="scheduled_line" readonly="state in ('confirm','cancel')">
+                                <list editable="top">
+                                    <field name="tick_me"/>
+                                    <field name="scheduled_id" invisible="1" string="Name"/>
+                                    <field name="partner_id"/>
+                                    <field name="type_id" context="{'product_id':parent.product_id,'collection':True,'activities_id':parent.activities_id}"/>
+                                    <field name="mobile_no"/>
+                                    <field name="remarks"/>
+                                    <field name="fees" sum="Total"/>
+                                    <field name="jv" string="Attendance" invisible="1"/>
+                                    <field name="no_of_classes"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Calendar view -->
+    <record id="od_schedule_sports_calendar" model="ir.ui.view">
+        <field name="name">od.schedule.calendar</field>
+        <field name="model">od.schedule</field>
+        <field name="arch" type="xml">
+            <calendar string="Schedule" color="activities_id" date_start="date" quick_add="False" avatar_model="od.schedule">
+                <field name="activities_id"/>
+                <field name="coach_id"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_od_schedule_sports" model="ir.actions.act_window">
+        <field name="name">Schedule</field>
+        <field name="res_model">od.schedule</field>
+        <field name="view_mode">list,calendar</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to add new Schedule.
+            </p>
+        </field>
+    </record>
+
+</odoo>

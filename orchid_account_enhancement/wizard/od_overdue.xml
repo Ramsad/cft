@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="od_overdue_tree" model="ir.ui.view">
+            <field name="name">od.overdue</field>
+            <field name="model">od.overdue</field>
+            <field name="arch" type="xml">
+                <list string="Partner Statement" edit="false" create="false">
+                    <field name="partner_id"/>
+                     <field name="user_id"/>
+                    <field name="ref"/>
+                    <field name="label"/>
+                     <field name="journal_code"/>
+                     <field name="number"/>
+                    <field name="date"/>
+                    <field name="due_date"/>
+                    <field name="debit"/>
+                    <field name="credit"/>
+                    <field name="balance"/>
+                    <field name="od_released"/>
+                    <field name="pdc"/>
+
+                </list>
+            </field>
+        </record>
+        
+
+        <record id="act_od_overdue" model="ir.actions.act_window">
+             <field name="name">Partner Statement</field>
+
+             <field name="res_model">od.overdue</field>
+
+             <field name="view_mode">tree</field>
+             <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+             
+              </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

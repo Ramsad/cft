@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="collection_wizard_form" model="ir.ui.view">
+            <field name="name">Collection Report</field>
+            <field name="model">od.payment.collection.report.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Collection Register">
+                 <group>
+                    
+                    <group>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <field name="salesman_id" widget="selection"/>
+                        <field name="journal_id" widget="selection"/>    
+                    </group>
+                </group>
+               
+                    <footer>
+                        <button name="print_excel_report" string="Excel" type="object"/>
+                        <button name="print_pdf" string="Print" type="object"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                        <field name="excel_file" filename="file_name" attrs="{'invisible':[('excel_file','=',False)]}"/>
+                        <field name="file_name" invisible="1"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_collection_wizard" model="ir.actions.act_window">
+            <field name="name">Collection Report</field>
+
+            <field name="res_model">od.payment.collection.report.wizard</field>
+
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+  <menuitem action="action_collection_wizard" id="menu_action_collection_wizard" parent="account.menu_finance_reports" sequence="20" />
+
+</odoo>
