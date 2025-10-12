@@ -121,15 +121,12 @@
                             </table>
                         </div>
 
-                        <div class="footer">
+                         <div class="footer">
                             <div class="row">
                                 <div class="col-xs-6">
-                                    <ul class="list-inline">
-                                        <li>Page:</li>
-                                        <li><span class="page"/></li>
-                                        <li>/</li>
-                                        <li><span class="topage"/></li>
-                                    </ul>
+                                    <span>
+                                        Page:<span class="page"/>/<span class="topage"/>
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -152,4 +149,5 @@
 
 
     </data>
+
 </odoo>
