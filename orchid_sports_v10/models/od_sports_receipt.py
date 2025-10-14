@@ -321,6 +321,11 @@ class OdSportsReceipt(models.Model):
         for line in self.receipt_line:
             line.od_venue_commission = line.total * (self.venue_comm / 100.0)
 
+    @api.onchange('activities_id')
+    def _onchange_activities_id(self):
+        self.coach_id = self.activities_id.coach_id.id if self.activities_id.coach_id.id else False
+
+
 
 class OdSportsReceiptLine(models.Model):
     _name = "od.sports.receipt.line"

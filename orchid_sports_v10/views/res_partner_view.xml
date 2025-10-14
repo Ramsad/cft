@@ -55,6 +55,11 @@
                 <field name="type" position="before">
                     <field name="vat" style="width:30%%" string="TIN"/>
                 </field>
+                <xpath expr="//field[@name='parent_id']" position="after">
+                    <label for="od_student"/><field name="od_student"/>
+                    <label for="od_coach"/><field name="od_coach"/>
+
+                </xpath>
 
             </field>
         </record>
