@@ -60,6 +60,9 @@
                                 <span style="text-right"><b>Inv.No.</b></span>
                                 <span style="text-right" t-field="o.od_invoice_no"/>
                                 <br/>
+                                <span style="text-right"><b>RV/Number</b></span>
+                                <span style="text-right" t-field="o.rv_no"/>
+                                <br/>
 
                             </div>
                         </div>
