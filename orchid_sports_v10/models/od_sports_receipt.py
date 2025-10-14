@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from future.builtins import round
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
 import math
@@ -375,7 +376,7 @@ class OdSportsReceiptLine(models.Model):
     @api.depends("transportation", "amount")
     def _compute_total(self):
         for rec in self:
-            rec.total = (rec.transportation or 0.0) + (rec.amount or 0.0)
+            rec.total = round((rec.transportation or 0.0) + (rec.amount or 0.0),2)
 
     @api.onchange("amount", "type_id", "receipt_id")
     def _onchange_amount(self):
@@ -391,7 +392,7 @@ class OdSportsReceiptLine(models.Model):
                 [("type_id", "=", self.type_id.id), ("activities_id", "=", activity_id)], limit=1)
             class_amount = getattr(camp_line, fee_field, 0.0) if camp_line else 0.0
             if class_amount:
-                self.no_of_clases = (self.amount or 0.0) / class_amount
+                self.no_of_clases = round((self.amount or 0.0) / class_amount,2)
 
     @api.onchange("payment_type_account_id")
     def _onchange_payment_type_account_id(self):
@@ -409,7 +410,7 @@ class OdSportsReceiptLine(models.Model):
     def _compute_commission(self):
         for rec in self:
             perc = rec.receipt_id.od_commission_perc or 0.0
-            rec.coach_commision = (rec.amount or 0.0) * (perc / 100.0)
+            rec.coach_commision = round((rec.amount or 0.0) * (perc / 100.0),2)
 
     @api.depends("receipt_id.venue_comm", "total")
     def _compute_venue_commission(self):
