@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Record Rule: portal users can only read receipts where venue.owner == current partner -->
+    <record id="rule_portal_receipt_venue_owner" model="ir.rule">
+        <field name="name">Portal: Read receipts where venue.owner == current partner</field>
+        <field name="model_id" ref="orchid_sports_v10.model_od_sports_receipt"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">[('venue_id.owner','=',user.partner_id.id)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+</odoo>
