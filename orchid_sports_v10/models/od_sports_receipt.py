@@ -9,6 +9,8 @@ class OdSportsReceipt(models.Model):
     _name = "od.sports.receipt"
     _description = "Sports Receipt"
     _order = "id desc"
+    _inherit = ['mail.thread', 'mail.activity.mixin', 'analytic.mixin']
+
 
     name = fields.Char(string="Name", copy=False, required=True, default="/")
     date = fields.Date(string="Date", required=True)
