@@ -93,7 +93,7 @@
                         <page string="Details">
                             <field name="receipt_line" readonly="state in ('confirm','cancel')">
                                 <list editable="top">
-                                    <field name="receipt_id" invisible="1" string="Name"/>
+<!--                                    <field name="receipt_id" invisible="1" string="Name"/>-->
                                     <field name="rv_no"/>
                                     <!-- in modern Odoo, use customer_rank to detect customers -->
                                     <field name="partner_id" domain="[('od_student','=',True)]"/>
@@ -105,7 +105,7 @@
                                     <field name="coach_commision" sum="Total"/>
                                     <field name="od_venue_commission" invisible="1" sum="Total"/>
                                     <field name="no_of_clases"/>
-                                    <field name="transportation" sum="Total"/>
+                                    <field name="transportation" sum="Total" digits="[42, 2]"/>
                                     <field name="total" sum="Total"/>
                                     <field name="od_vat_id" domain="[('type_tax_use','=','sale')]"/>
                                     <field name="od_vat_amount" sum="Total"/>
