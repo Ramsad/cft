@@ -46,98 +46,98 @@ class od_sports_receipt_analysis_view(models.Model):
 	od_refund_venue_comm = fields.Float(string='Refund venue comm.')
 	grand_total = fields.Float(string='Grand Total')
 
-	# def _select(self):
-	# 	select_str = """
-	# 		 SELECT ROW_NUMBER () OVER (ORDER BY osrl.id ) AS id,
-	# 			osrl.receipt_id as receipt_id,
-	# 			osr.activities_id as activities_id,
-	# 			osr.coach_id  as coach_id,
-	# 			osr.venue_id as venue_id,
-	# 			osr.venue_comm as venue_comm,
-	# 			osr.date as date,
-	# 			osr.term_id as term_id,
-	# 			osrl.rv_no as rv_no,
-	# 			osrl.partner_id as partner_id,
-	# 			osrl.payment_type_account_id as account_id,
-	# 			osrl.type_id as type_id,
-	# 			osrl.remarks as remarks,
-	# 			osrl.date as cheque_date,
-	# 			osrl.amount as amount,
-	# 			osrl.no_of_clases as no_of_class,
-	# 			osrl.transportation as transportation,
-	# 			osrl.total as total,
-	# 			oct.cost_centre_id as cost_centre_id,
-	# 			osrl.od_commission_perc as od_commission_perc,
-	# 			osrl.od_venue_commission as od_venue_commission,
-	# 			osrl.coach_commision as coach_commision,
-	# 			osrl.od_vat_amount as od_vat_amount,
-	# 			osrl.od_invoice_no as od_invoice_no,
-	# 			osrl.grand_total as grand_total,
-	# 			orel.od_refund_amount as od_refund_amount,
-	# 			orel.od_reg_refund_amount as od_reg_refund_amount,
-	# 			orel.od_refund_total as od_refund_total,
-	# 			orel.od_refund_vat_amount as od_refund_vat_amount,
-	# 			orel.od_refund_subtotal as od_refund_subtotal,
-	# 			orel.od_refund_coach_comm as od_refund_coach_comm,
-	# 			orel.od_refund_venue_comm as od_refund_venue_comm
-    #
-	#
-    #
-	# 	"""
-	# 	return select_str
-    #
-	# def _from(self):
-	# 	from_str = """
-	# 			od_sports_receipt_line   osrl
-	#
-	# 	"""
-	# 	return from_str
-	# def _group_by(self):
-	# 	group_by_str = """
-	# 		GROUP BY osrl.id,
-	# 			osrl.receipt_id,
-	# 			osr.activities_id,
-	# 			osr.coach_id,
-	# 			osr.venue_id,
-	# 			osr.venue_comm,
-	# 			osr.date,
-	# 			osr.term_id,
-	# 			osrl.rv_no,
-	# 			osrl.partner_id,
-	# 			osrl.payment_type_account_id,
-	# 			osrl.type_id,
-	# 			osrl.remarks,
-	# 			osrl.date,
-	# 			osrl.amount,
-	# 			osrl.no_of_clases,
-	# 			osrl.transportation,
-	# 			osrl.total,
-	# 			oct.cost_centre_id,
-	# 			osrl.od_commission_perc,
-	# 			osrl.od_venue_commission,
-	# 			osrl.coach_commision,
-	# 			osrl.od_vat_amount,
-	# 			osrl.od_invoice_no,
-	# 			orel.od_refund_amount,
-	# 			orel.od_reg_refund_amount,
-	# 			orel.od_refund_total,
-	# 			orel.od_refund_vat_amount,
-	# 			orel.od_refund_subtotal,
-	# 			orel.od_refund_coach_comm,
-	# 			orel.od_refund_venue_comm
-    #
-	# 	"""
-	# 	return group_by_str
-	#
-	#
-	# def init(self):
-	# 	tools.drop_view_if_exists(self._cr, self._table)
-	# 	self._cr.execute("""CREATE or REPLACE VIEW %s as (
-	# 		%s
-	# 		FROM  %s
-	# 		left join od_sports_receipt osr ON (osrl.receipt_id = osr.id)
-	# 		left join od_refund_entry_line orel ON (orel.od_collection_line_id = osrl.id)
-	# 		left join account_account account ON (osrl.payment_type_account_id = account.id)
-	# 		left join od_activities act ON (osr.activities_id = act.id)
-	# 		left join od_camp_type oct on (osrl.type_id = oct.id)
-	# 		)""" % (self._table, self._select(), self._from()))
+	def _select(self):
+		select_str = """
+			 SELECT ROW_NUMBER () OVER (ORDER BY osrl.id ) AS id,
+				osrl.receipt_id as receipt_id,
+				osr.activities_id as activities_id,
+				osr.coach_id  as coach_id,
+				osr.venue_id as venue_id,
+				osr.venue_comm as venue_comm,
+				osr.date as date,
+				osr.term_id as term_id,
+				osrl.rv_no as rv_no,
+				osrl.partner_id as partner_id,
+				osrl.payment_type_account_id as account_id,
+				osrl.type_id as type_id,
+				osrl.remarks as remarks,
+				osrl.date as cheque_date,
+				osrl.amount as amount,
+				osrl.no_of_clases as no_of_class,
+				osrl.transportation as transportation,
+				osrl.total as total,
+				oct.cost_centre_id as cost_centre_id,
+				osrl.od_commission_perc as od_commission_perc,
+				osrl.od_venue_commission as od_venue_commission,
+				osrl.coach_commision as coach_commision,
+				osrl.od_vat_amount as od_vat_amount,
+				osrl.od_invoice_no as od_invoice_no,
+				osrl.grand_total as grand_total,
+				orel.od_refund_amount as od_refund_amount,
+				orel.od_reg_refund_amount as od_reg_refund_amount,
+				orel.od_refund_total as od_refund_total,
+				orel.od_refund_vat_amount as od_refund_vat_amount,
+				orel.od_refund_subtotal as od_refund_subtotal,
+				orel.od_refund_coach_comm as od_refund_coach_comm,
+				orel.od_refund_venue_comm as od_refund_venue_comm
+
+
+
+		"""
+		return select_str
+
+	def _from(self):
+		from_str = """
+				od_sports_receipt_line   osrl
+
+		"""
+		return from_str
+	def _group_by(self):
+		group_by_str = """
+			GROUP BY osrl.id,
+				osrl.receipt_id,
+				osr.activities_id,
+				osr.coach_id,
+				osr.venue_id,
+				osr.venue_comm,
+				osr.date,
+				osr.term_id,
+				osrl.rv_no,
+				osrl.partner_id,
+				osrl.payment_type_account_id,
+				osrl.type_id,
+				osrl.remarks,
+				osrl.date,
+				osrl.amount,
+				osrl.no_of_clases,
+				osrl.transportation,
+				osrl.total,
+				oct.cost_centre_id,
+				osrl.od_commission_perc,
+				osrl.od_venue_commission,
+				osrl.coach_commision,
+				osrl.od_vat_amount,
+				osrl.od_invoice_no,
+				orel.od_refund_amount,
+				orel.od_reg_refund_amount,
+				orel.od_refund_total,
+				orel.od_refund_vat_amount,
+				orel.od_refund_subtotal,
+				orel.od_refund_coach_comm,
+				orel.od_refund_venue_comm
+
+		"""
+		return group_by_str
+
+
+	def init(self):
+		tools.drop_view_if_exists(self._cr, self._table)
+		self._cr.execute("""CREATE or REPLACE VIEW %s as (
+			%s
+			FROM  %s
+			left join od_sports_receipt osr ON (osrl.receipt_id = osr.id)
+			left join od_refund_entry_line orel ON (orel.od_collection_line_id = osrl.id)
+			left join account_account account ON (osrl.payment_type_account_id = account.id)
+			left join od_activities act ON (osr.activities_id = act.id)
+			left join od_camp_type oct on (osrl.type_id = oct.id)
+			)""" % (self._table, self._select(), self._from()))
