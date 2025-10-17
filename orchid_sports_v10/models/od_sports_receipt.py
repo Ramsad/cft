@@ -351,8 +351,8 @@ class OdSportsReceiptLine(models.Model):
 
     coach_commision = fields.Float(string="Coach Commission Amount", compute="_compute_commission", store=True)
 
-    od_vat_id = fields.Many2one("account.tax", string="VAT" ,digits=(16, 2))
-    od_vat_amount = fields.Float(string="VAT Amount", compute="_compute_vat_amount", store=True)
+    od_vat_id = fields.Many2one("account.tax", string="VAT" )
+    od_vat_amount = fields.Float(string="VAT Amount", compute="_compute_vat_amount", store=True,digits=(16, 2))
 
     grand_total = fields.Float(string="Total", compute="_compute_grand_total", store=True)
 
