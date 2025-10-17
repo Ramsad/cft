@@ -3,6 +3,7 @@ from future.builtins import round
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
 import math
+from odoo.tools import float_round
 
 
 class OdSportsReceipt(models.Model):
@@ -338,7 +339,7 @@ class OdSportsReceiptLine(models.Model):
     partner_id = fields.Many2one("res.partner", string="Student", required=True)
 
     amount = fields.Float(string="Fees")
-    transportation = fields.Float(string="Registration")
+    transportation = fields.Float(string="Registration",digits=(16, 2) )
 
     total = fields.Float(string="Amount", compute="_compute_total", store=True)
     payment_type_account_id = fields.Many2one("account.account", string="Account", required=True)
@@ -363,6 +364,8 @@ class OdSportsReceiptLine(models.Model):
     def create(self, vals):
         # Auto-create registration line if student not registered for the program
         receipt = False
+        if vals.get('transportation') is not None:
+            vals['transportation'] = float_round(vals['transportation'], precision_digits=2)
         if vals.get("receipt_id"):
             receipt = self.env["od.sports.receipt"].browse(vals["receipt_id"])
         if receipt and vals.get("partner_id"):
@@ -441,3 +444,15 @@ class OdSportsReceiptLine(models.Model):
         # Replace legacy ir.actions.report.xml with modern report_action
         return self.env.ref("orchid_sports_v10.od_sports_receipt_line_pdf").report_action(self)
 
+    @api.onchange('transportation')
+    def _onchange_transportation(self):
+        for rec in self:
+            if rec.transportation is not None:
+                rec.transportation = float_round(rec.transportation, precision_digits=2)
+
+
+
+    def write(self, vals):
+        if 'transportation' in vals and vals['transportation'] is not None:
+            vals['transportation'] = float_round(vals['transportation'], precision_digits=2)
+        return super().write(vals)
