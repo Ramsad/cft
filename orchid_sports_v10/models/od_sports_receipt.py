@@ -432,7 +432,8 @@ class OdSportsReceiptLine(models.Model):
     def _compute_vat_amount(self):
         for rec in self:
             tax_perc = rec.od_vat_id.amount if rec.od_vat_id else 0.0
-            raw = rec.total or 0.0 * (tax_perc / 100.0)
+            base = rec.total or 0.0
+            raw = base * (tax_perc / 100.0)
             rec.od_vat_amount = float_round(raw, precision_digits=2, rounding_method='DOWN')
 
     @api.depends("total", "od_vat_amount")
