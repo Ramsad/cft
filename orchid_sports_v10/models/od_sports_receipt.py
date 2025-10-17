@@ -437,7 +437,7 @@ class OdSportsReceiptLine(models.Model):
     @api.depends("total", "od_vat_amount")
     def _compute_grand_total(self):
         for rec in self:
-            rec.grand_total = float_round((rec.total or 0.0) + (rec.od_vat_amount or 0.0),precision_digits=2)
+            rec.grand_total = float_round((float_round(rec.total,2) or 0.0) + (float_round(rec.od_vat_amount,2) or 0.0),precision_digits=2)
 
     def od_print_invoice(self):
         self.ensure_one()
