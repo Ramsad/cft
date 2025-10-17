@@ -81,10 +81,12 @@ class od_activities(models.Model):
         res['domain'] = {'coach_id': [('od_coach', '=', True)]}
         return res
 
-    def create(self, vals):
-        if vals.get('sequence', '/') == '/' and vals.get('types') == 'rental':
-            vals['sequence'] = self.env['ir.sequence'].next_by_code('od.activities') or '/'
-        return super(od_activities, self).create(vals)
+    def create(self, vals_list):
+        seq = self.env['ir.sequence']
+        for vals in vals_list:
+            if vals.get('sequence', '/') == '/' and vals.get('types') == 'rental':
+                vals['sequence'] = seq.next_by_code('od.activities') or '/'
+        return super().create(vals_list)
 
     def unlink(self):
         for obj in self:
