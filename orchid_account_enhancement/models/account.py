@@ -98,7 +98,7 @@ class AccountPayment(models.Model):
     is_clearing = fields.Boolean(string='Clearing', copy=False)
     is_reverse = fields.Boolean(string='Reverse', copy=False)
     is_group = fields.Boolean(string='Group Pay', copy=False)
-    od_bank_account = fields.Many2one('account.account', string='Bank Account', required=True,
+    od_bank_account = fields.Many2one('account.account', string='Bank Account', required=False,
                                       domain=[('deprecated', '=', False)],
                                       help="Select Bank Account (Default filled from Journal)", copy=False)
     od_clearing_account = fields.Many2one('account.account', string='Clearing Account',
