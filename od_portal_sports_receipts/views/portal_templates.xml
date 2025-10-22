@@ -7,7 +7,7 @@
         <!-- Insert into the common category grid -->
         <xpath expr="//div[@id='portal_common_category']" position="inside">
             <t t-call="portal.portal_docs_entry">
-                <t t-set="icon" t-value="'/portal/static/src/img/portal-connection.svg'"/>
+                <t t-set="icon" t-value="'/project/static/src/img/tasks.svg'"/>
                 <t t-set="title">Collection</t>
                 <t t-set="text">View your sports receipts</t>
                 <t t-set="url" t-value="'/my/collections'"/>
