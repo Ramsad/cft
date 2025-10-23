@@ -70,7 +70,6 @@
                             <th>Date</th>
                             <th>Program</th>
                             <th>Coach</th>
-                            <th>Coach Commission %</th>
                             <th>Venue</th>
                             <th class="text-end">Fees</th>
                             <th class="text-end">Registration</th>
@@ -86,7 +85,6 @@
                                 <td><t t-esc="rec.date"/></td>
                                 <td><t t-esc="rec.activities_id.display_name"/></td>
                                 <td><t t-esc="rec.coach_id.display_name"/></td>
-                                <td><t t-esc="round(rec.od_commission_perc or 0.0, 2)"/></td>
                                 <td><t t-esc="rec.venue_id.display_name"/></td>
                                 <td class="text-end"><t t-esc="round(rec.od_amount_total or 0.0, 2)"/></td>
                                 <td class="text-end"><t t-esc="round(rec.od_transportation_total or 0.0, 2)"/></td>
