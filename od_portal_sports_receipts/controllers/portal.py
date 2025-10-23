@@ -22,6 +22,8 @@ class PortalSportsReceipt(CustomerPortal):
         venues = request.env['od.venue'].sudo().search(['|',('management_id','=',request.env.user.partner_id.id),('owner','=',request.env.user.partner_id.id)])
         if venues :
             domain.append(('venue_id', 'in', venues.ids))
+        else :
+            domain.append(('venue_id', 'in', [] ))
         domain.append((('date', '>=', '2025-10-01')))
         date_from = kwargs.get('date_from')
         date_to = kwargs.get('date_to')
