@@ -37,7 +37,7 @@
                 <form class="row g-2 mb-3" method="get" action="/my/collections">
                     <div class="col-md-4">
                         <input type="text" class="form-control" name="search" t-att-value="search"
-                               t-att-placeholder="'Search by Name'"/>
+                               t-att-placeholder="'Search by Voucher No.'"/>
                     </div>
                     <div class="col-md-3">
                         <input type="date" class="form-control" name="date_from" t-att-value="date_from"
