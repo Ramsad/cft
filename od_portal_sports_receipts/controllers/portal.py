@@ -15,11 +15,7 @@ class PortalSportsReceipt(CustomerPortal):
         return values
 
     def _get_receipt_search_domain(self, kwargs):
-        domain = []
-        state = kwargs.get('state')
-        if state in ('draft', 'confirm', 'cancel'):
-            domain.append(('state', '=', state))
-
+        domain = [('state', '=', 'confirm')]
         search = kwargs.get('search')
         if search:
             domain.append(('name', 'ilike', search))
