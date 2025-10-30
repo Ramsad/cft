@@ -68,7 +68,7 @@
                         <tr>
                             <th>Voucher No.</th>
                             <th>Date</th>
-                            <th>Fee Type</th>
+                            <th>Program</th>
                             <th>Coach</th>
                             <th>Venue</th>
                             <th class="text-end">Fees</th>

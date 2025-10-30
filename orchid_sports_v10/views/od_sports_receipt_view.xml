@@ -7,11 +7,9 @@
         <field name="model">od.sports.receipt</field>
         <field name="arch" type="xml">
             <list string="Collection">
-                <field name="state" widget="statusbar" statusbar_visible="draft,confirm,cancel" invisible="True"/>
                 <field name="name" readonly="1"/>
                 <field name="date" readonly="state in ('confirm','cancel')"/>
-                <field name="activities_id" domain="[('state','=','draft')]" options="{'no_create': True}"
-                       readonly="state in ('confirm','cancel')"/>
+                <field name="activities_id" domain="[('state','=','draft')]" options="{'no_create': True}" readonly="state in ('confirm','cancel')"/>
                 <field name="coach_id"/>
                 <field name="od_commission_perc"/>
                 <field name="venue_id"/>
@@ -26,7 +24,10 @@
                 <field name="od_total_vat"/>
                 <field name="od_grand_total"/>
 
-                <field name="state"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-success="state == 'confirm'"
+                       decoration-danger="state == 'cancel'"/>
             </list>
         </field>
     </record>
