@@ -96,7 +96,7 @@
 <!--                                    <field name="receipt_id" invisible="1" string="Name"/>-->
                                     <field name="rv_no"/>
                                     <!-- in modern Odoo, use customer_rank to detect customers -->
-                                    <field name="partner_id" domain="[('od_student','=',True)]"/>
+                                    <field name="partner_id" domain="['|',('od_student','=',True),('od_coach','=',True)]"/>
                                     <field name="payment_type_account_id"/>
                                     <field name="type_id" string="Fees type"/>
                                     <field name="remarks"/>
