@@ -9,7 +9,9 @@
              'sale',
              'account',
              'purchase'],
- 'data': ['views/partner_inherit_view.xml',
+ 'data': [
+     'security/ir.model.access.csv',
+     'views/partner_inherit_view.xml',
           'views/tax_inherit_view.xml',
           'wizard/tax_register_wiz.xml',
           'views/models_view.xml',

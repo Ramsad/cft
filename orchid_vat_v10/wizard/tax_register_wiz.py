@@ -10,9 +10,13 @@ from datetime import timedelta
 import base64
 import xlwt
 from io import StringIO
+from io import BytesIO
+
 from pprint import pprint
 import logging
 from odoo import tools
+from openpyxl.workbook import Workbook
+
 _logger = logging.getLogger(__name__)
 from collections import defaultdict
 
@@ -31,7 +35,7 @@ class OrchidTaxRegister(models.TransientModel):
 	od_product = fields.Boolean(string='Product Wise')
 	journal_id = fields.Many2many('account.journal',string='Journals')
 	account_id = fields.Many2many('account.account',string='Accounts')
-	
+
 	def generate(self):
 		if self.from_date > self.to_date:
 			raise UserError(_('From date cannot be greater than To date!!'))
@@ -62,7 +66,7 @@ class OrchidTaxRegister(models.TransientModel):
 				return self.generate_excel_pos(move_datas)
 			else:
 				move_datas  = move_obj.search(domain)
-				move_datas = sorted(move_datas, key=lambda k: (datetime.strptime(k.date, '%Y-%m-%d')))
+				move_datas = sorted(move_datas, key=lambda k: (datetime.strptime(str(k.date), '%Y-%m-%d')))
 				return self.generate_excel_sum(move_datas)
 
 	def generate_excel_pos(self, move_datas):
@@ -140,7 +144,7 @@ class OrchidTaxRegister(models.TransientModel):
 			col=col+1
 		flag=0
 		for move_data in move_datas:
-			for line in move_data.invoice_id.invoice_line_ids:
+			for line in move_data.move_id.invoice_line_ids:
 				data = {}
 				if move_data.currency_id.name != 'AED' and move_data.currency_id.name != 0:
 					flag=1;
@@ -168,17 +172,17 @@ class OrchidTaxRegister(models.TransientModel):
 			data['inv_date'] = move_data.date or ''
 			data['inv_num']=move_data.move_id.name or " "
 			data['tax_amount'] = move_data.debit or -move_data.credit or 0
-			data['od_net_amount']=move_data.invoice_id and move_data.invoice_id.amount_total or 0
+			data['od_net_amount']=move_data.move_id and move_data.move_id.amount_total or 0
 			data['state_id']= move_data.partner_id.state_id.name or ""
 			data['fcy']=move_data.currency_id.name or 0
-			data['price_subtotal']= move_data.invoice_id and move_data.invoice_id.amount_untaxed or 0
+			data['price_subtotal']= move_data.move_id and move_data.move_id.amount_untaxed or 0
 			if data['tax_amount']<0:
 					data['price_subtotal']=-data['price_subtotal']
 			data['inv_date']=datetime.strptime(data['inv_date'], '%Y-%m-%d').strftime('%d/%m/%Y')
-			if move_data.invoice_id:
-				for line in move_data.invoice_id.invoice_line_ids:
-					if line.invoice_line_tax_ids:
-						for l in line.invoice_line_tax_ids:
+			if move_data.move_id:
+				for line in move_data.move_id.invoice_line_ids:
+					if line.tax_ids:
+						for l in line.tax_ids:
 							if l.name:
 								tax_name=l.name
 								d['taxes'].append(tax_name)
@@ -467,7 +471,7 @@ class OrchidTaxRegister(models.TransientModel):
 					sheet.write(row,col,float(total),style5)
 					temp=col
 
-				for l in line.invoice_line_tax_ids:
+				for l in line.tax_ids:
 					tax_name=l.name or move_data.account_id
 					d['taxes'].append(tax_name)
 
@@ -509,7 +513,7 @@ class OrchidTaxRegister(models.TransientModel):
 
 	def generate_excel_sum(self, move_datas):
 		company = self.env['res.company'].browse(self.env.user.company_id.id)
-		vat_period = datetime.strptime(self.from_date, '%Y-%m-%d').strftime('%d/%m/%Y')+"-"+datetime.strptime(self.to_date,'%Y-%m-%d').strftime('%d/%m/%Y')
+		vat_period = datetime.strptime(str(self.from_date), '%Y-%m-%d').strftime('%d/%m/%Y')+"-"+datetime.strptime(str(self.to_date),'%Y-%m-%d').strftime('%d/%m/%Y')
 
 		head=defaultdict(list)
 		head['add'].append(company.street or "")
@@ -587,7 +591,7 @@ class OrchidTaxRegister(models.TransientModel):
 			col=col+1
 		flag=0
 		for move_data in move_datas:
-			for line in move_data.invoice_id.invoice_line_ids:
+			for line in move_data.move_id.invoice_line_ids:
 				data = {}
 				if move_data.currency_id.name != 'AED' and move_data.currency_id.name != 0:
 					flag=1;
@@ -610,20 +614,20 @@ class OrchidTaxRegister(models.TransientModel):
 				d = defaultdict(list)
 
 
-				data['partner'] = move_data.partner_id.legal_name or move_data.partner_id.name or " "
+				data['partner'] = move_data.partner_id.name or move_data.partner_id.name or " "
 				data['partner_trn'] = move_data.partner_id.vat or ""
-				data['sales_person'] = move_data.invoice_id and move_data.invoice_id.user_id and move_data.invoice_id.user_id.name or ""
+				data['sales_person'] = move_data.move_id and move_data.move_id.user_id and move_data.move_id.user_id.name or ""
 				data['inv_date'] = move_data.date or ''
 				data['inv_num'] = move_data.move_id.name or ''
 				data['inv_ref'] = move_data.name or ''
-				data['price_subtotal']= move_data.invoice_id and move_data.invoice_id.amount_untaxed or 0
+				data['price_subtotal']= move_data.move_id and move_data.move_id.amount_untaxed or 0
 				data['tax_amount'] = move_data.debit or -move_data.credit or 0
-				data['od_net_amount']=move_data.invoice_id and move_data.invoice_id.amount_total or 0
+				data['od_net_amount']=move_data.move_id and move_data.move_id.amount_total or 0
 				data['state_id']= move_data.partner_id.state_id.name or " "
 				data['fcy']=move_data.currency_id.name or 0
 				if data['tax_amount']<0:
 					data['price_subtotal']=-data['price_subtotal']
-				data['inv_date']=datetime.strptime(data['inv_date'], '%Y-%m-%d').strftime('%d/%m/%Y')
+				data['inv_date']=datetime.strptime(str(data['inv_date']), '%Y-%m-%d').strftime('%d/%m/%Y')
 				s=s+1
 				row=row+1
 
@@ -678,8 +682,8 @@ class OrchidTaxRegister(models.TransientModel):
 					tax_total += tax
 					grand_total += total_amount
 
-				for line in move_data.invoice_id.invoice_line_ids:
-					for l in line.invoice_line_tax_ids:
+				for line in move_data.move_id.invoice_line_ids:
+					for l in line.tax_ids:
 						tax_name=l.name or move_data.account_id
 						d['taxes'].append(l.name or ' ')
 				col=col+1
@@ -715,9 +719,9 @@ class OrchidTaxRegister(models.TransientModel):
 		sheet.write(row,col+9,float(tax_total),style5)
 		sheet.write(row,col+10,float(grand_total),style5)
 
-		fp = StringIO()
+		fp = BytesIO()
 		workbook.save(fp)
-		excel_file = base64.encodestring(fp.getvalue())
+		excel_file =  base64.b64encode(fp.getvalue())
 		self.excel_file = excel_file
 		self.file_name =filename
 		fp.close()
