@@ -620,7 +620,13 @@ class OrchidTaxRegister(models.TransientModel):
 				data['inv_date'] = move_data.date or ''
 				data['inv_num'] = move_data.move_id.name or ''
 				data['inv_ref'] = move_data.name or ''
-				data['price_subtotal']= move_data.move_id and move_data.move_id.amount_untaxed or 0
+				data['price_subtotal'] = move_data.move_id and move_data.move_id.amount_untaxed or 0
+
+				# If price_subtotal is 0, calculate from tax_amount
+				if data['price_subtotal'] == 0:
+					tax_amt = move_data.debit or -move_data.credit or 0
+					data['price_subtotal'] = tax_amt * 20
+
 				data['tax_amount'] = move_data.debit or -move_data.credit or 0
 				data['od_net_amount']=move_data.move_id and move_data.move_id.amount_total or 0
 				data['state_id']= move_data.partner_id.state_id.name or " "
