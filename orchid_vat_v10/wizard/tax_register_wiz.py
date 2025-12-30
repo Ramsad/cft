@@ -609,105 +609,110 @@ class OrchidTaxRegister(models.TransientModel):
 		grand_total = 0
 
 		for move_data in move_datas:
-				data = {}
-				temp=0
-				d = defaultdict(list)
+			data = {}
+			temp = 0
+			d = defaultdict(list)
 
+			data['partner'] = move_data.partner_id.name or " "
+			data['partner_trn'] = move_data.partner_id.vat or ""
+			data['sales_person'] = move_data.move_id and move_data.move_id.user_id and move_data.move_id.user_id.name or ""
+			data['inv_date'] = move_data.date or ''
+			data['inv_num'] = move_data.move_id.name or ''
+			data['inv_ref'] = move_data.name or ''
 
-				data['partner'] = move_data.partner_id.name or move_data.partner_id.name or " "
-				data['partner_trn'] = move_data.partner_id.vat or ""
-				data['sales_person'] = move_data.move_id and move_data.move_id.user_id and move_data.move_id.user_id.name or ""
-				data['inv_date'] = move_data.date or ''
-				data['inv_num'] = move_data.move_id.name or ''
-				data['inv_ref'] = move_data.name or ''
-				data['price_subtotal']= move_data.move_id and move_data.move_id.amount_untaxed or 0
-				data['tax_amount'] = move_data.debit or -move_data.credit or 0
-				data['od_net_amount']=move_data.move_id and move_data.move_id.amount_total or 0
-				data['state_id']= move_data.partner_id.state_id.name or " "
-				data['fcy']=move_data.currency_id.name or 0
-				if data['tax_amount']<0:
-					data['price_subtotal']=-data['price_subtotal']
-				data['inv_date']=datetime.strptime(str(data['inv_date']), '%Y-%m-%d').strftime('%d/%m/%Y')
-				s=s+1
-				row=row+1
+			# Fixed for Odoo 18
+			if move_data.move_id and move_data.move_id.is_invoice():
+				data['price_subtotal'] = move_data.move_id.amount_untaxed or 0
+			else:
+				data['price_subtotal'] = abs(move_data.balance) or 0
 
-				col=0
-				sheet.write(row,col,s,style3)
-				col=col+1
-				sheet.write(row,col,data['partner'],style3)
-				col=col+1
-				sheet.write(row,col,data['partner_trn'],style3)
-				col=col+1
-				sheet.write(row,col,data['sales_person'],style3)
-				col=col+1
-				sheet.write(row,col,data['inv_date'],style3)
-				col=col+1
-				sheet.write(row,col,data['inv_date'],style3)
-				col=col+1
-				sheet.write(row,col,data['inv_num'],style3)
-				col=col+1
-				sheet.write(row,col,data['inv_ref'],style3)
+			data['tax_amount'] = move_data.debit or -move_data.credit or 0
+			data['od_net_amount'] = move_data.move_id and move_data.move_id.amount_total or 0
+			data['state_id'] = move_data.partner_id.state_id.name or " "
+			data['fcy'] = move_data.currency_id.name or 0
+			if data['tax_amount']<0:
+				data['price_subtotal']=-data['price_subtotal']
+			data['inv_date']=datetime.strptime(str(data['inv_date']), '%Y-%m-%d').strftime('%d/%m/%Y')
+			s=s+1
+			row=row+1
 
-				if data['fcy'] == 'AED' or data['fcy'] ==0:
-					total_amount = float(data['price_subtotal'] or 0) + float(data['tax_amount'] or 0)
-					col=col+1
-					price_subtotal='%.2f'%(data['price_subtotal'])
-					tax_amount='%.2f'%(data['tax_amount'])
-					total='%.2f'%(total_amount)
-					sheet.write(row,col,float(price_subtotal),style5)
-					col=col+1
-					sheet.write(row,col,float(tax_amount),style5)
-					col = col + 1
-					sheet.write(row,col,float(total),style5)
-					temp=col
-					inv_total += data['price_subtotal']
-					tax_total += data['tax_amount']
-					grand_total += total_amount
-				else:
-					price = move_data.currency_id.compute(data['price_subtotal'], company.currency_id)
-					tax = move_data.currency_id.compute(data['tax_amount'], company.currency_id)
-					total_amount = price + tax
-					col=col+1
+			col=0
+			sheet.write(row,col,s,style3)
+			col=col+1
+			sheet.write(row,col,data['partner'],style3)
+			col=col+1
+			sheet.write(row,col,data['partner_trn'],style3)
+			col=col+1
+			sheet.write(row,col,data['sales_person'],style3)
+			col=col+1
+			sheet.write(row,col,data['inv_date'],style3)
+			col=col+1
+			sheet.write(row,col,data['inv_date'],style3)
+			col=col+1
+			sheet.write(row,col,data['inv_num'],style3)
+			col=col+1
+			sheet.write(row,col,data['inv_ref'],style3)
 
-					price_subtotal='%.2f'%(price)
-					tax_amount='%.2f'%(tax)
-					total='%.2f'%(total_amount)
-					sheet.write(row,col,float(price_subtotal),style5)
-					col=col+1
-					sheet.write(row,col,float(tax_amount),style5)
-					col = col + 1
-					sheet.write(row,col,float(total),style5)
-					temp=col
-					inv_total += price
-					tax_total += tax
-					grand_total += total_amount
+			if data['fcy'] == 'AED' or data['fcy'] ==0:
+				total_amount = float(data['price_subtotal'] or 0) + float(data['tax_amount'] or 0)
+				col=col+1
+				price_subtotal='%.2f'%(data['price_subtotal'])
+				tax_amount='%.2f'%(data['tax_amount'])
+				total='%.2f'%(total_amount)
+				sheet.write(row,col,float(price_subtotal),style5)
+				col=col+1
+				sheet.write(row,col,float(tax_amount),style5)
+				col = col + 1
+				sheet.write(row,col,float(total),style5)
+				temp=col
+				inv_total += data['price_subtotal']
+				tax_total += data['tax_amount']
+				grand_total += total_amount
+			else:
+				price = move_data.currency_id.compute(data['price_subtotal'], company.currency_id)
+				tax = move_data.currency_id.compute(data['tax_amount'], company.currency_id)
+				total_amount = price + tax
+				col=col+1
 
-				for line in move_data.move_id.invoice_line_ids:
-					for l in line.tax_ids:
-						tax_name=l.name or move_data.account_id
-						d['taxes'].append(l.name or ' ')
+				price_subtotal='%.2f'%(price)
+				tax_amount='%.2f'%(tax)
+				total='%.2f'%(total_amount)
+				sheet.write(row,col,float(price_subtotal),style5)
 				col=col+1
-				if d['taxes'] :
-					sheet.write(row,col,d['taxes'][0],style4)
-				else:
-					sheet.write(row,col," ",style4)
+				sheet.write(row,col,float(tax_amount),style5)
+				col = col + 1
+				sheet.write(row,col,float(total),style5)
+				temp=col
+				inv_total += price
+				tax_total += tax
+				grand_total += total_amount
+
+			for line in move_data.move_id.invoice_line_ids:
+				for l in line.tax_ids:
+					tax_name=l.name or move_data.account_id
+					d['taxes'].append(l.name or ' ')
+			col=col+1
+			if d['taxes'] :
+				sheet.write(row,col,d['taxes'][0],style4)
+			else:
+				sheet.write(row,col," ",style4)
+			col=col+1
+			sheet.write(row,col,data['state_id'],style3)
+			# col=col+1
+			# sheet.write(row,col,"",style3)
+			if data['fcy'] != 'AED' and data['fcy'] != 0:
+				total_amount = data['price_subtotal'] + data['tax_amount']
 				col=col+1
-				sheet.write(row,col,data['state_id'],style3)
-				# col=col+1
-				# sheet.write(row,col,"",style3)
-				if data['fcy'] != 'AED' and data['fcy'] != 0:
-					total_amount = data['price_subtotal'] + data['tax_amount']
-					col=col+1
-					sheet.write(row,col,data['fcy'],style3)
-					col=col+1
-					price_subtotal='%.2f'%(data['price_subtotal'])
-					tax_amount='%.2f'%(data['tax_amount'])
-					total='%.2f'%(total_amount)
-					sheet.write(row,col,float(price_subtotal),style5)
-					col=col+1
-					sheet.write(row,col,float(tax_amount),style5)
-					col = col + 1
-					sheet.write(row,col,float(total),style5)
+				sheet.write(row,col,data['fcy'],style3)
+				col=col+1
+				price_subtotal='%.2f'%(data['price_subtotal'])
+				tax_amount='%.2f'%(data['tax_amount'])
+				total='%.2f'%(total_amount)
+				sheet.write(row,col,float(price_subtotal),style5)
+				col=col+1
+				sheet.write(row,col,float(tax_amount),style5)
+				col = col + 1
+				sheet.write(row,col,float(total),style5)
 
 		row = row + 1
 		col = 0
