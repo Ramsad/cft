@@ -455,13 +455,13 @@ class OdRefundEntryLine(models.Model):
     @api.depends('od_refund_amount', 'od_reg_refund_amount')
     def compute_total(self):
         for rec in self:
-            rec.od_refund_total = (rec.od_refund_amount or 0.0) + (rec.od_reg_refund_amount or 0.0)
+            rec.od_refund_total = round((rec.od_refund_amount or 0.0) + (rec.od_reg_refund_amount or 0.0),2)
 
     @api.depends('od_refund_total', 'od_vat_id')
     def compute_vat(self):
         for rec in self:
             rate = (rec.od_vat_id.amount or 0.0) / 100.0 if rec.od_vat_id else 0.0
-            rec.od_refund_vat_amount = (rec.od_refund_total or 0.0) * rate
+            rec.od_refund_vat_amount = round((rec.od_refund_total or 0.0) * rate,2)
             rec.od_refund_subtotal = round((rec.od_refund_total or 0.0) + rec.od_refund_vat_amount,2)
 
     @api.depends('od_refund_amount', 'od_refund_total', 'od_collection_id')
