@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from future.builtins import round
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError, ValidationError
 
@@ -461,7 +462,7 @@ class OdRefundEntryLine(models.Model):
         for rec in self:
             rate = (rec.od_vat_id.amount or 0.0) / 100.0 if rec.od_vat_id else 0.0
             rec.od_refund_vat_amount = (rec.od_refund_total or 0.0) * rate
-            rec.od_refund_subtotal = (rec.od_refund_total or 0.0) + rec.od_refund_vat_amount
+            rec.od_refund_subtotal = round((rec.od_refund_total or 0.0) + rec.od_refund_vat_amount,2)
 
     @api.depends('od_refund_amount', 'od_refund_total', 'od_collection_id')
     def compute_commission(self):
